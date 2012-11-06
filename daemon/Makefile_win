@@ -1,0 +1,21 @@
+all: windows_binary/daemon.exe
+windows_binary/daemon.exe: http.o judge.o manager.o readconfig.o database.o validator.o json_builder.o call_ruc.o
+	g++ -std=c++0x -O -L./mysql/mysql_win -o windows_binary/daemon.exe http.o judge.o manager.o json_builder.o call_ruc.o readconfig.o database.o validator.o -lmysql -lmicrohttpd -lboost_thread-mgw47-mt-1_50 -lboost_system-mgw47-mt-1_50 -lboost_chrono-mgw47-mt-1_50
+http.o: http.cpp judge_daemon.h
+	g++ -std=c++0x -c -O http.cpp
+judge.o: judge.cpp judge_daemon.h
+	g++ -c -O judge.cpp
+manager.o: manager.cpp judge_daemon.h
+	g++ -std=c++0x -c -O manager.cpp
+readconfig.o: readconfig.cpp judge_daemon.h
+	g++ -std=c++0x -c -O readconfig.cpp
+win32_run.o: win32_run.cpp judge_daemon.h
+	g++ -c -O win32_run.cpp
+database.o: database.cpp judge_daemon.h
+	g++ -c -O database.cpp -I./mysql/mysql_win
+validator.o: validator.c
+	gcc -c -O2 validator.c
+json_builder.o: json_builder.cpp judge_daemon.h
+	g++ -std=c++0x -c -O json_builder.cpp
+call_ruc.o: call_ruc.cpp
+	g++ -std=c++0x -c -O call_ruc.cpp

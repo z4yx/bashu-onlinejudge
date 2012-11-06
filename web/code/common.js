@@ -1,0 +1,65 @@
+function htmlEncode(str) {
+	var s = "";
+	if (str.length == 0) return "";
+	s = str.replace(/&/g, "&amp;");
+	s = s.replace(/ /g, "&nbsp;");
+	s = s.replace(/</g, "&lt;");
+	s = s.replace(/>/g, "&gt;");  
+	s = s.replace(/\'/g, "&#39;");
+	s = s.replace(/\"/g, "&quot;");
+	return s;
+}
+$(document).ready(function(){
+	var $nav=$('#navbar_top'),navFixed=false,$win=$(window),$container=$('body>.container-fluid');
+
+	function processScroll () {
+		var now = $win.scrollTop(),
+			navTop = $('header').height();
+		if(now>navTop && !navFixed){
+			navFixed = true;
+			$container.css('margin-top','62px');
+			$nav.addClass('navbar-fixed-top');
+		}else if(now<=navTop && navFixed){
+			navFixed = false;
+			$container.css('margin-top','0');
+			$nav.removeClass('navbar-fixed-top');
+		}
+	}
+	processScroll();
+	$win.on('scroll', processScroll);
+	$('#logoff_btn').click(function(){$.ajax({url:"logoff.php",dataType:"html",success:function(){location.reload();}});});
+	$('#form_login').submit(function(E){
+		var b=false;
+		if($('#uid').attr('value')==''){
+			$('#uid_ctl').addClass('error');
+			b=true;
+		}else{
+			$('#uid_ctl').removeClass('error');
+		}
+		if($('#pwd').attr('value')==''){
+			b=true;
+			$('#pwd_ctl').addClass('error');
+		}else
+			$('#pwd_ctl').removeClass('error');
+		if(b){
+			return false;
+		}
+	});
+	$('#search_form').submit(function(){
+		if($.trim($('#search_input').val()).length==0)
+			return false;
+		return true;
+	});
+});
+$(function(){
+if($.browser.msie&&parseInt($.browser.version,10)===6){
+	$('.row div[class^="span"]:last-child').addClass("last-child");
+	$('[class="span"]').addClass("margin-left-20");
+	$(':button[class="btn"], :reset[class="btn"], :submit[class="btn"], input[type="button"]').addClass("button-reset");
+	$(":checkbox").addClass("input-checkbox");
+	$('[class^="icon-"], [class=" icon-"]').addClass("icon-sprite");
+	$(".pagination li:first-child a").addClass("pagination-first-child")
+}
+}); 
+
+	
