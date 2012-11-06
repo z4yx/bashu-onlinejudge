@@ -67,7 +67,19 @@ if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
                 </div>
               </div>
               <div class="tab-pane" id="tab_B">
-                <p>Developing...</p>
+                <div style="margin-left:50px;margin-right:50px">
+                  <div id="table_news">
+                    <div class="row-fluid">
+                      <div class="alert span4">Loading news...</div>
+                    </div>
+                  </div>
+                  <form action="admin.php" method="post" class="form-inline" id="form_news">
+                    <label for="input_news" style="display:block">Add News</label>
+                    <input type="text" id="input_news" name="news" class="input-xlarge" placeholder="Entering something...">
+                    <input type="submit" class="btn" value="Add">
+                    <input type="hidden" name="op" value="add_news">
+                  </form>
+                </div>
               </div>
               <div class="tab-pane" id="tab_C">
                 <p>Developing...</p>
@@ -122,11 +134,14 @@ if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
         $('#ret_url').val("admin.php");
 
         var getprivlist=function(){$('#table_priv').load('ajax_admin.php',{op:'list_priv'});};
+        var getnewslist=function(){$('#table_news').load('ajax_admin.php',{op:'list_news'});};
         $('#nav_tab').click(function(E){
           var jq=$(E.target);
           if(jq.is('a')){
             if(E.target.innerHTML.search(/Privilege/i)!=-1)
               getprivlist();
+            else if(E.target.innerHTML.search(/News/i)!=-1)
+              getnewslist();
           }
         });
         $('#table_priv').click(function(E){
@@ -156,6 +171,33 @@ if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
             data:$('#form_priv').serialize(),
             success:getprivlist
           });
+          return false;
+        });
+        $('#form_news').submit(function(E){
+          E.preventDefault();
+          $.ajax({
+            type:"POST",
+            url:"ajax_admin.php",
+            data:$('#form_news').serialize(),
+            success:getnewslist
+          });
+          return false;
+        });
+        $('#table_news').click(function(E){
+          E.preventDefault();
+          var jq=$(E.target);
+          if(jq.is('i')){
+            var jq_id=jq.parent().parent().prev().prev().prev();
+            $.ajax({
+              type:"POST",
+              url:"ajax_admin.php",
+              data:{
+                op:'del_news',
+                news_id:jq_id.html()
+              },
+              success:function(){jq_id.parent().remove();}
+            });
+          }
           return false;
         });
         $('#form_index').submit(function(E){
