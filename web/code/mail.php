@@ -35,7 +35,6 @@ if(!isset($_SESSION['user'])){
 			</div></div>
 			<div class="row-fluid" style="font-size:14px">
 				<div class="span8 offset2" id="maillist">
-					<div class="backsqare">
 						<ul>
 <?php
 	require('inc/database.php');
@@ -73,7 +72,6 @@ if(!isset($_SESSION['user'])){
 	}
 ?>
 						</ul>
-					</div>
 				</div>
 			</div>  
 			<div class="row-fluid">
@@ -148,36 +146,41 @@ if(!isset($_SESSION['user'])){
 					return false;
 				});
 				$('#maillist').click(function(E){
-					if(typeof(E.target.href)!='undefined'){
-						var j=$(E.target).attr('href'),k,content,mailid;
-						switch(j.substr(j.lastIndexOf('#')+1)){
-							case 'title':
-								k=$(E.target).parent().parent(); 
-								mailid=k.parent().get(0).id.substr(4);
-								content=k.children('.mail-content');
-								if(content.is(":hidden")){
-									content.children('pre').load('ajax_showmail.php?mail_id='+mailid);
-									content.show();
-									$(E.target).prev('span').remove();
-								}else{
-									content.hide();
-								}
-								break;
-							case 'del':
-								k=$(E.target).parents('li');
-								$.ajax('ajax_deletemail.php?mail_id='+k.attr('id').substr(4));
-								k.remove();
-								break;
-							case 'rep':
-								k=$(E.target).parent().parent().prev().prev();
-								content=k.html();
-								$('#to_input').val(content.substr(0,content.indexOf(' ')));
-								k=k.prev().children('a');
-								$('#title_input').val('Re:'+k.html());
-								$('#send_result').hide();
-								$('#MailModal').modal('show');
-								break;
-						}
+					var $a;
+					if($(E.target).is('i'))
+						$a=$(E.target).parent();
+					else if(typeof(E.target.href)!='undefined')
+						$a=$(E.target);
+					else
+						return;
+					var j=$a.attr('href'),k,content,mailid;
+					switch(j.substr(j.lastIndexOf('#')+1)){
+						case 'title':
+							k=$a.parent().parent(); 
+							mailid=k.parent().get(0).id.substr(4);
+							content=k.children('.mail-content');
+							if(content.is(":hidden")){
+								content.children('pre').load('ajax_showmail.php?mail_id='+mailid);
+								content.show();
+								$a.prev('span').remove();
+							}else{
+								content.hide();
+							}
+							break;
+						case 'del':
+							k=$a.parents('li');
+							$.ajax('ajax_deletemail.php?mail_id='+k.attr('id').substr(4));
+							k.remove();
+							break;
+						case 'rep':
+							k=$a.parent().parent().prev().prev();
+							content=k.html();
+							$('#to_input').val(content.substr(0,content.indexOf(' ')));
+							k=k.prev().children('a');
+							$('#title_input').val('Re:'+k.html());
+							$('#send_result').hide();
+							$('#MailModal').modal('show');
+							break;
 					}
 					return false;
 				});
