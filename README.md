@@ -1,0 +1,33 @@
+安装方法
+===
+
+Web
+---
+
+1. 安装并配置好一个可用的php服务器,如apache,nginx等
+2. 安装并启动mysql服务器,运行`doc/init.sql`初始化数据库,修改`web/code/inc/database.php`中的数据库连接信息
+3. 将web目录下的全部内容复制到网站根目录下,保证服务器用户(如www)有读写权限(770)
+4. 测试能否访问http://localhost/code/index.php
+5. Web服务器配置反向代理/query到127.0.0.1:8888用于提交题目时获取评测进度
+
+Daemon
+---
+
+**Windows用户:**
+
+1. 修改`daemon/windows_binary/config.ini`中的数据目录,mysql密码等信息
+2. 运行`daemon/windows_binary/daemon.exe`
+3. 如果提示"Started successfully.Waiting for submitting...",说明成功启动,可用提交一个题目测试
+
+**Linux用户:**
+
+1. 安装编译工具,要求:
+ - G++ >=4.6
+ - libmicrohttpd >= 0.9.21
+ - libmysqlclient 对应mysql版本
+2. 在`daemon/`中运行
+    make
+3. 如果没有出错,修改`daemon/config.ini`中的数据目录,mysql密码等信息
+4. 在`daemon/`中运行
+    ./daemon
+5. 如果提示"Started successfully.Waiting for submitting...",说明成功启动,可用提交一个题目测试
