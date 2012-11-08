@@ -27,11 +27,11 @@ Daemon
  - libmysqlclient 对应mysql版本
 2. 在`daemon/`中运行
 
-    make
+    `make`
 
 3. 如果没有出错,修改`daemon/config.ini`中的数据目录,mysql密码等信息
 4. 在`daemon/`中运行
 
-    ./daemon
+    `./daemon`
 
 5. 如果提示"Started successfully.Waiting for submitting...",说明daemon启动成功,提交一个题目测试
