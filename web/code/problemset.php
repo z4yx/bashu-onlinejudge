@@ -45,17 +45,17 @@ if(isset($_SESSION['user'])){
   <body>
     <?php require('page_header.php'); ?>      
     <div class="container-fluid" style="font-size:14px">
-      <div class="pagination pagination-centered">
-        <ul>
-          <?php 
+      <?php
+      if($maxpage>10){
+        echo '<div class="pagination pagination-centered"><ul>';
             for($i=10;$i<=$maxpage;++$i)
               if($i!=$page_id)
                 echo '<li><a href="problemset.php?page_id=',$i,'">',$i,'</a></li>';
               else
                 echo '<li class="active"><a href="problemset.php?page_id=',$i,'">',$i,'</a></li>';
-          ?>
-        </ul>
-      </div>
+        echo '</ul></div>';
+      }
+      ?>
       <div class="row-fluid">
         <div class="span10 offset1">
 
