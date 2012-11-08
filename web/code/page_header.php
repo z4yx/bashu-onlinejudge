@@ -37,7 +37,7 @@
           <li><a id="nav_prob" href="problempage.php">Problem</a></li>
           <li><a id="nav_record" href="record.php">Record</a></li>
           <li><a id="nav_rank" href="ranklist.php">Ranklist</a></li>
-          <li><a href="about.php">About</a></li>
+          <li><a id="nav_about" href="about.php">About</a></li>
         </ul>
         <form class="navbar-search pull-left" id="search_form" action="search.php" method="get">
           <input type="text" name="q" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" placeholder="Problem ID,Title,Source">
