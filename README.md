@@ -17,7 +17,7 @@ Daemon
 
 1. 修改`daemon/windows_binary/config.ini`中的数据目录,mysql密码等信息
 2. 运行`daemon/windows_binary/daemon.exe`
-3. 如果提示"Started successfully.Waiting for submitting...",说明成功启动,可用提交一个题目测试
+3. 如果提示"Started successfully.Waiting for submitting...",说明daemon启动成功,提交一个题目测试
 
 **Linux用户:**
 
@@ -26,8 +26,12 @@ Daemon
  - libmicrohttpd >= 0.9.21
  - libmysqlclient 对应mysql版本
 2. 在`daemon/`中运行
+
     make
+
 3. 如果没有出错,修改`daemon/config.ini`中的数据目录,mysql密码等信息
 4. 在`daemon/`中运行
+
     ./daemon
-5. 如果提示"Started successfully.Waiting for submitting...",说明成功启动,可用提交一个题目测试
+
+5. 如果提示"Started successfully.Waiting for submitting...",说明daemon启动成功,提交一个题目测试
