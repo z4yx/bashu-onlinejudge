@@ -21,7 +21,7 @@
   </head>
 
   <body>
-    <?php require('page_header.php'); ?>  
+    <?php session_start();require('page_header.php'); ?>  
           
     <div class="container-fluid about-page">
       <div class="row-fluid">
