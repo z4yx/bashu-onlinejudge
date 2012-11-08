@@ -13,7 +13,7 @@ if(!isset($_SESSION['administrator']))
 			font-size: 14px;
 			overflow: hidden;
 		}
-		h3{
+		h3,h4{
 			text-align: center;
 		}
 		a{
@@ -47,14 +47,18 @@ if(!isset($_SESSION['administrator']))
 
 				if(file_exists("../images/$filename"))
 					throw new Exception("File '$filename' already exists,<br>try another file name.");
+				if(!is_dir("../images"))
+					if(!mkdir("../images",0770))
+						throw new Exception("Cannot create directory 'images'");
+						
 				if(move_uploaded_file($_FILES["file"]["tmp_name"],"../images/$filename")){
-					echo '<h3>Upload successfully.</h3>';
+					echo '<h3 style="margin:10px auto">Upload successfully.</h3>';
 					echo '<div style="overflow:auto;white-space:nowrap">HTML Tag:<span style="color:red">&lt;img src="images/',$filename,'"&gt;</span></div>';
 					echo '<p style="text-align:center"><a href="#" onclick="return window.close(),false;">Close</a></p>';
 				}else
 					throw new Exception("Upload failed");
 			}catch(Exception $e){
-				echo '<h3>',$e->getMessage(),'</h3>';
+				echo '<h4 style="margin:10px auto">',$e->getMessage(),'</h4>';
 				echo '<a href="#" onclick="return history.back(),false;">&laquo;Go back</a>';
 			}
 		}else{
