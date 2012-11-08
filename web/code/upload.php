@@ -53,7 +53,7 @@ if(!isset($_SESSION['administrator']))
 						
 				if(move_uploaded_file($_FILES["file"]["tmp_name"],"../images/$filename")){
 					echo '<h3 style="margin:10px auto">Upload successfully.</h3>';
-					echo '<div style="overflow:auto;white-space:nowrap">HTML Tag:<span style="color:red">&lt;img src="images/',$filename,'"&gt;</span></div>';
+					echo '<div style="overflow:auto;white-space:nowrap">HTML Tag:<span style="color:red">&lt;img src="../images/',$filename,'"&gt;</span></div>';
 					echo '<p style="text-align:center"><a href="#" onclick="return window.close(),false;">Close</a></p>';
 				}else
 					throw new Exception("Upload failed");
