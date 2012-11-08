@@ -44,6 +44,9 @@ extern char target_path[];
 solution::solution()
 {
 	mutex_for_query = new std::mutex;
+	problem = compare_way = lang = time_limit = mem_limit = score = error_code = 0;
+	public_code = 0;
+	timestamp = 0;
 }
 solution::~solution()
 {

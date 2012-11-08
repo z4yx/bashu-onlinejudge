@@ -37,42 +37,50 @@ static int server_handler_get(
 	}
 	return ignore_requst(connection);
 }
-
+template<class T>
+void numcat(T &left, const char *right)
+{
+	int len = strlen(right);
+	while(len--)
+		left *= 10;
+	left += atol(right);
+}
 static int iterate_post(void *arg, enum MHD_ValueKind, const char *name,
 	const char*, const char*, const char*, const char *data, uint64_t offset, size_t size)
 {
 	solution *p = ((pair*)arg) -> second;
 	//printf("[%s]->[%s] %lld %d\n", name, data, offset, size);
 	switch(*name - 'a') {
+		//A number may be separated into two parts
 		case MSG_problem:
-			p->problem = atol(data);
+			numcat(p->problem, data);
 			break;
 		case MSG_lang:
-			p->lang = atol(data);
+			numcat(p->lang, data);
 			break;
 		case MSG_time:
-			p->time_limit = atol(data);
+			numcat(p->time_limit, data);
 			break;
 		case MSG_mem:
-			p->mem_limit = atol(data);
+			numcat(p->mem_limit, data);
 			break;
 		case MSG_score:
-			p->score = atol(data);
+			numcat(p->score, data);
 			break;
 		case MSG_code:
 			p->code += data;
 			break;
 		case MSG_user:
-			p->user = data;
+			p->user += data;
 			break;
 		case MSG_key:
-			p->key = data;
+			p->key += data;
 			break;
 		case MSG_share:
 			p->public_code = atol(data);
 			break;
 		case MSG_compare:
-			p->compare_way = atol(data);
+			numcat(p->compare_way, data);
 	}
 	return MHD_YES;
 }
