@@ -6,9 +6,10 @@ Web
 
 1. 安装并配置好一个可用的php服务器,如apache,nginx等,Linux用户建议安装php扩展[sysvsem]
 2. 安装并启动mysql服务器,运行`doc/init.sql`初始化数据库,修改`web/code/inc/database.php`中的数据库连接信息
-3. 将web目录下的全部内容复制到网站根目录下,保证服务器用户(如www)有读写权限(770)
-4. 测试能否访问http://localhost/code/index.php
-5. Web服务器配置反向代理/query到127.0.0.1:8888用于提交题目时获取评测进度
+3. 如需显示数学公式,下载Mathjax并解压到`web/assets/Mathjax/`
+4. 将web目录下的全部内容复制到网站根目录下,保证服务器用户(如www)有读写权限(770)
+5. 测试能否访问http://localhost/code/index.php
+6. Web服务器配置反向代理/query到127.0.0.1:8888用于提交题目时获取评测进度
 
 Daemon
 ---
