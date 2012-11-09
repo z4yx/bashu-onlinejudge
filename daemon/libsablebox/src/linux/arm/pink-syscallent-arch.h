@@ -1,8 +1,0 @@
-/* vim: set cino= fo=croql sw=8 ts=8 sts=0 noet cin fdm=syntax : */
-
-	"SYS_0", /* 0 */
-	"breakpoint", /* 1 */
-	"cacheflush", /* 2 */
-	"usr26", /* 3 */
-	"usr32", /* 4 */
-	"set_tls", /* 5 */
