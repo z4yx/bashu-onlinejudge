@@ -33,10 +33,7 @@ if($title_len>500)
 
 $content=mysql_real_escape_string($_POST['detail']);
 
-$lock_file=$_SERVER['DOCUMENT_ROOT'].'/postmessage.lock';
-$file=EnterCriticalSection($lock_file);
-if(!$file)
-	die('Runtime Error');
+$mutex=new php_mutex("/tmp/bsoj_postmessage.lock");
 $new_msg_id=getNextMsgID();
 
 if(isset($_POST['message_id'])
@@ -69,7 +66,7 @@ if(isset($_POST['message_id'])
 	}
 }
 mysql_query("insert into message (thread_id,message_id,parent_id,orderNum,problem_id,depth,user_id,title,content,in_date) values($new_msg_id,$new_msg_id,$msg_id,$order_num,$prob_id,$depth,'$user_id','$title','$content',NOW())");
-LeaveCriticalSection($file);
+$mutex->release_mutex();
 header('location: board.php'.($prob_id ? "?problem_id=$prob_id" : ''));
 //echo 'succeed';
 

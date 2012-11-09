@@ -4,7 +4,7 @@
 Web
 ---
 
-1. 安装并配置好一个可用的php服务器,如apache,nginx等
+1. 安装并配置好一个可用的php服务器,如apache,nginx等,Linux用户建议安装php扩展[sysvsem]
 2. 安装并启动mysql服务器,运行`doc/init.sql`初始化数据库,修改`web/code/inc/database.php`中的数据库连接信息
 3. 将web目录下的全部内容复制到网站根目录下,保证服务器用户(如www)有读写权限(770)
 4. 测试能否访问http://localhost/code/index.php
@@ -35,3 +35,5 @@ Daemon
     `./daemon`
 
 5. 如果提示"Started successfully.Waiting for submitting...",说明daemon启动成功,提交一个题目测试
+
+  [sysvsem]: http://php.net/manual/en/book.sem.php

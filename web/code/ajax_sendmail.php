@@ -36,12 +36,11 @@ if(isset($_POST['detail']))
 else
 	$detail='';
 
-$lock_file=$_SERVER['DOCUMENT_ROOT'].'/sendmail.lock';
-$file=EnterCriticalSection($lock_file);
-if(!$file)
-	die('Runtime Error');
+$mutex=new php_mutex("/tmp/bsoj_sendmail.lock");
+
 $mail_id=getNextMailID();
 mysql_query("insert into mail (mail_id,from_user,to_user,title,content,in_date) values ($mail_id,'$from','$touser','$title','$detail',NOW())");
-LeaveCriticalSection($file);
+$mutex->release_mutex();
+
 echo '__OK__';
 ?>
