@@ -444,3 +444,15 @@ h1,h2,h3,h4,h5,h6{
   display: inline-block;
   margin-right: 9px;
 }
+.a-green{
+  color: #5bb75b;
+}
+.a-green:hover{
+  color: #5bb75b;
+}
+.a-red{
+  color: #bd362f;
+}
+.a-red:hover{
+  color: #bd362f;
+}

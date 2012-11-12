@@ -17,6 +17,7 @@ $problem_id=0;
 $result=-1;
 $lang=-1;
 $way="none";
+$public_code=false;
 if(isset($_GET['user_id'])){
   $user_id=trim($_GET['user_id']);
   if(strlen($user_id))
@@ -46,7 +47,10 @@ if(isset($_GET['lang'])){
   if($lang!=-1)
     $cond.=" and language=$lang";
 }
-
+if(isset($_GET['public'])){
+  $public_code=true;
+  $cond.=' and public_code';
+}
 $sql="";
 if(strlen($cond))
   $sql="where".substr($cond, 4);
@@ -87,7 +91,7 @@ if($problem_id==0)
             <label>Problem:</label>
             <input type="text" class="input-mini" name="problem_id" id="ipt_problem_id" value="<?php echo $problem_id?>">
             <label>User:</label>
-            <input type="text" class="input-medium" name="user_id" id="ipt_user_id" value="<?php echo $user_id?>">
+            <input type="text" class="input-small" name="user_id" id="ipt_user_id" value="<?php echo $user_id?>">
             <label>Result:</label>
             <select class="input-small" name="result" id="slt_result">
               <option value="-1">All</option>
@@ -109,7 +113,7 @@ if($problem_id==0)
               <option value="memory">Memory</option>
             </select>
             <input type="hidden" name="start_id" value="0">
-            <input style="margin-left:5px" type="submit" class="btn" value="Set">
+            <label style="display:inline-block;"><input <?php if($public_code)echo 'checked'?> style="margin:0 3px" id="chk_public" type="checkbox" name="public">Open Source</label>
             <span style="margin-left:5px" class="btn" id="btn_reset">Reset</span>
           </form>
         </div>
@@ -130,7 +134,7 @@ if($problem_id==0)
                 <th style="width:11%">Language</th>
                 <th style="width:17%">Submit Date</th>
               </tr></thead>
-              <tbody>
+              <tbody id="tab_record">
                 <?php 
                 while($row=mysql_fetch_row($res)){
                   echo '<tr><td>',$row[0],'</td>';
@@ -145,14 +149,14 @@ if($problem_id==0)
                     echo '<td>',$row[6],' KB</td>';
                   }
                   echo '<td>',round($row[7]/1024,2),' KB</td>';
-                  echo '<td>',($row[10] ? '*' : ''),'<a target="_blank" href="sourcecode.php?solution_id=',$row[0],'">',$LANG_NAME[$row[8]],'</a></td>';
+                  echo '<td><a target="_blank" href="sourcecode.php?solution_id=',$row[0],'">',$LANG_NAME[$row[8]],'</a>';
+                  echo ' [<a href="#sw_open_',$row[0],'" class=',($row[10] ? '"a-green">O' : '"a-red">C'),'</a>]</td>';
                   echo '<td>',$row[9],'</td>';
                   echo '</tr>';
                 }
                 ?>
               </tbody>
             </table>
-
         </div>  
       </div>
       <div class="row-fluid">
@@ -200,15 +204,42 @@ if($problem_id==0)
             location.href='record.php'+newuri+'start_id='+(cur-20);
           return false;
         });
+        function toggle_s(obj){
+          if(obj.hasClass('a-red')){
+            obj.removeClass('a-red');
+            obj.addClass('a-green');
+            obj.html('O');
+          }else{
+            obj.removeClass('a-green');
+            obj.addClass('a-red');
+            obj.html('C');
+          }
+        }
+        $('#tab_record').click(function(E){
+          var $target=$(E.target);
+          if($target.is('a') && $target.attr('href').substr(0,9)=='#sw_open_'){
+            $.ajax({
+              type:"POST",
+              url:"ajax_opensource.php",
+              data:{"id":$target.attr('href').substr(9)},
+              success:function(msg){if(/success/.test(msg))toggle_s($target);}
+            });
+            return false;
+          }
+        });
+        function fun_submit(){$('#form_filter').submit();}
         $('#slt_result').change(function(){
           $('#slt_way').val('none');
-          $('#form_filter').submit();
+          fun_submit();
         });
-        $('#slt_lang').change(function(){
-          $('#form_filter').submit();
+        $('#slt_lang').change(fun_submit);
+        $('#slt_way').change(fun_submit);
+        $('#chk_public').change(fun_submit);
+        $('#ipt_problem_id').keydown(function(E){
+          if(E.keyCode==13)fun_submit();
         });
-        $('#slt_way').change(function(){
-          $('#form_filter').submit();
+        $('#ipt_user_id').keydown(function(E){
+          if(E.keyCode==13)fun_submit();
         });
         $('#btn_reset').click(function(){window.location="record.php?problem_id="+$("#ipt_problem_id").val()+"&user_id="+$("#ipt_user_id").val();});
       }); 
