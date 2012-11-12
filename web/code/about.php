@@ -16,6 +16,7 @@
     <![endif]-->
     <style type="text/css">
     #tab_options td:last-child{text-align: left;}
+    #about_msg td:last-child{text-align: left;}
     .about-page .page-header{margin-bottom: 9px;}
     </style>
   </head>
@@ -72,13 +73,38 @@
           <div class="page-header">
             <h3>Q: What is the meaning of the judge's replies?</h3>
             A: Here is a list of the judge's replies and their meaning:<br>
-            <span class="label label-success">Accepted</span>&nbsp;OK! Your program is correct!.<br>
-            <span class="label">Compile Error</span>&nbsp;The compiler could not compile your program. Of course, warning messages are not error messages.<br>
-            <span class="label label-warning">Memory Exceeded</span>&nbsp;Your program tried to use more memory than the problem settings.<br>
-            <span class="label label-info">Runtime Error</span>&nbsp;Your program failed during the execution (illegal file access, stack overflow, pointer reference out of range, floating point exception, divided by zero...).<br>
-            <span class="label label-warning">Time Out</span>&nbsp;Your program tried to run during too much time.<br>
-            <span class="label label-important">Wrong Answer</span>&nbsp;The solution has not produced the desired output.<br>
-            <span class="label label-inverse">Validator Error</span>&nbsp;The checker program has exhibited abnormal behavior while validating the output produced by the solution.
+            <table class="table table-condensed" id="about_msg">
+              <tbody>
+                <tr>
+                  <td><span class="label label-success">Accepted</span></td>
+                  <td>OK! Your program is correct!.</td>
+                </tr>
+                <tr>
+                  <td><span class="label">Compile Error</span></td>
+                  <td>The compiler could not compile your program. Of course, warning messages are not error messages.</td>
+                </tr>
+                <tr>
+                  <td><span class="label label-warning">Memory Exceeded</span></td>
+                  <td>Your program tried to use more memory than the problem settings.</td>
+                </tr>
+                <tr>
+                  <td><span class="label label-info">Runtime Error</span></td>
+                  <td>Your program failed during the execution (illegal file access, stack overflow, pointer reference out of range, floating point exception, divided by zero...).</td>
+                </tr>
+                <tr>
+                  <td><span class="label label-warning">Time Out</span></td>
+                  <td>Your program tried to run during too much time.</td>
+                </tr>
+                <tr>
+                  <td><span class="label label-important">Wrong Answer</span></td>
+                  <td>The solution has not produced the desired output.</td>
+                </tr>
+                <tr>
+                  <td><span class="label label-inverse">Validator Error</span></td>
+                  <td>The checker program has exhibited abnormal behavior while validating the output produced by the solution.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <h5>Any questions/suggestions please post to <a href="board.php">web board</a>.</h5>
         </div>
