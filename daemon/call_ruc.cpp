@@ -26,9 +26,8 @@ int run_judge(const char *target, const char *input, const char *output, int tim
 	//puts(str.c_str());
 	int ret = system(str.c_str());
 	if(ret) {
-		std::ostringstream tmp("Error: RUC exited with ");
-		tmp << ret;
-		applog(tmp.str().c_str());
+		sprintf(info_str, "Error: RUC exited with %d", ret);
+		applog(info_str);
 		return ret;
 	}
 	FILE *run_info = fopen("run.info", "r");
