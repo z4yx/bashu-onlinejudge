@@ -7,7 +7,7 @@
 #include "judge_daemon.h"
 
 static MYSQL *hMySQL;
-extern char buffer[];
+char statements[65536*2]; //escaped compile info becomes longer
 
 char DATABASE_USER[128], DATABASE_PASS[128];
 
@@ -58,8 +58,8 @@ int get_next_solution_id()
 }
 bool haveSolved(int problem_id, const char *user_id)
 {
-	sprintf(buffer, "select solution_id from solution where problem_id=%d and result=0 and user_id='%s' limit 1", problem_id, user_id);
-	if(mysql_query(hMySQL, buffer))
+	sprintf(statements, "select solution_id from solution where problem_id=%d and result=0 and user_id='%s' limit 1", problem_id, user_id);
+	if(mysql_query(hMySQL, statements))
 		throw 1;
 	MYSQL_RES *result = mysql_store_result(hMySQL);
 	if(NULL == result)
@@ -73,8 +73,8 @@ bool haveSolved(int problem_id, const char *user_id)
 }
 bool haveSubmitted(int problem_id, const char *user_id, int before)
 {
-	sprintf(buffer, "select solution_id from solution where solution_id<%d and problem_id=%d and user_id='%s' limit 1", before, problem_id, user_id);
-	if(mysql_query(hMySQL, buffer))
+	sprintf(statements, "select solution_id from solution where solution_id<%d and problem_id=%d and user_id='%s' limit 1", before, problem_id, user_id);
+	if(mysql_query(hMySQL, statements))
 		throw 1;
 	MYSQL_RES *result = mysql_store_result(hMySQL);
 	if(NULL == result)
@@ -94,8 +94,8 @@ void write_result_to_database(int solution_id, solution *data)
 	valid = haveSolved(data->problem, data->user.c_str()) ? 0 : 1;
 	//printf("valid %d\n",valid);
 
-	sprintf(buffer, "select max(score) from solution where problem_id=%d and user_id='%s'", data->problem, data->user.c_str());
-	if(mysql_query(hMySQL, buffer))
+	sprintf(statements, "select max(score) from solution where problem_id=%d and user_id='%s'", data->problem, data->user.c_str());
+	if(mysql_query(hMySQL, statements))
 		throw 1;
 	MYSQL_RES *result = mysql_store_result(hMySQL);
 	if(!result)
@@ -118,18 +118,18 @@ void write_result_to_database(int solution_id, solution *data)
 		int len = data->last_state.length();
 		char *info_escape = (char*)malloc(len*2 + 3);
 		mysql_real_escape_string(hMySQL, info_escape, data->last_state.c_str(), len);
-		sprintf(buffer, "insert into compileinfo VALUES (%d,'%s')", solution_id, info_escape);
+		sprintf(statements, "insert into compileinfo VALUES (%d,'%s')", solution_id, info_escape);
 		free(info_escape);
 		data->last_state = "";
-		if(mysql_query(hMySQL, buffer))
+		if(mysql_query(hMySQL, statements))
 			throw 1;
 		if(1 != mysql_affected_rows(hMySQL))
 			throw 1;
 	}
 	puts("insert solution");
-	sprintf(buffer, "insert into solution (solution_id,problem_id,user_id,time,memory,in_date,result,score,info,language,valid,code_length,public_code) VALUES "
+	sprintf(statements, "insert into solution (solution_id,problem_id,user_id,time,memory,in_date,result,score,info,language,valid,code_length,public_code) VALUES "
 		"(%d,%d,'%s',%d,%d,NOW(),%d,%d,'%s',%d,%d,%d,%d)", solution_id, data->problem, data->user.c_str(), data->time_limit, data->mem_limit, data->error_code, data->score, data->last_state.c_str(), data->lang, valid, code_length, (int)data->public_code);
-	if(mysql_query(hMySQL, buffer))
+	if(mysql_query(hMySQL, statements))
 		throw 1;
 	if(1 != mysql_affected_rows(hMySQL))
 		throw 1;
@@ -138,25 +138,25 @@ void write_result_to_database(int solution_id, solution *data)
 	//printf("code_length %d\n", code_length);
 	char *code_escape = (char*)malloc(code_length*2 + 3);
 	mysql_real_escape_string(hMySQL, code_escape, data->code.c_str(), code_length);
-	sprintf(buffer, "insert into source_code VALUES (%d,'%s')", solution_id, code_escape);
+	sprintf(statements, "insert into source_code VALUES (%d,'%s')", solution_id, code_escape);
 	free(code_escape);
-	if(mysql_query(hMySQL, buffer))
+	if(mysql_query(hMySQL, statements))
 		throw 1;
 	if(1 != mysql_affected_rows(hMySQL))
 		throw 1;
 
 	puts("update user info");
 	int is_first_solved = (int)(valid && data->error_code == RES_AC);
-	sprintf(buffer, "update users set submit=submit+1,solved=solved+%d,score=score+%d,language=%d where user_id='%s'", is_first_solved, delta, data->lang, data->user.c_str());
-	if(mysql_query(hMySQL, buffer))
+	sprintf(statements, "update users set submit=submit+1,solved=solved+%d,score=score+%d,language=%d where user_id='%s'", is_first_solved, delta, data->lang, data->user.c_str());
+	if(mysql_query(hMySQL, statements))
 		throw 1;
 	if(1 != mysql_affected_rows(hMySQL))
 		throw 1;
 
 	puts("update problem info");
-	sprintf(buffer, "update problem set submit=submit+1,accepted=accepted+%d,submit_user=submit_user+%d,solved=solved+%d where problem_id=%d", 
+	sprintf(statements, "update problem set submit=submit+1,accepted=accepted+%d,submit_user=submit_user+%d,solved=solved+%d where problem_id=%d", 
 			(int)(data->error_code == RES_AC), (int)(valid && !haveSubmitted(data->problem, data->user.c_str(), solution_id)), is_first_solved, data->problem);
-	if(mysql_query(hMySQL, buffer))
+	if(mysql_query(hMySQL, statements))
 		throw 1;
 	if(1 != mysql_affected_rows(hMySQL))
 		throw 1;
