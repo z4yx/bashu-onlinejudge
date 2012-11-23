@@ -5,13 +5,16 @@ try{
 	require('inc/database.php');
 	$user=mysql_real_escape_string(trim($_POST['uid']));
 	if(preg_match('/\W/',$user))
-		throw new Exception('Login failed.');
-	$res=mysql_query("select password,user_id,language from users where user_id='$user'");
+		throw new Exception('Invalid user ID');
+	$res=mysql_query("select password,user_id,language,defunct from users where user_id='$user'");
 	$r=mysql_fetch_row($res);
 	if(!$r)
-		throw new Exception("Login failed.");
+		throw new Exception("No such user");
+	if($r[3]!='N')
+		throw new Exception("User is disabled");
+		
 	if(strcmp($r[0],$_POST['pwd'])!=0)
-		throw new Exception("Login failed.");
+		throw new Exception("Password is incorrect");
 	session_start();
 	session_unset();
 	$_SESSION['user']=$r[1];
@@ -22,14 +25,15 @@ try{
 		if($r[0]=='administrator' || $r[0]=='source_browser')
 			$_SESSION[$r[0]]=true;
 	}
-	mysql_query("update users set accesstime=NOW() where user_id='$user'");
+	$ip=mysql_escape_string($_SERVER["REMOTE_ADDR"]);
+	mysql_query("update users set accesstime=NOW(),ip='$ip' where user_id='$user'");
 	//echo("Login succeeded.");
 	header("location: ".$_POST['url']);
 }catch(Exception $E){?>
-<html><script language='javascript'>
-	alert('UserName or Password Wrong!');
+<html><head><script language="javascript">
+	alert('<?php echo $E->getMessage();?>');
 	history.go(-1);
-</script></html>
+</script></head></html>
 <?php
 }
 ?>
