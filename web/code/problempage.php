@@ -57,45 +57,45 @@ $_SESSION['view']=$prob_id;
           <div class="row-fluid">
             <div class="span12">
               <h3>Description</h3>
-              <p class="backsqare"><?php echo mb_ereg_replace('\r?\n','<br>',$row[1]);?></p>
+              <div class="well well-small"><?php echo mb_ereg_replace('\r?\n','<br>',$row[1]);?></div>
             </div>
           </div>
           <div class="row-fluid">
             <div class="span12">
               <h3>Input</h3>
-              <p class="backsqare"><?php echo mb_ereg_replace('\r?\n','<br>',$row[2]);?></p>
+              <div class="well well-small"><?php echo mb_ereg_replace('\r?\n','<br>',$row[2]);?></div>
             </div>
           </div>
           <div class="row-fluid">
             <div class="span12">
               <h3>Output</h3>
-              <p class="backsqare"><?php echo mb_ereg_replace('\r?\n','<br>',$row[3]);?></p>
+              <div class="well well-small"><?php echo mb_ereg_replace('\r?\n','<br>',$row[3]);?></div>
             </div>
           </div>
           <div class="row-fluid">
             <div class="span12">
               <h3>Sample Input</h3>
-              <p class="backsqare" style="font-family: monospace;"><?php echo mb_ereg_replace('\r?\n','<br>',$row[4]);?></p>
+              <div class="well well-small" style="font-family: monospace;"><?php echo mb_ereg_replace('\r?\n','<br>',$row[4]);?></div>
             </div>
           </div>
           <div class="row-fluid">
             <div class="span12">
               <h3>Sample Output</h3>
-              <p class="backsqare" style="font-family: monospace;"><?php echo mb_ereg_replace('\r?\n','<br>',$row[5]);?></p>
+              <div class="well well-small" style="font-family: monospace;"><?php echo mb_ereg_replace('\r?\n','<br>',$row[5]);?></div>
             </div>
           </div>
           <?php if(strlen($row[6])){ ?>
           <div class="row-fluid">
             <div class="span12">
               <h3>Hint</h3>
-              <p class="backsqare"><?php echo mb_ereg_replace('\r?\n','<br>',$row[6]);?></p>
+              <div class="well well-small"><?php echo mb_ereg_replace('\r?\n','<br>',$row[6]);?></div>
             </div>
           </div>
           <?php } ?>
           <div class="row-fluid">
             <div class="span12">
               <h3>Source</h3>
-              <p class="backsqare"><?php echo mb_ereg_replace('\r?\n','<br>',$row[7])?></p>
+              <div class="well well-small"><?php echo mb_ereg_replace('\r?\n','<br>',$row[7])?></div>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@ $_SESSION['view']=$prob_id;
           </div>
           <div class="row-fluid">
             <div class="span12">
-              <div class="backsqare">
+              <div class="well well-small">
                 <table class="table table-condensed table-striped" style="margin-bottom:0px;">
                   <tbody>
                     <tr><td style="text-align:left">Case Time Limit:</td><td><?php echo $row[8]?> ms</td></tr>
@@ -120,7 +120,7 @@ $_SESSION['view']=$prob_id;
             </div>
           </div>
           <div class="row-fluid"><div class="span12">
-            <div id="status" class="backsqare" style="margin-top:10px">
+            <div id="status" class="well well-small" style="margin-top:10px">
               <table class="table table-condensed table-striped" style="margin-bottom:0px">
                 <tbody>
                 <?php 
@@ -163,7 +163,7 @@ $_SESSION['view']=$prob_id;
             </div>
           </div></div>
           <div class="row-fluid"><div class="span12" style="text-align: center;">
-            <div id="function" class="backsqare" style="margin-top:10px">
+            <div id="function" class="well well-small" style="margin-top:10px">
               <a href="#" class="btn btn-primary" id="action_submit">Submit</a>
               <a href="record.php?way=time&amp;problem_id=<?php echo $prob_id?>" class="btn btn-info">Status</a>
               <a href="board.php?problem_id=<?php echo $prob_id;?>" class="btn btn-warning">Discuss</a>
@@ -172,7 +172,7 @@ $_SESSION['view']=$prob_id;
           <?php if(isset($_SESSION['administrator'])){?>
           <div class="row-fluid">
             <div class="span12" style="text-align:center">
-              <div class="backsqare" style="margin-top:10px">
+              <div class="well well-small" style="margin-top:10px">
                 <a href="edit.php?problem_id=<?php echo $prob_id?>" class="btn btn-success">Edit</a>
                 <span id="action_delete" class="btn btn-danger"><?php echo $row[11]=='N' ? 'Delete' : 'Resume';?></span>
               </div>
