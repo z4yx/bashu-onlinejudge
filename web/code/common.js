@@ -25,8 +25,10 @@ $(document).ready(function(){
 			$nav.removeClass('navbar-fixed-top');
 		}
 	}
-	processScroll();
-	$win.on('scroll', processScroll);
+	if($nav.length){
+		processScroll();
+		$win.on('scroll', processScroll);
+	}
 	$('#logoff_btn').click(function(){$.ajax({url:"logoff.php",dataType:"html",success:function(){location.reload();}});});
 	$('#form_login').submit(function(E){
 		var b=false;

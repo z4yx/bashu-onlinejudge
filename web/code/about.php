@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php session_start();?><!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -22,7 +22,7 @@
   </head>
 
   <body>
-    <?php session_start();require('page_header.php'); ?>  
+    <?php require('page_header.php') ?>  
           
     <div class="container-fluid about-page">
       <div class="row-fluid">

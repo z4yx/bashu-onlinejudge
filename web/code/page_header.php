@@ -1,3 +1,9 @@
+<?php
+/*if(!isset($_SESSION['user'])){
+  header("location: auth.php");
+  exit(0);
+}*/
+?>
 <!--[if IE 6]>
   <script>var LETSKILLIE6_DELAY=1;</script>
   <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
