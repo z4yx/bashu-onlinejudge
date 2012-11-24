@@ -60,6 +60,15 @@ void test_indentical()
     should(info.ret, ==,  VAL_IDENTICAL);
 }
 
+void test_invaliddata()
+{
+    FILE* fu = fopen("user_invalid.txt", "w+");
+    FILE* fs = fopen("std_invalid.txt", "w+");
+    fprintf(fu, "123\n\n\n");
+    fprintf(fs, "123\n");
+    struct validator_info info = validator(fs, fu);
+    should(info.ret, ==, VAL_IDENTICAL);
+}
 
 int main()
 {
@@ -67,5 +76,6 @@ int main()
     test_longer();
     test_multi();
     test_indentical();
+    test_invaliddata();
     return 0;
 }

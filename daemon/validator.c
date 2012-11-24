@@ -103,13 +103,18 @@ long filelen(FILE* stream)
 long filelines(FILE* stream)
 {
     fseek(stream, 0, SEEK_SET);
-    int c, num = 0;
+    int c, tmp = 0, sum = 0;
     while(c = getc(stream)){
         if(c == EOF)
             break;
-        num += (c == '\n');
+        if(c == '\n'){
+            tmp++;
+        }else{
+            sum += tmp;
+            tmp = 0;
+        }
     }
-    return num;
+    return sum;
 }
 
 struct field init_field(FILE* fp)
@@ -185,22 +190,21 @@ struct validator_info validator(FILE* fstd, FILE* fuser)
 		return ret;
 	}
 
-    {
-        //if the numbers of lines don't match, return directly.
-        int line_u = filelines(fuser);
-        int line_s = filelines(fstd);
-        if(line_u < line_s)
-            ret.ret = VAL_SHORTER;
-        else if(line_u > line_s)
-            ret.ret = VAL_LONGER;
-        if(line_u != line_s)
-            return ret;
-    }
+    //if the numbers of lines don't match, return directly.
+    int line_u = filelines(fuser);
+    int line_s = filelines(fstd);
+    if(line_u < line_s)
+        ret.ret = VAL_SHORTER;
+    else if(line_u > line_s)
+        ret.ret = VAL_LONGER;
+    if(line_u != line_s)
+        return ret;
 
 	struct field fs = init_field(fstd);
 	struct field fu = init_field(fuser);
 
-	do{
+    int x;
+    for(x=0; x<line_u; x++){
 		if(compare(&fs, &fu))
 			return mismatch(fs.fp, fu.fp);
 		fs.st = fs.ed+1;
@@ -208,14 +212,8 @@ struct validator_info validator(FILE* fstd, FILE* fuser)
 
 		fu.st = fu.ed+1;
 		find_end(&fu);
-	}while(!eof(&fs) && !eof(&fu));
-
-	if(eof(&fs) && eof(&fu))
-		ret.ret = VAL_IDENTICAL;
-	else if(eof(&fu))
-		ret.ret = VAL_SHORTER;
-	else 
-		ret.ret = VAL_LONGER;
+    }
+    ret.ret = VAL_IDENTICAL;
 	return ret;
 }
 struct validator_info validator_int(FILE *fstd, FILE *fuser)
