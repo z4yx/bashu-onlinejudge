@@ -77,8 +77,13 @@ if(isset($_SESSION['user'])){
                   while($row=mysql_fetch_row($result)){
                 echo '<tr>';
                 echo '<td>',$row[0],'</td>';
-                if(isset($_SESSION['user']))echo '<td class="',is_null($row[6]) ? 'prob-not' : ($row[6] ? 'prob-wa' : 'prob-ac'),'"><i></i></td>';
-                echo '<td style="text-align:left"><a href="problempage.php?problem_id=',$row[0],'">',$row[1];
+                if(isset($_SESSION['user'])){
+                  echo '<td class="',is_null($row[6]) ? 'prob-not' : ($row[6] ? 'prob-wa' : 'prob-ac'),'"><i></i></td>';
+                  echo '<td style="text-align:left;border-left:0;">';
+                }else{
+                  echo '<td style="text-align:left">';
+                }
+                echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1];
                 if($row[5]=='Y')echo '<span style="color:red">(deleted)</span>';
                 echo '</a></td>';
                 echo '<td>',$row[2],'/',$row[3],'</td>';

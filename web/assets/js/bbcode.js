@@ -1,50 +1,14 @@
-// -----------------------------------------------------------------------
 // Copyright (c) 2008, Stone Steps Inc. 
 // All rights reserved
 // http://www.stonesteps.ca/legal/bsd-license/
-//
-// This is a BBCode parser written in JavaScript. The parser is intended
-// to demonstrate how to parse text containing BBCode tags in one pass 
-// using regular expressions.
-//
-// The parser may be used as a backend component in ASP or in the browser, 
-// after the text containing BBCode tags has been served to the client. 
-//
-// Following BBCode expressions are recognized:
-//
-// [b]bold[/b]
-// [i]italic[/i]
-// [u]underlined[/u]
-// [s]strike-through[/s]
-// [samp]sample[/samp]
-//
-// [color=red]red[/color]
-// [color=#FF0000]red[/color]
-// [size=1.2]1.2em[/size]
-//
-// [url]http://blogs.stonesteps.ca/showpost.asp?pid=33[/url]
-// [url=http://blogs.stonesteps.ca/showpost.asp?pid=33][b]BBCode[/b] Parser[/url]
-//
-// [q=http://blogs.stonesteps.ca/showpost.asp?pid=33]inline quote[/q]
-// [q]inline quote[/q]
-// [blockquote=http://blogs.stonesteps.ca/showpost.asp?pid=33]block quote[/blockquote]
-// [blockquote]block quote[/blockquote]
-//
-// [pre]formatted 
-//     text[/pre]
-// [code]if(a == b) 
-//   print("done");[/code]
-//
-// text containing [noparse] [brackets][/noparse]
-//
-// -----------------------------------------------------------------------
 var opentags;           // open tag stack
 var crlf2br = true;     // convert CRLF to <br>?
 var noparse = false;    // ignore BBCode tags?
 var urlstart = -1;      // beginning of the URL if zero or greater (ignored if -1)
 
 // aceptable BBcode tags, optionally prefixed with a slash
-var tagname_re = /^\/?(?:b|i|u|pre|samp|code|colou?r|size|noparse|url|img|s|q|blockquote|del)$/;
+var tagname_re = /^\/?(?:pre|samp|code|colou?r|size|noparse|url|img|blockquote|del)$/;
+//disable [b] [i] [u] [s] [q]
 
 // color names or hex color
 var color_re = /^(:?black|silver|gray|white|maroon|red|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua|#(?:[0-9a-f]{3})?[0-9a-f]{3})$/i;

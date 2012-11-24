@@ -456,3 +456,6 @@ h1,h2,h3,h4,h5,h6{
 .a-red:hover{
   color: #bd362f;
 }
+.tooltip-inner{
+  max-width: 400px;
+}
