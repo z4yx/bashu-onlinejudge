@@ -9,8 +9,13 @@
   width: auto;
   }
 }
-header>a,header img{
+header img{
+  width: 980px;
+}
+header{
   width: 100%;
+  background: rgb(127,0,143);
+  text-align: center;
 }
 table{
   background: white;
@@ -455,7 +460,4 @@ h1,h2,h3,h4,h5,h6{
 }
 .a-red:hover{
   color: #bd362f;
-}
-.tooltip-inner{
-  max-width: 400px;
 }
