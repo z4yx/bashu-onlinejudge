@@ -139,7 +139,7 @@ if($problem_id==0)
                 while($row=mysql_fetch_row($res)){
                   echo '<tr><td>',$row[0],'</td>';
                   echo '<td><a href="problempage.php?problem_id=',$row[1],'">',$row[1],'</a></td>';
-                  echo '<td>',$row[2],'</td>';
+                  echo '<td><a href="#uid">',$row[2],'</a></td>';
                   echo '<td><span class="label ',$RESULT_STYLE[$row[3]],'">',$RESULT_TYPE[$row[3]],'</span></td>';
                   echo '<td>',$row[4],'</td>';
                   if($row[3])
@@ -169,7 +169,19 @@ if($problem_id==0)
           </li>
         </ul>
       </div>
-      
+       
+      <div class="modal hide" id="UserModal">
+        <div class="modal-header">
+          <a class="close" data-dismiss="modal">×</a>
+          <h4>User Infomation</h4>
+        </div>
+        <div class="modal-body" id="user_status" style="max-height:350px">
+          <p>Information isn't available.</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+      </div>
       <hr>
       <footer class="muted" style="text-align: center;font-size:12px;">
         <p>&copy; 2012 Bashu Middle School</p>
@@ -217,13 +229,22 @@ if($problem_id==0)
         }
         $('#tab_record').click(function(E){
           var $target=$(E.target);
-          if($target.is('a') && $target.attr('href').substr(0,9)=='#sw_open_'){
+          if(!$target.is('a'))
+            return true;
+          var h=$target.attr('href');
+          if(h.substr(0,9)=='#sw_open_'){
             $.ajax({
               type:"POST",
               url:"ajax_opensource.php",
               data:{"id":$target.attr('href').substr(9)},
               success:function(msg){if(/success/.test(msg))toggle_s($target);}
             });
+            return false;
+          }else if(h=='#uid'){
+            $('#user_status').html("<p>Loading...</p>").load("ajax_user.php?user_id="+E.target.innerHTML).scrollTop(0);
+            var win=$('#UserModal');
+            win.children('.modal-header').children('h4').html('User Infomation');
+            win.modal('show');
             return false;
           }
         });
