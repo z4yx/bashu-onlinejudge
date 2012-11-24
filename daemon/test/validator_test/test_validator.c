@@ -70,6 +70,23 @@ void test_invaliddata()
     should(info.ret, ==, VAL_IDENTICAL);
 }
 
+void test_singleline()
+{
+    {
+        FILE* fu = fopen("user_identical.txt", "w");
+        fprintf(fu, "\n");
+        fclose(fu);
+
+        FILE* fs = fopen("std_identical.txt", "w");
+        fprintf(fs, "123455");
+        fclose(fs);
+    }
+    FILE* fu = fopen("user_identical.txt", "r");
+    FILE* fs = fopen("std_identical.txt", "r");
+    struct validator_info info = validator(fs, fu);
+    should(info.ret, ==,  VAL_SHORTER);
+}
+
 int main()
 {
     test_shorter();
@@ -77,5 +94,6 @@ int main()
     test_multi();
     test_indentical();
     test_invaliddata();
+    test_singleline();
     return 0;
 }

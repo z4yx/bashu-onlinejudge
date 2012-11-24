@@ -100,11 +100,10 @@ long filelen(FILE* stream)
 	return ftell(stream);
 }
 
-
 long filelines(FILE* stream)
 {
     fseek(stream, 0, SEEK_SET);
-    int c, tmp = 0, sum = 0, non_empty = 0;
+    int c, tmp = 0, sum = 0;
     while(c = getc(stream)){
         if(c == EOF)
             break;
@@ -113,10 +112,9 @@ long filelines(FILE* stream)
         }else{
             sum += tmp;
             tmp = 0;
-            non_empty = 1;
         }
     }
-    return sum + non_empty;
+    return sum + 1;
 }
 
 struct field init_field(FILE* fp)

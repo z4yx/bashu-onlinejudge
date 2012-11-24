@@ -1,0 +1,2 @@
+test:filelines
+	./filelines
