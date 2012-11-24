@@ -20,6 +20,8 @@ struct validator_info{
     if(!(left op right)){ \
         puts("Failed!!!" #left #op #right);\
         printf("%s = %d, %s = %d\n\n", #left, left, #right, right); \
+    }else{\
+        puts("Passed!!!" #left #op #right);\
     }
 
 void test_shorter()
@@ -48,10 +50,22 @@ void test_multi()
     should(info.ret, ==,  VAL_SHORTER);
 }
 
+void test_indentical()
+{
+    system("echo \"123456\n123\" > user_identical.txt");
+    system("echo \"123456\n123\" > std_identical.txt");
+    FILE* fu = fopen("user_identical.txt", "r");
+    FILE* fs = fopen("std_identical.txt", "r");
+    struct validator_info info = validator(fs, fu);
+    should(info.ret, ==,  VAL_IDENTICAL);
+}
+
+
 int main()
 {
     test_shorter();
     test_longer();
     test_multi();
+    test_indentical();
     return 0;
 }

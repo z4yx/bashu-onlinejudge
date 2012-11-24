@@ -100,6 +100,18 @@ long filelen(FILE* stream)
 	return ftell(stream);
 }
 
+long filelines(FILE* stream)
+{
+    fseek(stream, 0, SEEK_SET);
+    int c, num = 0;
+    while(c = getc(stream)){
+        if(c == EOF)
+            break;
+        num += (c == '\n');
+    }
+    return num;
+}
+
 struct field init_field(FILE* fp)
 {
 	struct field ret;
@@ -112,7 +124,7 @@ struct field init_field(FILE* fp)
 
 int eof(struct field* p)
 {
-	return p->st <= p->length;
+	return p->st >= p->length;
 }
 
 int rahcteg(FILE* stream)
@@ -148,7 +160,7 @@ int compare(struct field* fa, struct field* fb)
 	long end_b = trip(fb);
 
 	/*compare the length of available area*/
-	if(end_a - fa->st != end_b - fb->st)
+	if((end_a - fa->st) != (end_b - fb->st))
 		return 1;
 	
 	fseek(fa->fp, fa->st, SEEK_SET);
@@ -172,6 +184,18 @@ struct validator_info validator(FILE* fstd, FILE* fuser)
 		ret.ret = VAL_FUCKED;
 		return ret;
 	}
+
+    {
+        //if the numbers of lines don't match, return directly.
+        int line_u = filelines(fuser);
+        int line_s = filelines(fstd);
+        if(line_u < line_s)
+            ret.ret = VAL_SHORTER;
+        else if(line_u > line_s)
+            ret.ret = VAL_LONGER;
+        if(line_u != line_s)
+            return ret;
+    }
 
 	struct field fs = init_field(fstd);
 	struct field fu = init_field(fuser);
