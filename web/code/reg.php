@@ -69,8 +69,7 @@ if(isset($_SESSION['user'])){
                 </div>
               </div>
               <div class="span3 offset3">
-                <span id="save_btn" class="btn btn-primary" value="Save changes">Save changes</span>
-                <!--<button class="btn">Cancel</button>-->
+                <span id="save_btn" class="btn btn-primary">Submit</span>
               </div>
             </fieldset>
           </form>
