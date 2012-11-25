@@ -13,7 +13,7 @@ $total=($row[0]);
 if($page_id<0 || $page_id>=$total)
   die('Argument out of range.');
 $rank=$page_id;
-$result=mysql_query('select user_id,nick,solved,submit,score from users order by solved desc,submit desc limit '.$page_id.',50');
+$result=mysql_query('select user_id,nick,solved,submit,score from users order by solved desc,submit asc limit '.$page_id.',50');
 ?>
 <!DOCTYPE html>
 <html>
