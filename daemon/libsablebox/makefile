@@ -10,6 +10,6 @@ scaffold.o: sablebox.h scaffold.c
 sablebox.o: sablebox.h sablebox.c
 	gcc sablebox.c -c
 
-test: scaffold helloworld re_seg re_div0 mle_dyn mle_static tle 1003re 1500ac 2000mle tle
+test: scaffold helloworld re_seg re_div0 mle_dyn mle_static tle 1003re 1500ac 2000mle tle block
 	./scaffold
 	
