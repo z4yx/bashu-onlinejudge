@@ -13,7 +13,7 @@ int test_##name ()	\
 		struct sablebox sbox;\
 		struct profile ret;\
 		puts("------------" #name "-------------------\n");\
-		sable_init(&sbox, #pathname, #fin, #fout, 1000, 1024*50, 0);\
+		sable_init(&sbox, #pathname, NULL, #fin, #fout, 1000, 1024*50, 0);\
 		ret = sable_run(&sbox);\
 		switch(ret.status){\
 			CASE(PROF_SUCCESS)\
@@ -47,6 +47,7 @@ deftest(1003re, ./1003re, 1003.in, 1003.out)
 deftest(1500ac, ./1500ac, 1500.in, 1500.out)
 deftest(2000mle, ./2000mle, 2000.in, 2000.out)
 deftest(tle, ./tle, t.in, t.out)
+deftest(block, ./block, t.in, t.out)
 
 int main(int argc, char** argv)
 {
@@ -59,5 +60,6 @@ int main(int argc, char** argv)
 	test_1003re();
 	test_1500ac();
 	test_2000mle();
+    test_block();
 	return 0;
 }
