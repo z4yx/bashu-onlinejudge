@@ -10,8 +10,10 @@ if(!isset($_SESSION['user']))
 
 require('inc/database.php');
 
-$res=mysql_query('select content,new_mail from mail where UPPER(defunct)=\'N\' and mail_id='.$mail);
+$res=mysql_query('select content,new_mail,to_user from mail where UPPER(defunct)=\'N\' and mail_id='.$mail);
 if($res && ($row=mysql_fetch_row($res))){
+	if(strcmp($_SESSION['user'], $row[2]))
+		exit(0);
 	echo htmlspecialchars($row[0]);
 	if($row[1])
 		mysql_query('update mail set new_mail=0 where mail_id='.$mail);

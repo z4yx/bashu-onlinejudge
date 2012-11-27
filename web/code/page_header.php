@@ -20,7 +20,9 @@
 <?php if(isset($_SESSION['user'])){?>
         <a class="btn dropdown-toggle" data-toggle="dropdown" style="white-space:nowrap" href="#">
           <i class="icon-user"></i>
-          <?php echo $_SESSION['user']?>
+          <?php
+          echo $_SESSION['user'],'<strong id="notifier"></strong>';
+          ?>
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
