@@ -86,7 +86,8 @@ if(isset($_SESSION['user'])){
                 echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1];
                 if($row[5]=='Y')echo '<span style="color:red">(deleted)</span>';
                 echo '</a></td>';
-                echo '<td>',$row[2],'/',$row[3],'</td>';
+                echo '<td><a href="record.php?way=time&amp;problem_id=',$row[0],'">',$row[2],'</a>/';
+                echo '<a href="record.php?problem_id=',$row[0],'">',$row[3],'</a></td>';
                 echo '<td>',$row[3] ? intval($row[2]/$row[3]*100) : 0,'%</td>';
                 echo '<td>',$row[4],'</td>';
                 echo "</tr>\n";

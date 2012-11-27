@@ -13,7 +13,7 @@ $total=($row[0]);
 if($page_id<0 || $page_id>=$total)
   die('Argument out of range.');
 $rank=$page_id;
-$result=mysql_query('select user_id,nick,solved,submit,score from users order by solved desc,submit asc limit '.$page_id.',50');
+$result=mysql_query('select user_id,nick,solved,submit,score from users order by solved desc,submit desc limit '.$page_id.',50');
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,11 +72,11 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
                 <?php 
                   while($row=mysql_fetch_row($result)){
                 echo '<tr><td>',(++$rank),'</td>';
-                echo '<td><a href="#">',$row[0],'</a></td>';
+                echo '<td><a href="#linkU">',$row[0],'</a></td>';
                 echo '<td>',htmlspecialchars($row[1]),'</td>';
                 echo '<td>',$row[4],'</td>';
-                echo '<td>',$row[2],'</td>';
-                echo '<td>',$row[3],'</td>';
+                echo '<td><a href="record.php?user_id=',$row[0],'&amp;result=0">',$row[2],'</a></td>';
+                echo '<td><a href="record.php?user_id=',$row[0],'">',$row[3],'</a></td>';
                 echo '<td>',$row[3] ? intval($row[2]/$row[3]*100) : 0,'%</td>';
                 echo "</tr>\n";
                   }
@@ -175,12 +175,15 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
           var num=parseInt($(this).find("option:selected").text())-1;
           location.href='ranklist.php?start_id='+num;
         });
-        $('#userlist a').click(function(Event){
-          $('#user_status').html("<p>Loading...</p>").load("ajax_user.php?user_id="+Event.target.innerHTML).scrollTop(0);
-          var win=$('#UserModal');
-          win.children('.modal-header').children('h4').html('User Infomation');
-          win.modal('show');
-          return false;
+        $('#userlist').click(function(Event){
+          var $target=$(Event.target);
+          if($target.is('a') && $target.attr('href')=='#linkU'){
+            $('#user_status').html("<p>Loading...</p>").load("ajax_user.php?user_id="+Event.target.innerHTML).scrollTop(0);
+            var win=$('#UserModal');
+            win.children('.modal-header').children('h4').html('User Infomation');
+            win.modal('show');
+            return false;
+          }
         });
         $('#btn-next').click(function(){
           if(cur+1+50<=<?php echo $total?>)

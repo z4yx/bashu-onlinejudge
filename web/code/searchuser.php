@@ -57,8 +57,8 @@ session_start();//for login
                 echo '<tr>';
                 echo '<td><a href="#">',$row[0],'</a></td>';
                 echo '<td>',htmlspecialchars($row[1]),'</td>';
-                echo '<td>',$row[2],'</td>';
-                echo '<td>',$row[3],'</td>';
+                echo '<td><a href="record.php?user_id=',$row[0],'&amp;result=0">',$row[2],'</a></td>';
+                echo '<td><a href="record.php?user_id=',$row[0],'">',$row[3],'</a></td>';
                 echo "</tr>\n";
                   }
                 ?>
@@ -114,13 +114,15 @@ session_start();//for login
             location.href=u+"&page_id="+(thispage-100);
           return false;
         })
-        $('#userlist a').click(function(Event){
-          //if($.browser.msie)
-          //  $('#user_status').html('本功能不开放给IE使用!');
-          //else
-            $('#user_status').load("ajax_user.php?user_id="+Event.target.text);
-          $('#UserModal').modal('show');
-          return false;
+        $('#userlist').click(function(Event){
+          var $target=$(Event.target);
+          if($target.is('a') && $target.attr('href')=='#linkU'){
+            $('#user_status').html("<p>Loading...</p>").load("ajax_user.php?user_id="+Event.target.innerHTML).scrollTop(0);
+            var win=$('#UserModal');
+            win.children('.modal-header').children('h4').html('User Infomation');
+            win.modal('show');
+            return false;
+          }
         });
       });
     </script>
