@@ -6,7 +6,7 @@
 ?>
 <!--[if IE 6]>
   <script>var LETSKILLIE6_DELAY=1;</script>
-  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+  <script src="http://letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 <header>
   <a href="index.php"><img src="../assets/img/logo.jpg" alt="Logo" class="img-rounded"></a>
