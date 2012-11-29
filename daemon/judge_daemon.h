@@ -17,9 +17,11 @@ struct solution
 	std::vector<case_info> detail_results;
 	void *mutex_for_query;//use void* to avoid including <mutex>
 	time_t timestamp;
+	unsigned char type;
 
 	solution();
 	~solution();
+	void copy_setting(const solution &);
 	bool compile();
 	void judge();
 	void write_database();
@@ -37,7 +39,8 @@ struct validator_info{
 	char* std_mismatch;
 };
 
-enum {MSG_problem, MSG_lang, MSG_time, MSG_mem, MSG_score, MSG_code, MSG_user, MSG_key, MSG_share, MSG_compare};
+enum {TYPE_normal=0, TYPE_rejudge=1};
+enum {MSG_problem, MSG_lang, MSG_time, MSG_mem, MSG_score, MSG_code, MSG_user, MSG_key, MSG_share, MSG_compare, MSG_rejudge};
 enum {RES_AC=0, RES_CE=7, RES_TLE=2, RES_MLE=3, RES_WA=4, RES_RE=5, RES_VE=99, RES_SE=100};
 
 typedef int (*run_compiler_def)(const char *, char *, int);
@@ -49,9 +52,15 @@ bool start_http_interface();
 bool init_mysql_con();
 char *JUDGE_get_progress(const char*);
 char *JUDGE_accept_submit(solution *&sol);
+char *JUDGE_start_rejudge(solution *&sol);
 bool clean_files();
 int get_next_solution_id();
 void write_result_to_database(int, solution*);
+void get_exist_solution_info(int solution_id, solution* sol);
+void update_exist_solution_info(int solution_id, solution* sol);
+void refresh_users_problem(int problem_id);
+void get_solution_list(std::vector<int> &rejudge_list, int problem_id);
+
 extern "C" {
 	struct validator_info validator(FILE* fstd, FILE* fuser);
 	struct validator_info validator_int(FILE* fstd, FILE* fuser);

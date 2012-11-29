@@ -32,8 +32,11 @@ namespace std {
 
 std::map<std::string, solution* > finder;
 std::queue<solution*> waiting, removing;
-std::mutex waiting_mutex, removing_mutex, finder_mutex, applog_mutex;
-std::condition_variable notifier;
+std::mutex waiting_mutex, removing_mutex, finder_mutex, applog_mutex, rejudge_mutex;
+std::condition_variable notifier, rejudge_notifier;
+volatile bool rejudging, filled;
+std::vector<int> rejudge_list;
+solution rejudge_init;
 
 #ifdef USE_DLL_ON_WINDOWS
 run_compiler_def run_compiler;
@@ -47,10 +50,21 @@ solution::solution()
 	problem = compare_way = lang = time_limit = mem_limit = score = error_code = 0;
 	public_code = 0;
 	timestamp = 0;
+	type = TYPE_normal;
 }
 solution::~solution()
 {
 	delete (std::mutex*)mutex_for_query;
+}
+void solution::copy_setting(const solution &from)
+{
+	problem=from.problem;
+	compare_way=from.compare_way;
+	lang=from.lang;
+	time_limit=from.time_limit;
+	mem_limit=from.mem_limit;
+	score=from.score;
+	type=from.type;
 }
 void applog(const char *str)
 {
@@ -159,7 +173,9 @@ void thread_judge()
 			}
 			if(cur->compile())
 				cur->judge();
-			cur->write_database();
+			if(cur->type == TYPE_normal) {
+				cur->write_database();
+			}
 			cur->timestamp = time(0);
 		}catch(int) {
 			std::string message("Error: Exception occur when judging ");
@@ -176,9 +192,86 @@ void thread_judge()
 			}
 		}
 
-		std::unique_lock<std::mutex> Lock(removing_mutex);
-		removing.push(cur);
+		if(cur->type == TYPE_normal) {
+			std::unique_lock<std::mutex> Lock(removing_mutex);
+			removing.push(cur);
+		}else if(cur->type == TYPE_rejudge){
+			rejudging = false;
+		}
 	}
+}
+void thread_rejudge()
+{
+	std::unique_lock<std::mutex> Lock(rejudge_mutex);
+	for(;;) {
+		rejudge_notifier.wait(Lock, []()->bool{return filled;});
+		filled = false;
+
+		puts("rejudge thread running");
+		for(int solution_id : rejudge_list) {
+			solution *sol = new solution;
+			if(!sol) {
+				applog("Error: Can't allocate memory, stop rejudging");
+				break;
+			}
+			try {
+				puts("rejudge one solution");
+				sol->copy_setting(rejudge_init); //Get problem settings, like compare_way
+				get_exist_solution_info(solution_id, sol);
+				sol->error_code = -1;
+
+				rejudging = true;
+				do { //insert to queue
+					std::unique_lock<std::mutex> Lock(waiting_mutex);
+					waiting.push(sol);
+					notifier.notify_one();
+				}while(0);
+				puts("insert to queue");
+
+				//wait until finished
+				while(rejudging);
+
+				update_exist_solution_info(solution_id, sol);
+			}catch(...) {
+				char tmp[64];
+				sprintf(tmp, "Error: Exception occur when rejudging %d", solution_id);
+				applog(tmp);
+			}
+			delete sol;
+		}
+		try {
+			refresh_users_problem(rejudge_init.problem);
+		}catch(...) {
+			applog("Error: Exception occur when refreshing user info");
+		}
+	}
+}
+char *JUDGE_start_rejudge(solution *&new_sol)
+{
+	char *p = (char*)malloc(8);
+	if(rejudge_mutex.try_lock()) {
+		puts("rejudge_mutex locked");
+		try {
+			rejudge_init = *new_sol;
+			get_solution_list(rejudge_list, rejudge_init.problem);
+			for(int t : rejudge_list)
+				printf("%d\n", t);
+
+			filled = true;
+			rejudge_notifier.notify_one();
+			rejudge_mutex.unlock();
+			strcpy(p, "OK");
+			return p;
+		}catch(...) {
+			applog("Error: Cannot start rejudging");
+			rejudge_mutex.unlock();
+
+			strcpy(p, "error");
+			return p;
+		}
+	}
+	strcpy(p, "another");
+	return p;
 }
 char *JUDGE_accept_submit(solution *&new_sol)
 {
@@ -280,6 +373,7 @@ int main(int argc, char **argv)
 
 	std::thread thread_j(thread_judge);
 	std::thread thread_r(thread_remove);
+	std::thread thread_re(thread_rejudge);
 
 	if(!start_http_interface()) {
 		applog("Error: Cannot open http interface, Exit...");

@@ -101,7 +101,8 @@ int main(int argc, char **argv)
 	fprintf(run_info, "Time = %ld\n", ret.time);
 	fprintf(run_info, "Memory = %ld\n", ret.memory);
 	fprintf(run_info, "State = %d\n", state);
-	fprintf(run_info, "Info = %s\n", ret.info);
+	if(ret.info)
+		fprintf(run_info, "Info = %s\n", ret.info);
 	fclose(run_info);
 
 	return 0;

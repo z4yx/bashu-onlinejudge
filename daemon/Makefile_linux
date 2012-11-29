@@ -10,7 +10,7 @@ manager.o: manager.cpp judge_daemon.h
 readconfig.o: readconfig.cpp judge_daemon.h
 	g++ -std=c++0x -c -O readconfig.cpp
 database.o: database.cpp judge_daemon.h
-	g++ -c -O database.cpp -I/usr/include/mysql -I/usr/local/mysql/include
+	g++ -std=c++0x -c -O database.cpp -I/usr/include/mysql -I/usr/local/mysql/include
 validator.o: validator.c
 	gcc -c -O2 validator.c
 json_builder.o: json_builder.cpp judge_daemon.h

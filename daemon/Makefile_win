@@ -12,7 +12,7 @@ readconfig.o: readconfig.cpp judge_daemon.h
 win32_run.o: win32_run.cpp judge_daemon.h
 	g++ -c -O win32_run.cpp
 database.o: database.cpp judge_daemon.h
-	g++ -c -O database.cpp -I./mysql/mysql_win
+	g++ -std=c++0x -c -O database.cpp -I./mysql/mysql_win
 validator.o: validator.c
 	gcc -c -O2 validator.c
 json_builder.o: json_builder.cpp judge_daemon.h

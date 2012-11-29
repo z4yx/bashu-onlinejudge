@@ -94,6 +94,10 @@ static int iterate_post(void *arg, enum MHD_ValueKind, const char *name,
 			break;
 		case MSG_compare:
 			numcat(p->compare_way, data);
+			break;
+		case MSG_rejudge:
+			p->type = atol(data);
+			break;
 	}
 	return MHD_YES;
 }
@@ -136,7 +140,11 @@ static int server_handler_post(
 			return MHD_YES;
 		}else{ //last time, finish reading
 			//puts("last");
-			char *result = JUDGE_accept_submit(p->second);
+			char *result;
+			if(p->second->type == TYPE_rejudge)
+				result = JUDGE_start_rejudge(p->second);
+			else
+				result = JUDGE_accept_submit(p->second);
 			struct MHD_Response *response = 
 				MHD_create_response_from_buffer(strlen(result), result, MHD_RESPMEM_MUST_FREE);
 			int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
