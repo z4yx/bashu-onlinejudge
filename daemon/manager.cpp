@@ -215,7 +215,6 @@ void thread_rejudge()
 				break;
 			}
 			try {
-				puts("rejudge one solution");
 				sol->copy_setting(rejudge_init); //Get problem settings, like compare_way
 				get_exist_solution_info(solution_id, sol);
 				sol->error_code = -1;
@@ -226,7 +225,6 @@ void thread_rejudge()
 					waiting.push(sol);
 					notifier.notify_one();
 				}while(0);
-				puts("insert to queue");
 
 				//wait until finished
 				while(rejudging);
@@ -244,18 +242,16 @@ void thread_rejudge()
 		}catch(...) {
 			applog("Error: Exception occur when refreshing user info");
 		}
+		applog("Info: Rejudge thread finished");
 	}
 }
 char *JUDGE_start_rejudge(solution *&new_sol)
 {
 	char *p = (char*)malloc(8);
 	if(rejudge_mutex.try_lock()) {
-		puts("rejudge_mutex locked");
 		try {
 			rejudge_init = *new_sol;
 			get_solution_list(rejudge_list, rejudge_init.problem);
-			for(int t : rejudge_list)
-				printf("%d\n", t);
 
 			filled = true;
 			rejudge_notifier.notify_one();
