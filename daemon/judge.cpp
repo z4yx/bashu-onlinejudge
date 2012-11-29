@@ -22,7 +22,7 @@ namespace std {
 #include <mutex>
 #endif
 
-#define USE_CENA_VALIDATOR
+//#define USE_CENA_VALIDATOR
 
 enum{CMP_tra, CMP_float, CMP_int, CMP_spj};
 

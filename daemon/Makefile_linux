@@ -18,7 +18,7 @@ json_builder.o: json_builder.cpp judge_daemon.h
 call_ruc.o: call_ruc.cpp
 	g++ -c -O call_ruc.cpp
 cena_validator.o: cena_validator.cpp
-	g++ -c O2 cena_validator.cpp
+	g++ -c -O2 cena_validator.cpp
 
 sablebox: 
 	make -C ./libsablebox

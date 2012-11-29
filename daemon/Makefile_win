@@ -14,7 +14,7 @@ win32_run.o: win32_run.cpp judge_daemon.h
 database.o: database.cpp judge_daemon.h
 	g++ -std=c++0x -c -O database.cpp -I./mysql/mysql_win
 cena_validator.o: cena_validator.cpp
-        g++ -c -O2 cena_validator.cpp
+	g++ -c -O2 cena_validator.cpp
 validator.o: validator.c
 	gcc -c -O2 validator.c
 json_builder.o: json_builder.cpp judge_daemon.h
