@@ -22,6 +22,8 @@ namespace std {
 #include <mutex>
 #endif
 
+#define USE_CENA_VALIDATOR
+
 enum{CMP_tra, CMP_float, CMP_int, CMP_spj};
 
 char DataDir[MAXPATHLEN+4], dir_name[MAXPATHLEN+16], input_filename[MAXPATHLEN+16];
@@ -164,7 +166,11 @@ void solution::judge()
 
 					switch(compare_way >> 16) {
 					case CMP_tra:
+#ifdef USE_CENA_VALIDATOR
+						info = validator_cena(fanswer, foutput);
+#else
 						info = validator(fanswer, foutput);//traditional OI comparison (Ignore trailing space)
+#endif
 						break;
 					case CMP_float:
 						info = validator_float(fanswer, foutput, (compare_way & 0xffff)); //precision comparison

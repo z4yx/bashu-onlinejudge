@@ -1,6 +1,6 @@
 all: daemon sablebox runner_linux
-daemon: http.o judge.o manager.o readconfig.o database.o validator.o json_builder.o call_ruc.o
-	g++ -std=c++0x -L/usr/local/mysql/lib -L/usr/lib64/mysql -L/usr/local/lib -O -o daemon http.o database.o judge.o manager.o readconfig.o validator.o json_builder.o call_ruc.o -lmicrohttpd -lmysqlclient
+daemon: http.o judge.o manager.o readconfig.o database.o cena_validator.o validator.o json_builder.o call_ruc.o
+	g++ -std=c++0x -L/usr/local/mysql/lib -L/usr/lib64/mysql -L/usr/local/lib -O -o daemon http.o database.o judge.o manager.o readconfig.o cena_validator.o validator.o json_builder.o call_ruc.o -lmicrohttpd -lmysqlclient
 http.o: http.cpp judge_daemon.h
 	g++ -std=c++0x -c -O http.cpp -I/usr/local/include
 judge.o: judge.cpp judge_daemon.h
@@ -17,6 +17,8 @@ json_builder.o: json_builder.cpp judge_daemon.h
 	g++ -std=c++0x -c -O json_builder.cpp
 call_ruc.o: call_ruc.cpp
 	g++ -c -O call_ruc.cpp
+cena_validator.o: cena_validator.cpp
+	g++ -c O2 cena_validator.cpp
 
 sablebox: 
 	make -C ./libsablebox

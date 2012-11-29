@@ -61,6 +61,7 @@ void update_exist_solution_info(int solution_id, solution* sol);
 void refresh_users_problem(int problem_id);
 void get_solution_list(std::vector<int> &rejudge_list, int problem_id);
 
+struct validator_info validator_cena(FILE* fstd, FILE* fuser);
 extern "C" {
 	struct validator_info validator(FILE* fstd, FILE* fuser);
 	struct validator_info validator_int(FILE* fstd, FILE* fuser);
