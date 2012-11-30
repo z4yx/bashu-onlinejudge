@@ -4,6 +4,9 @@
   exit(0);
 }*/
 ?>
+<!--[if lt IE 9]>
+  <script>window.fix_ie_pre=true;</script>
+<![endif]-->
 <!--[if IE 6]>
   <script>var LETSKILLIE6_DELAY=1;</script>
   <script src="http://letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>

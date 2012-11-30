@@ -2,7 +2,6 @@
 // All rights reserved
 // http://www.stonesteps.ca/legal/bsd-license/
 var opentags;           // open tag stack
-var crlf2br = true;     // convert CRLF to <br>?
 var noparse = false;    // ignore BBCode tags?
 var urlstart = -1;      // beginning of the URL if zero or greater (ignored if -1)
 
@@ -20,7 +19,7 @@ var number_re = /^[\\.0-9]{1,8}$/i;
 var uri_re = /^[-;\/\?:@&=\+\$,_\.!~\*'\(\)%0-9a-z]{1,512}$/i;
 
 // main regular expression: CRLF, [tag=option], [tag] or [/tag]
-var postfmt_re = /([\r\n])|(?:\[([a-z]{1,16})(?:=([^\x00-\x1F"'\(\)<>\[\]]{1,256}))?\])|(?:\[\/([a-z]{1,16})\])/ig;
+var postfmt_re = /([\r\n\t ])|(?:\[([a-z]{1,16})(?:=([^\x00-\x1F"'\(\)<>\[\]]{1,256}))?\])|(?:\[\/([a-z]{1,16})\])/ig;
 
 // stack frame object
 function taginfo_t(bbtag, etag)
@@ -49,16 +48,28 @@ function textToHtmlCB(mstr, m1, m2, m3, m4, offset, string)
    //
    // CR LF sequences
    //
+   function times(s,t) {
+       var ret="";
+       while(t--)
+       ret+=s;
+       return ret;
+   }
+
    if(m1 && m1.length) {
-      if(!crlf2br)
+      if(typeof(window.fix_ie_pre)=='undefined')
          return mstr;
 
       switch (m1) {
+         case ' ':
+            return "&nbsp;";
          case '\r':
             return "";
          case '\n':
             return "<br>";
+         case '\t':
+	         return times("&nbsp;",8);
       }
+      return mstr;
    }
 
    //
@@ -183,8 +194,6 @@ function parseBBCode(post)
 {
    var result, endtags, tag;
 
-   // convert CRLF to <br> by default
-   crlf2br = true;
 
    // create a new array for open tags
    if(opentags == null || opentags.length)

@@ -160,7 +160,11 @@ if(!isset($_SESSION['user'])){
 							mailid=k.parent().get(0).id.substr(4);
 							content=k.children('.mail-content');
 							if(content.is(":hidden")){
-								content.children('pre').load('ajax_showmail.php?mail_id='+mailid);
+								$.get('ajax_showmail.php?mail_id='+mailid,function(data){
+									if(typeof(window.fix_ie_pre)!='undefined')
+										data=encode_space(data);
+									content.children('pre').html(data);
+								});
 								content.show();
 								$a.prev('span').remove();
 							}else{

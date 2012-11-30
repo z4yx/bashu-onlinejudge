@@ -9,6 +9,14 @@ function htmlEncode(str) {
 	s = s.replace(/\"/g, "&quot;");
 	return s;
 }
+function encode_space(str) {
+	var s="";
+	if(str.length == 0) return "";
+	s=str.replace(/\r?\n/g, "<br>");
+	s=s.replace(/ /g, "&nbsp;");
+	s=s.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+	return s;
+}
 $(document).ready(function(){
 	var $nav=$('#navbar_top'),navFixed=false,$win=$(window),$container=$('body>.container-fluid'),$notifier=$('#notifier');
 	function processScroll () {
