@@ -19,7 +19,7 @@ struct validator_info{
 #define VAL_LONGER 2
 #define VAL_SHORTER 3
 
-static int fs[2], bp[2], line, col[2], readed[2];
+static int fs[2], line, col[2];
 static FILE *f[2];
 struct Tchar
 {
@@ -39,6 +39,10 @@ void GetChar(int fi)
 		if(ch == 10) {
 			if(last != 13)
 				chars[fi].eml++;
+			col[fi] = 0;
+			chars[fi].he = false;
+		}else if(ch == 13) {
+			chars[fi].eml++;
 			col[fi] = 0;
 			chars[fi].he = false;
 		}else {
