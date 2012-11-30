@@ -337,6 +337,7 @@ samp {
 .tooltip-inner{
   text-align: left;
   font-family: "Lucida Console","Courier New",Monospace;
+  max-width: none;
 }
 #form_filter > label{
   margin-left: 5px;
