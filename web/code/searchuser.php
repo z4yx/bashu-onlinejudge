@@ -96,8 +96,7 @@ session_start();//for login
 
     </div>
     <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
     <script src="common.js"></script>
 
     <script type="text/javascript"> 

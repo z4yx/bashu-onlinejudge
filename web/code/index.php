@@ -110,8 +110,7 @@ $index_text=($row=mysql_fetch_row($res)) ? $row[0] : '';
       ?>
     </script>
     <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
     <script src="common.js"></script>
     <script src="../assets/js/chat.js"></script>
     <script type="text/javascript"> 

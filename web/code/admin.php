@@ -136,9 +136,7 @@ if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
     </div>
 
     <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap-tab.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
     <script src="common.js"></script>
 
     <script type="text/javascript">

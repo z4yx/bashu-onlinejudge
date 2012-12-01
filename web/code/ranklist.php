@@ -115,8 +115,7 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
 
     </div><!--/.container-->
     <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
     <script src="common.js"></script>
 
     <script type="text/javascript">

@@ -59,7 +59,7 @@ if(strlen($key)!=32 || preg_match('/\W/',$key))
     </div>
 
     <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap-tooltip.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
 
     <script type="text/javascript"> 
 			$(function(){
