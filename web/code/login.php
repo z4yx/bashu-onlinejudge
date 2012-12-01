@@ -27,6 +27,11 @@ try{
 	}
 	$ip=mysql_escape_string($_SERVER["REMOTE_ADDR"]);
 	mysql_query("update users set accesstime=NOW(),ip='$ip' where user_id='$user'");
+
+	if(isset($_POST['remember'])){
+		require_once 'inc/cookie.php';
+		write_cookie();
+	}
 	//echo("Login succeeded.");
 	header("location: ".$_POST['url']);
 }catch(Exception $E){?>
