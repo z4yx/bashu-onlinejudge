@@ -17,6 +17,9 @@ session_start();
       <script src="../assets/js/html5.js"></script>
     <![endif]-->
   </head>
+  <style type="text/css">
+    .mainbutton>.btn{margin-top: 20px;}
+  </style>
 
   <body>
     <?php require('page_header.php'); ?>  
@@ -51,8 +54,11 @@ if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
             <div class="tab-content">
               <div class="tab-pane active" id="tab_A">
                 <div class="row-fluid">
-                  <div class="span3 offset1">
+                  <div class="span3 offset1 mainbutton">
                     <a href="newproblem.php" style="margin-top:20px" class="btn btn-primary">Add Problem</a>
+                    <div> </div>
+                    <a href="#" id="btn_rejudge" style="width:82px" class="btn btn-info">Rejudge...</a>
+                    <div class="alert hide" id="rejudge_res" style="margin-top:20px"></div>
                   </div>
                   <div class="span5 offset1">
                     <h3 class="center">Home Page</h3>
@@ -142,7 +148,20 @@ if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
     <script type="text/javascript">
       $(document).ready(function(){
         $('#ret_url').val("admin.php");
-
+        $('#btn_rejudge').click(function(){
+          var obj=$('#rejudge_res').hide();
+          var id=prompt("Enter problem ID","");
+          if(id!=null){
+            id=$.trim(id);
+            if(id){
+              $.get("rejudge.php?problem_id="+id,function(msg){
+                if(/start/.test(msg))obj.addClass('alert-success');
+                else obj.addClass('alert-error');
+                obj.html(msg).slideDown();
+              });
+            }
+          }
+        });
         var getprivlist=function(){$('#table_priv').load('ajax_admin.php',{op:'list_priv'});};
         var getnewslist=function(){$('#table_news').load('ajax_admin.php',{op:'list_news'});};
         var getusrlist=function(){$('#table_usr').load('ajax_admin.php',{op:'list_usr'});};
