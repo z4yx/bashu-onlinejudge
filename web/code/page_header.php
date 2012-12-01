@@ -58,7 +58,7 @@ if(!isset($_SESSION['user'])){
           <li><a id="nav_about" href="about.php">About</a></li>
         </ul>
         <form class="navbar-search pull-left" id="search_form" action="search.php" method="get">
-          <input type="text" name="q" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" placeholder="Problem ID,Title,Source">
+          <input type="text" name="q" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" autocomplete="off" placeholder="Problem ID,Title,Source">
         </form>
     </div>
   </div>
