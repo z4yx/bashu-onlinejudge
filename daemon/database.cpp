@@ -142,7 +142,7 @@ void write_result_to_database(int solution_id, solution *data)
 	}
 	puts("insert solution");
 	sprintf(statements, "insert into solution (solution_id,problem_id,user_id,time,memory,in_date,result,score,language,valid,code_length,public_code) VALUES "
-		"(%d,%d,'%s',%d,%d,NOW(),%d,%d,%d,%d,%d,%d)", solution_id, data->problem, data->user.c_str(), data->time_limit, data->mem_limit, data->error_code, data->score, data->lang, valid, code_length, (int)data->public_code);
+		"(%d,%d,'%s',%d,%d,NOW(),%d,%d,%d,%d,%d,%d)", solution_id, data->problem, data->user.c_str(), data->time_limit, data->mem_limit, data->error_code, data->score, data->lang, (int)(valid && data->error_code == RES_AC), code_length, (int)data->public_code);
 	if(mysql_query(hMySQL, statements))
 		throw 1;
 	if(1 != mysql_affected_rows(hMySQL))
@@ -237,6 +237,14 @@ void refresh_users_problem(int problem_id)
 		throw 1;
 	//update problem accepted & solved
 	sprintf(statements,"update problem,(select count(distinct user_id)as s,count(*)as t from solution where problem_id=%d and result=0)as tmp set solved=tmp.s,accepted=tmp.t where problem.problem_id=%d", problem_id, problem_id);
+	if(mysql_query(hMySQL, statements))
+		throw 1;
+
+	//maintain `valid` field in `solution`
+	sprintf(statements,"update solution set valid=0 where problem_id=%d", problem_id);
+	if(mysql_query(hMySQL, statements))
+		throw 1;
+	sprintf(statements,"update solution,(select solution_id from(select solution_id,user_id from solution where problem_id=%d and result=0 order by solution_id) as t group by user_id)as s SET valid=1 where solution.solution_id=s.solution_id", problem_id);
 	if(mysql_query(hMySQL, statements))
 		throw 1;
 }

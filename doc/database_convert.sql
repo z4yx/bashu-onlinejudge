@@ -94,3 +94,6 @@ alter table attend modify user_id varchar(20) CHARACTER SET gbk;
 alter table attend modify nick BLOB;
 alter table attend modify nick varchar(100) CHARACTER SET gbk;
 alter table attend CONVERT TO CHARACTER SET utf8;
+
+update solution set valid=0;
+update solution,(select solution_id from(select solution_id,problem_id,user_id,result FROM solution order by solution_id) as t where result=0 group by problem_id,user_id)as s SET valid=1 where solution.solution_id=s.solution_id;
