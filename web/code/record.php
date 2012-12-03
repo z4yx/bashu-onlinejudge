@@ -18,25 +18,40 @@ $result=-1;
 $lang=-1;
 $way="none";
 $public_code=false;
-if(isset($_GET['user_id'])){
-  $user_id=trim($_GET['user_id']);
-  if(strlen($user_id))
-    $cond.=' and user_id=\''.mysql_real_escape_string($user_id).'\'';
-}
+$rank_mode=false;
+
 if(isset($_GET['problem_id'])){
   $problem_id=intval($_GET['problem_id']);
 }
 if(isset($_GET['way'])){
   $way=$_GET['way'];
   if($way=="time"||$way=="memory"){
+    $rank_mode=true;
     $result=0;
     if(!$problem_id)
       $problem_id=1000;
     $cond.=" and result=0";
   }
 }
+if(!$rank_mode) {
+  if(isset($_GET['solution_id']))
+    $cond.=" and solution_id=".intval($_GET['solution_id']);
+  else {
+    $row=mysql_fetch_row(mysql_query('select max(solution_id) from solution'));
+    $top=0;
+    if(!is_null($row[0]))
+      $top=$row[0];
+    $top-=$start_id;
+    $cond.=" and solution_id<=$top";
+  }
+}
 if($problem_id)
     $cond.=" and problem_id=$problem_id";
+if(isset($_GET['user_id'])){
+  $user_id=trim($_GET['user_id']);
+  if(strlen($user_id))
+    $cond.=' and user_id=\''.mysql_real_escape_string($user_id).'\'';
+}
 if($result==-1 && isset($_GET['result'])){
   $result=intval($_GET['result']);
   if($result!=-1)
@@ -62,7 +77,11 @@ else if($way=="memory")
 else
   $sql.=" order by solution_id desc";
 
-$res=mysql_query("select solution_id,problem_id,user_id,result,score,time,memory,code_length,language,in_date,public_code from solution $sql limit $start_id,20");
+if(!$rank_mode){
+  $res=mysql_query("select solution_id,problem_id,user_id,result,score,time,memory,code_length,language,in_date,public_code from solution $sql limit 20");
+}else{
+  $res=mysql_query("select solution_id,problem_id,user_id,result,score,time,memory,code_length,language,in_date,public_code from solution $sql limit $start_id,20");
+}
 if($problem_id==0)
   $problem_id="";
 ?>

@@ -41,7 +41,7 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
         <select class="input-small pull-left" id="user_page"></select>
         <div class="pull-right">
           <form id="searchuser_form" action="searchuser.php" method="get" style="margin: 0 0">
-            <div class="input-append"><input id="searchuser_input" type="text" name="q" class="input-medium" placeholder="Search User"><span class="add-on"><i class="icon-search"></i></span></div>
+            <div class="input-append"><input id="searchuser_input" type="text" name="q" class="input-medium" placeholder="Search User"><span id="search_addon" class="add-on"><i class="icon-search"></i></span></div>
           </form>
         </div>
         <div class="btn-group pull-right" style="margin-right:9px">
@@ -54,6 +54,9 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
               <button id="btn_usrcmp" class="btn btn-small btn-primary pull-right" style="margin-right:9px;">Compare</button>
             </li>
           </ul>
+        </div>
+        <div class="pull-right" style="margin-right:9px">
+          <a href="solved.php" class="btn btn-success">Recent Solved...</a>
         </div>
       </div>
       <div class="row-fluid" style="font-size:14px">
@@ -199,6 +202,7 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
             return false;
           return true;
         });
+        $('#search_addon').click(function(){$('#searchuser_form').submit();});
         $('#btn_usrcmp_menu').click(function(E){
           $(E.target).parent().toggleClass('open');
         });
