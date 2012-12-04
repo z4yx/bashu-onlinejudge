@@ -1,6 +1,7 @@
 #include "sablebox.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 static struct scmask safe_syscall;
 
@@ -89,14 +90,14 @@ int main(int argc, char **argv)
 			break;
 	}
 	if(sys_error)
-		return 1;
+		return 2;
 
 	if(isspj) {
 		return (state == 0) ? 0 : 1;//whether validator exited successfully
 	}
 	run_info = fopen("run.info", "w");
 	if(!run_info)
-		return 1;
+		return 3;
 
 	fprintf(run_info, "Time = %ld\n", ret.time);
 	fprintf(run_info, "Memory = %ld\n", ret.memory);

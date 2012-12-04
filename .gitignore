@@ -1,0 +1,5 @@
+*.o
+*.a
+.DS_Store
+daemon/daemon
+daemon/runner_linux

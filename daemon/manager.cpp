@@ -7,6 +7,7 @@
 #include <ctime>
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <map>
 #include <queue>
 #ifdef __MINGW32__
@@ -187,6 +188,17 @@ void thread_judge()
 				cur->detail_results.clear();
 				cur->detail_results.push_back({RES_SE, 0, 0, cur->last_state, 0});
 				cur->timestamp = time(0);
+
+				message = "../dump/dump_";
+				message += cur->key;
+				std::ofstream dump_f(message.c_str());
+				if(dump_f.is_open()) {
+					dump_f << cur->user << std::endl;
+					dump_f << cur->code;
+					dump_f.close();
+					puts("Dump file created");
+				}
+	
 			}catch(...) {
 				;
 			}
