@@ -23,6 +23,8 @@
 #include <sys/ptrace.h>
 #include <linux/ptrace.h>
 
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
 
 //#define PRINT_FOR_DEBUG
 //#define ALLOW_FOR_DEBUG
@@ -134,8 +136,10 @@ struct profile sable_run(struct sablebox* pbox)
 		set_resource_limits(pbox);
 		redirect_io(pbox);
 		
-		if(ptrace(PTRACE_TRACEME, 0, 0, 0))
+		if(ptrace(PTRACE_TRACEME, 0, 0, 0)){
+			perror("ptrace:"TOSTRING(__LINE__));
 			_exit(1);
+		}
 
 		/*stop to wait parent getting the listener ready*/
 		kill(getpid(), SIGSTOP);
@@ -191,20 +195,26 @@ static void setup_listener(struct __child_t* pson)
 {
 	int status;
 
-	if(waitpid(pson->pid, &status, 0) < 0)
+	if(waitpid(pson->pid, &status, 0) < 0){
+		perror("waitpid:"TOSTRING(__LINE__));
 		THROW_SYSERR;
+	}
 
 	/*check it is the first STOP signal sent by the child*/
 	if(!((WIFSTOPPED(status)) && ((WSTOPSIG(status)) == SIGSTOP)))
 		THROW_SYSERR;
 
-	if(ptrace(PTRACE_SETOPTIONS, pson->pid, 0, PTRACE_O_TRACESYSGOOD | PTRACE_EVENT_EXEC))
+	if(ptrace(PTRACE_SETOPTIONS, pson->pid, 0, PTRACE_O_TRACESYSGOOD | PTRACE_EVENT_EXEC)){
+		perror("ptrace:"TOSTRING(__LINE__));
 		THROW_SYSERR;
+	}
 
 	
 	/*resume the child*/
-	if(ptrace(PTRACE_SYSCALL, pson->pid, 0, 0))
+	if(ptrace(PTRACE_SYSCALL, pson->pid, 0, 0)){
+		perror("ptrace:"TOSTRING(__LINE__));
 		THROW_SYSERR;
+	}
 }
 
 
@@ -233,7 +243,10 @@ static int sc_handle(struct sablebox* pbox, struct __child_t* pson, struct profi
 		pson->insyscall = 1;
 		scno = ptrace(PTRACE_PEEKUSER, pson->pid, ORIG_RAX * 8, 0);
 		if(scno == -1 || scno >= MAX_SYSCALL_NUM){
-			ret->status = PROF_SYSTEM_ERROR;
+			if(errno != ESRCH){
+				perror("ptrace:"TOSTRING(__LINE__));
+				ret->status = PROF_SYSTEM_ERROR;
+			}
 			return 1;
 		}
 
@@ -330,7 +343,7 @@ static void message_loop(struct sablebox* pbox, struct __child_t* pson, struct p
 	while(!pson->dead){
 		sig = 0;
 		if(waitpid(pson->pid, &status, 0) < 0){
-			perror("waitpid");
+			perror("waitpid:"TOSTRING(__LINE__));
 			THROW_SYSERR;
 		}
 
