@@ -32,9 +32,9 @@ function write_cookie()
 	$arr = array('web'=>'bsoj');
 	$arr['user']=$_SESSION['user'];
 	$arr['lang']=$_SESSION['lang'];
-	if($_SESSION['administrator'])
+	if(isset($_SESSION['administrator']))
 		$arr['administrator']=true;
-	if($_SESSION['source_browser'])
+	if(isset($_SESSION['source_browser']))
 		$arr['source_browser']=true;
 	$data = encrypt(cookie_key, serialize($arr));
 	setcookie('SID', $data, time()+cookie_expire);
