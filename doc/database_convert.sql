@@ -67,6 +67,7 @@ alter table message modify content BLOB;
 alter table message modify content TEXT CHARACTER SET gbk;
 alter table message CONVERT TO CHARACTER SET utf8;
 
+alter table mail modify mail_id INT(11) NOT NULL AUTO_INCREMENT;
 alter table mail modify title BLOB;
 alter table mail modify title varchar(200) CHARACTER SET gbk;
 alter table mail modify content BLOB;

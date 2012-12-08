@@ -150,7 +150,7 @@ DROP TABLE IF EXISTS `mail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mail` (
-  `mail_id` int(11) NOT NULL DEFAULT '0',
+  `mail_id` int(11) NOT NULL AUTO_INCREMENT,
   `to_user` varchar(20) NOT NULL DEFAULT '',
   `from_user` varchar(20) NOT NULL DEFAULT '',
   `title` varchar(200) DEFAULT NULL,

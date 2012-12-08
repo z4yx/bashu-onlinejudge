@@ -1,14 +1,4 @@
 <?php
-require('inc/mutex.php');
-function getNextMailID(){
-	$ID=1000;
-	$res=mysql_query("select max(mail_id) from mail");
-	if($res && ($r=mysql_fetch_row($res))){
-		if($r[0])
-			$ID=$r[0]+1;
-	}
-	return $ID;
-}
 function UserExist($uid){
 	if(preg_match('/\W/',$uid))
 		return false;
@@ -35,12 +25,7 @@ if(isset($_POST['detail']))
 	$detail=mysql_real_escape_string($_POST['detail']);
 else
 	$detail='';
-
-$mutex=new php_mutex("/tmp/bsoj_sendmail.lock");
-
-$mail_id=getNextMailID();
-mysql_query("insert into mail (mail_id,from_user,to_user,title,content,in_date) values ($mail_id,'$from','$touser','$title','$detail',NOW())");
-$mutex->release_mutex();
+mysql_query("insert into mail (from_user,to_user,title,content,in_date) VALUES ('$from','$touser','$title','$detail',NOW())");
 
 echo '__OK__';
 ?>
