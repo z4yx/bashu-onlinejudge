@@ -28,7 +28,7 @@ if($_POST['type']=='profile'){
 	}
 	$query.=" where user_id='$user'";
 	mysql_query($query);
-	echo "User infomation updated succesfully!";
+	echo "User infomation updated successfully!";
 }else if($_POST['type']=='reg'){
 	if(!isset($_POST['userid'],$_POST['newpwd']))
 		die('Invalid argument.');
@@ -50,7 +50,7 @@ if($_POST['type']=='profile'){
 	mysql_query("insert into users (user_id,email,password,reg_time,nick,school) values ('$user','".mysql_real_escape_string($_POST['email'])."','$pwd',NOW(),'".mysql_real_escape_string($_POST['nick'])."','".mysql_real_escape_string($_POST['school'])."')");
 	$code=mysql_errno();
 	if($code==0)
-		echo 'User created succesfully!';
+		echo 'User created successfully!';
 	else if($code==1062)
 		echo "User '$user' exists.";
 	else 

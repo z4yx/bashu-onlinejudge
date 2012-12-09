@@ -68,14 +68,16 @@ if(isset($_SESSION['user'])){
                   <input class="input-xlarge" type="text" name="school" id="input_school">
                 </div>
               </div>
+              <div class="row-fluid">
+                <div class="span8 center">
+                  <span id="ajax_result" class="alert hide"></span>
+                </div>
+              </div>
               <div class="span3 offset3">
                 <span id="save_btn" class="btn btn-primary">Submit</span>
               </div>
             </fieldset>
           </form>
-        </div>
-        <div class="row-fluid">
-          <span id="ajax_result" class="span8 offset5" style="color:#C09853;font-size:15px"></span>
         </div>
 <?php } ?>
       </div>
@@ -114,9 +116,11 @@ if(isset($_SESSION['user'])){
               url:"ajax_profile.php",
               data:$('#form_profile').serialize(),
               success:function(msg){
-                $('#ajax_result').html(msg);
-                if(/created/.test(msg))
+                $('#ajax_result').html(msg).show();
+                if(/created/.test(msg)){
+                  $('#ajax_result').addClass('alert-success');
                   setTimeout(function(){location.href="index.php";},700);
+                }
               }
             });
           }
