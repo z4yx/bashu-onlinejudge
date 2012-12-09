@@ -37,16 +37,18 @@ $(document).ready(function(){
 		$win.on('scroll', processScroll);
 	}
 	$('#logoff_btn').click(function(){$.ajax({url:"logoff.php",dataType:"html",success:function(){location.reload();}});});
-	$('#search_input').typeahead({
-		source:function(query, update){
-			console.log(query);
-			$.getJSON("ajax_search.php?q="+encodeURIComponent(query),function (r){
-				  console.log(r);
-				  update(r.arr);
-				}
-			);
-		}
-	});
+	var $search_input=$('#search_input');
+	if($search_input.length)
+		$search_input.typeahead({
+			source:function(query, update){
+				console.log(query);
+				$.getJSON("ajax_search.php?q="+encodeURIComponent(query),function (r){
+					  console.log(r);
+					  update(r.arr);
+					}
+				);
+			}
+		});
 	$('#form_login').submit(function(E){
 		var b=false;
 		if($('#uid').attr('value')==''){
