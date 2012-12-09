@@ -6,7 +6,7 @@ alter table users modify language int NOT NULL DEFAULT 0;
 alter table users modify email BLOB;
 alter table users modify email varchar(100) CHARACTER SET gbk;
 update users set password = decode(password,'PWDforJO2005');
-alter table users modify password varchar(40) CHARACTER SET gbk;
+alter table users modify password varchar(90) CHARACTER SET gbk;
 alter table users modify nick BLOB;
 alter table users modify nick varchar(100) CHARACTER SET gbk;
 alter table users modify school BLOB;

@@ -13,11 +13,10 @@ if($_POST['type']=='profile'){
 	session_start();
 	if(!isset($_SESSION['user']))
 		die('Not logged in.');
-	
+	$user=$_SESSION['user'];
 	require('inc/database.php');
-	$user=mysql_real_escape_string($_SESSION['user']);
-	$r=mysql_fetch_row(mysql_query("select password from users where user_id='$user'"));
-	if(!$r || strcmp($_POST['oldpwd'],$r[0]))
+    require('inc/checkpwd.php');
+    if(!password_right($user, $_POST['oldpwd']))
 		die('Old password is not correct!');
 	
 	$query='update users set email=\''.mysql_real_escape_string($_POST['email']).'\',school=\''.mysql_real_escape_string($_POST['school']).'\',nick=\''.mysql_real_escape_string($_POST['nick']).'\'';
@@ -25,7 +24,7 @@ if($_POST['type']=='profile'){
 		$len=strlen($_POST['newpwd']);
 		if($len<6||$len>20)
 			die('Password is too long or too short!');
-		$query.=',password=\''.mysql_real_escape_string($_POST['newpwd']).'\'';
+		$query.=',password=\''.mysql_real_escape_string(my_rsa($_POST['newpwd'])).'\'';
 	}
 	$query.=" where user_id='$user'";
 	mysql_query($query);
@@ -51,7 +50,7 @@ if($_POST['type']=='profile'){
 	mysql_query("insert into users (user_id,email,password,reg_time,nick,school) values ('$user','".mysql_real_escape_string($_POST['email'])."','$pwd',NOW(),'".mysql_real_escape_string($_POST['nick'])."','".mysql_real_escape_string($_POST['school'])."')");
 	$code=mysql_errno();
 	if($code==0)
-		echo 'User created!';
+		echo 'User created succesfully!';
 	else if($code==1062)
 		echo "User '$user' exists.";
 	else 

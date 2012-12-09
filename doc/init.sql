@@ -384,7 +384,7 @@ CREATE TABLE `users` (
   `accesstime` datetime DEFAULT NULL,
   `volume` int(11) NOT NULL DEFAULT '1',
   `language` int(11) NOT NULL DEFAULT '0',
-  `password` varchar(40) DEFAULT NULL,
+  `password` varchar(90) DEFAULT NULL,
   `reg_time` datetime DEFAULT NULL,
   `nick` varchar(100) DEFAULT NULL,
   `school` varchar(100) DEFAULT NULL,

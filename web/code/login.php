@@ -12,11 +12,14 @@ try{
 		throw new Exception("No such user");
 	if($r[3]!='N')
 		throw new Exception("User is disabled");
-		
-	if(strcmp($r[0],$_POST['pwd'])!=0)
+
+	require('inc/checkpwd.php');
+	if(!password_right($user, $_POST['pwd']))
 		throw new Exception("Password is incorrect");
+
 	session_start();
 	session_unset();
+	setcookie('SID', '', 31415926);
 	$_SESSION['user']=$r[1];
 	$_SESSION['lang']=$r[2];
 	

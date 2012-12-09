@@ -32,11 +32,10 @@ if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
 }else{
   require('inc/database.php');
   if(isset($_POST['paswd'])){
-    $uid=$_SESSION['user'];
-    $res=mysql_query("select password from users where user_id='$uid'");
-    if($row=mysql_fetch_row($res))
-      if(strcmp($row[0], trim($_POST['paswd']))==0)
-        $_SESSION['admin_panel']=1;
+
+    require('inc/checkpwd.php');
+    if(password_right($_SESSION['user'], $_POST['paswd']))
+      $_SESSION['admin_panel']=1;
   }
   if(isset($_SESSION['admin_panel'])){
     $res=mysql_query('select content from news where news_id=0');
