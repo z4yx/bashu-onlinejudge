@@ -14,7 +14,7 @@ header img{
 }
 header{
   width: 100%;
-  background: rgb(127,0,143);
+  background: #e2e2e2;
   text-align: center;
 }
 table{
@@ -461,4 +461,18 @@ h1,h2,h3,h4,h5,h6{
 }
 .a-red:hover{
   color: #bd362f;
+}
+.linenums li{
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.linenums li span{
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
