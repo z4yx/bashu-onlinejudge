@@ -2,12 +2,6 @@
 require('inc/result_type.php');
 require('inc/lang_conf.php');
 session_start();
-if(isset($_GET['start_id']))
-  $start_id=intval($_GET['start_id']);
-else
-  $start_id=0;
-if($start_id<0)
-  die('Argument out of range.');
 
 require('inc/database.php');
 
@@ -33,18 +27,6 @@ if(isset($_GET['way'])){
     $cond.=" and result=0";
   }
 }
-if(!$rank_mode) {
-  if(isset($_GET['solution_id']))
-    $cond.=" and solution_id=".intval($_GET['solution_id']);
-  else {
-    $row=mysql_fetch_row(mysql_query('select max(solution_id) from solution'));
-    $top=0;
-    if(!is_null($row[0]))
-      $top=$row[0];
-    $top-=$start_id;
-    $cond.=" and solution_id<=$top";
-  }
-}
 if($problem_id)
     $cond.=" and problem_id=$problem_id";
 if(isset($_GET['user_id'])){
@@ -66,6 +48,11 @@ if(isset($_GET['public'])){
   $public_code=true;
   $cond.=' and public_code';
 }
+if(!$rank_mode){
+  $filter=$cond;
+  if(isset($_GET['solution_id']))
+    $cond=" and solution_id<=".intval($_GET['solution_id']).$cond;
+}
 $sql="";
 if(strlen($cond))
   $sql="where".substr($cond, 4);
@@ -80,6 +67,12 @@ else
 if(!$rank_mode){
   $res=mysql_query("select solution_id,problem_id,user_id,result,score,time,memory,code_length,language,in_date,public_code from solution $sql limit 20");
 }else{
+  if(isset($_GET['start_id'])){
+    $start_id=intval($_GET['start_id']);
+    if($start_id<0)
+      $start_id=0;
+  }else
+    $start_id=0;
   $res=mysql_query("select solution_id,problem_id,user_id,result,score,time,memory,code_length,language,in_date,public_code from solution $sql limit $start_id,20");
 }
 if($problem_id==0)
@@ -131,7 +124,6 @@ if($problem_id==0)
               <option value="time">Time</option>
               <option value="memory">Memory</option>
             </select>
-            <input type="hidden" name="start_id" value="0">
             <label style="display:inline-block;"><input <?php if($public_code)echo 'checked'?> style="margin:0 3px" id="chk_public" type="checkbox" name="public">Open Source</label>
             <span style="margin-left:5px" class="btn" id="btn_reset">Reset</span>
           </form>
@@ -155,7 +147,14 @@ if($problem_id==0)
               </tr></thead>
               <tbody id="tab_record">
                 <?php 
+                $max_solution=0;
+                $min_solution=2100000000;
+                $num=mysql_num_rows($res);
                 while($row=mysql_fetch_row($res)){
+                  if($row[0]<$min_solution)
+                    $min_solution=$row[0];
+                  if($row[0]>$max_solution)
+                    $max_solution=$row[0];
                   echo '<tr><td>',$row[0],'</td>';
                   echo '<td><a href="problempage.php?problem_id=',$row[1],'">',$row[1],'</a></td>';
                   echo '<td><a href="#uid">',$row[2],'</a></td>';
@@ -173,7 +172,33 @@ if($problem_id==0)
                   echo '<td>',$row[9],'</td>';
                   echo '</tr>';
                 }
-                ?>
+
+                parse_str($_SERVER["QUERY_STRING"],$arr); 
+                if($rank_mode){
+                  $arr['start_id']=($num ? $start_id+20 : $start_id);
+                }else{
+                  if($num)
+                    $arr['solution_id']=$min_solution-1;
+                }
+                $query_next=http_build_query($arr);
+
+                if($rank_mode){
+                  $arr['start_id']=($start_id>=20 ? $start_id-20 : 0);
+                }else{
+                  $sql="select solution_id from solution where solution_id>$max_solution $filter order by solution_id limit 20";
+                  $res=mysql_query($sql);
+                  $num=mysql_num_rows($res);
+                  if($num==0)
+                    $arr['solution_id']=$max_solution;
+                  else{
+                    while(--$num)
+                      mysql_fetch_row($res);
+                    $row=mysql_fetch_row($res);
+                    $arr['solution_id']=$row[0];
+                  }
+                }
+                $query_pre=http_build_query($arr); 
+              ?>
               </tbody>
             </table>
         </div>  
@@ -181,10 +206,10 @@ if($problem_id==0)
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a href="#" id="btn-pre">&larr; Previous</a>
+            <a href="record.php?<?php echo htmlspecialchars($query_pre)?>" id="btn-pre">&larr; Previous</a>
           </li>
           <li>
-            <a href="#" id="btn-next">Next &rarr;</a>
+            <a href="record.php?<?php echo htmlspecialchars($query_next)?>" id="btn-next">Next &rarr;</a>
           </li>
         </ul>
       </div>
@@ -213,26 +238,12 @@ if($problem_id==0)
 
     <script type="text/javascript"> 
       $(document).ready(function(){
-        var cur=<?php echo $start_id?>;
-        var now=window.location.search;
-        var newuri=now.replace(/start_id=[^&]*&?/,'').replace(/&*$/,'');
-        if(newuri=='')newuri='?';
-        if(newuri!='?')newuri+='&';
-
         $('#slt_lang>option[value=<?php echo $lang;?>]').attr('selected','selected');
         $('#slt_result>option[value=<?php echo $result?>]').attr('selected','selected');
         $('#slt_way>option[value="<?php echo $way?>"]').attr('selected','selected');
         $('#nav_record').parent().addClass('active');
-        $('#ret_url').val("record.php"+now);
-        $('#btn-next').click(function(){
-          location.href='record.php'+newuri+'start_id='+(cur+20);
-          return false;
-        });
-        $('#btn-pre').click(function(){
-          if(cur-20>=0)
-            location.href='record.php'+newuri+'start_id='+(cur-20);
-          return false;
-        });
+        $('#ret_url').val("record.php"+window.location.search);
+
         function toggle_s(obj){
           if(obj.hasClass('a-red')){
             obj.removeClass('a-red');
