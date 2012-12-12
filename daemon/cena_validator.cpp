@@ -63,7 +63,11 @@ void GetChar(int fi)
 }
 int CheckNow()
 {
-	int result = VAL_IDENTICAL;
+	int result;
+	col[0] = col[1] = fs[0] = fs[1] = line = 0;
+	memset(chars, 0, sizeof(chars));
+
+	result = VAL_IDENTICAL;
 	chars[0].eml = chars[1].eml = 1;
 
 	for(;;) {
