@@ -6,8 +6,8 @@ require 'json'
 USER = 'NOI'
 PASSWD = 'NOINOI'
 LANGS = {"G++" => 0, "GCC" => 1, "Pascal" => 2, "G++(0x)" => 3};
-HOST = 'oa.bashu.com.cn'
-PORT = 8080
+HOST = 'oj.bashu.com.cn'
+PORT = 80
 CODE2MSG = {0 => "Correct", 2 => "Time Out", 3 => "MLE", 4 => "Wrong Answer", 5 => "Runtime Error", 99 => "Validator Error"};
 CODE2COLOR = {0 => 42, 2 => 43, 3 => 43, 4 => 41, 5 => 46, 99 => 40};
 

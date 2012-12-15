@@ -13,7 +13,7 @@ import re;
 import time;
 import sys;
 
-host = 'oa.bashu.com.cn:8080';
+host = 'oj.bashu.com.cn';
 subdir = '/code/';
 
 languages = {"G++": 0, "GCC": 1, "Pascal": 2, "G++(0x)": 3};
