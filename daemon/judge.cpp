@@ -264,6 +264,6 @@ void solution::judge()
 void solution::write_database()
 {
 	int id = get_next_solution_id();
-	//printf("solution_id: %d\n", id);
+	printf("solution_id: %d\n", id);
 	write_result_to_database(id, this);
 }

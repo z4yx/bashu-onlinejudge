@@ -93,7 +93,9 @@ int main(int argc, char **argv)
 		return 2;
 
 	if(isspj) {
-		return (state == 0) ? 0 : 1;//whether validator exited successfully
+		if(ret.info)
+			printf("spj: %s\n", ret.info);
+		return (state == 0) ? 0 : 10+state;//whether validator exited successfully
 	}
 	run_info = fopen("run.info", "w");
 	if(!run_info)

@@ -221,6 +221,7 @@ void thread_rejudge()
 
 		puts("rejudge thread running");
 		for(int solution_id : rejudge_list) {
+			printf("rejudging %d\n", solution_id);
 			solution *sol = new solution;
 			if(!sol) {
 				applog("Error: Can't allocate memory, stop rejudging");
@@ -230,6 +231,7 @@ void thread_rejudge()
 				sol->copy_setting(rejudge_init); //Get problem settings, like compare_way
 				get_exist_solution_info(solution_id, sol);
 				sol->error_code = -1;
+				sol->key = std::to_string(solution_id);
 
 				rejudging = true;
 				do { //insert to queue
