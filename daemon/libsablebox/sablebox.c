@@ -34,11 +34,11 @@ static struct scmask MINIMAL_SCSET;
 
 static const int sc_safe[] = {
 #ifdef __x86_64__
-    0,    1,    2,      3,     5,    8,     9,     10,      11,    12,   13,          16,    19,    20,    21,      25,    63,       89,      97,       100,   158,        231
+    0,    1,    2,      3,     5,    8,     9,     10,      11,    12,   13,          16,    19,    20,    21,      25,    63,       89,      97,       100,   158,         202,  231
 #else
-    3,    4,    5,      6,    108,   19,    90,    125,     91,    45,   174,         54,    145,   146,   33,      163,   122,      85,      76,        43,               252,         140,    192,    197,    224,     243
+    3,    4,    5,      6,    108,   19,    90,    125,     91,    45,   174,         54,    145,   146,   33,      163,   122,      85,      76,        43,               240,   252,         140,    192,    197,    224,     243
 #endif
-//read, write, open, close, fstat, lseek, mmap, mprotect, munmap, brk, rt_sigaction, ioctl, readv, writev, access, mremap, uname, readlink, getrlimit, times, arch_prctl, exit_group, _llseek, mmap2, fstat64, gettid, set_thread_area
+//read, write, open, close, fstat, lseek, mmap, mprotect, munmap, brk, rt_sigaction, ioctl, readv, writev, access, mremap, uname, readlink, getrlimit, times, arch_prctl, futex, exit_group, _llseek, mmap2, fstat64, gettid, set_thread_area
 };
 
 static void init_defualt_scmask()
@@ -123,6 +123,7 @@ struct profile sable_run(struct sablebox* pbox)
 
 	if(son.pid = fork()){
 		/*parent process*/
+		stderr = stdout;
 		
 		son.dead = son.insyscall = son.program_break = 0;
 		setup_listener(&son);

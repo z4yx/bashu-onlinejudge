@@ -48,6 +48,7 @@ deftest(1500ac, ./1500ac, 1500.in, 1500.out)
 deftest(2000mle, ./2000mle, 2000.in, 2000.out)
 deftest(tle, ./tle, t.in, t.out)
 deftest(block, ./block, t.in, t.out)
+deftest(futex_test, ./futex_test, 3172.in, t.out)
 
 int main(int argc, char** argv)
 {
@@ -61,5 +62,6 @@ int main(int argc, char** argv)
 	test_1500ac();
 	test_2000mle();
     test_block();
+    test_futex_test();
 	return 0;
 }

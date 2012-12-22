@@ -30,8 +30,9 @@ tle: tle.cpp
 	g++ 2000mle.cpp -static -o 2000mle
 block: block.c
 	gcc block.c -static -o block
+futex_test: futex_test.cpp
+	gcc futex_test.cpp -static -o futex_test
 
-
-test: scaffold helloworld re_seg re_div0 mle_dyn mle_static 1003re 1500ac 2000mle tle block
+test: scaffold helloworld re_seg re_div0 mle_dyn mle_static 1003re 1500ac 2000mle tle block futex_test
 	./scaffold
-	
+
