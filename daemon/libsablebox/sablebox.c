@@ -14,7 +14,6 @@
 #include <errno.h>
 #include <sys/wait.h>
 #include <stdio.h>
-#include <asm/unistd.h>
 #include <setjmp.h>
 #include <sys/reg.h>
 #include <sys/stat.h>
