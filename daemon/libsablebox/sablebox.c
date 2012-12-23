@@ -22,6 +22,7 @@
 #include <fcntl.h>
 #include <sys/ptrace.h>
 #include <linux/ptrace.h>
+#include "syscallnum.h"
 
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
@@ -33,12 +34,11 @@
 static struct scmask MINIMAL_SCSET;
 
 static const int sc_safe[] = {
-#ifdef __x86_64__
-    0,    1,    2,      3,     5,    8,     9,     10,      11,    12,   13,          16,    19,    20,    21,      25,    63,       89,      97,       100,   158,         202,  231
-#else
-    3,    4,    5,      6,    108,   19,    90,    125,     91,    45,   174,         54,    145,   146,   33,      163,   122,      85,      76,        43,               240,   252,         140,    192,    197,    224,     243
-#endif
-//read, write, open, close, fstat, lseek, mmap, mprotect, munmap, brk, rt_sigaction, ioctl, readv, writev, access, mremap, uname, readlink, getrlimit, times, arch_prctl, futex, exit_group, _llseek, mmap2, fstat64, gettid, set_thread_area
+    __NR_read, __NR_write, __NR_open, __NR_close, __NR_fstat, __NR_lseek, __NR_mmap, __NR_mprotect, 
+    __NR_munmap, __NR_brk, __NR_rt_sigaction, __NR_ioctl, __NR_readv, __NR_writev, __NR_access,
+    __NR_mremap, __NR_uname, __NR_readlink, __NR_getrlimit, __NR_times, __NR_arch_prctl, __NR_futex, 
+    __NR_exit_group, __NR_gettid, __NR_set_thread_area, __NR_set_tid_address, __NR_set_robust_list,
+    __NR_rt_sigprocmask
 };
 
 static void init_defualt_scmask()
