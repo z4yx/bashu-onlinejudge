@@ -17,7 +17,6 @@ $result=mysql_query($query);
 $row=mysql_fetch_row($result);
 if(!$row)
   die('Wrong Problem ID.');
-$_SESSION['view']=$prob_id;
 
 ?>
 <!DOCTYPE html>
@@ -45,8 +44,9 @@ $_SESSION['view']=$prob_id;
       require('page_header.php');
       if($row[11]=='Y' && !isset($_SESSION['administrator'])){
         require('prob_forbidden.php');
-        die('');
+        exit;
       }
+      $_SESSION['view']=$prob_id;
     ?>
     <div id="probdisp" class="container-fluid" style="font-size:16px">
       <div class="row-fluid">
