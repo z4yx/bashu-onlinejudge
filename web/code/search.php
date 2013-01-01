@@ -24,6 +24,11 @@ require('inc/database.php');
 check_problemid($req);
 $keyword=mysql_real_escape_string(trim($req));
 $result=mysql_query("select problem_id,title,source from problem where title like '%$keyword%' or source like '%$keyword%' order by problem_id limit $page_id,100");
+if(mysql_num_rows($result)==1){
+  $row=mysql_fetch_row($result);
+  header('location: problempage.php?problem_id='.$row[0]);
+  exit();
+}
 session_start();//for login
 ?>
 <!DOCTYPE html>
