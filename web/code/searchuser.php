@@ -55,7 +55,7 @@ $result=mysql_query("select user_id,nick,solved,submit from users where user_id 
                 <?php 
                   while($row=mysql_fetch_row($result)){
                 echo '<tr>';
-                echo '<td><a href="#">',$row[0],'</a></td>';
+                echo '<td><a href="#linkU">',$row[0],'</a></td>';
                 echo '<td>',htmlspecialchars($row[1]),'</td>';
                 echo '<td><a href="record.php?user_id=',$row[0],'&amp;result=0">',$row[2],'</a></td>';
                 echo '<td><a href="record.php?user_id=',$row[0],'">',$row[3],'</a></td>';
