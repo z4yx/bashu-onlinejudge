@@ -85,7 +85,7 @@ if(!$row)
       <div class="row-fluid">
         <div class="span9" id="leftside">
           <div style="margin-left: auto; margin-right: auto;text-align: center">
-            <h2><?php echo $prob_id,' -- ',$row[0];if($row[11]=='Y')echo "(Deleted)";?></h2>
+            <h2><?php echo $prob_id,' -- ',$row[0];if($row[11]=='Y')echo '<span style="vertical-align:middle" class="label label-important">Deleted</span>';?></h2>
           </div>
           <div class="row-fluid">
             <div class="span12">

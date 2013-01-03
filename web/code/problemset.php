@@ -86,7 +86,7 @@ if($page_id<10 || $page_id>$maxpage)
                   echo '<td style="text-align:left">';
                 }
                 echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1];
-                if($row[5]=='Y')echo '<span style="color:red">(deleted)</span>';
+                if($row[5]=='Y')echo '<span class="label label-important">Deleted</span>';
                 echo '</a></td>';
                 echo '<td><a href="record.php?result=0&amp;problem_id=',$row[0],'">',$row[2],'</a>/';
                 echo '<a href="record.php?problem_id=',$row[0],'">',$row[3],'</a></td>';
