@@ -7,7 +7,7 @@ function encode_user_id($user)
   $key=hash('sha256','my)(password_xx0',true);
   return openssl_encrypt($user,'aes-256-cbc',$key,false,$iv);
 }
-session_start();
+require('inc/checklogin.php');
 require('inc/database.php');
 $res=mysql_query("select content from news where news_id=0");
 $index_text=($row=mysql_fetch_row($res)) ? $row[0] : '';

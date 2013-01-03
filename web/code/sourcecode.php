@@ -4,8 +4,8 @@ require('inc/lang_conf.php');
 if(!isset($_GET['solution_id']))
     die('Wrong argument.');
 $sol_id=intval($_GET['solution_id']);
-session_start();
 
+require('inc/checklogin.php');
 require('inc/database.php');
 $result=mysql_query("select user_id,time,memory,result,language,code_length,problem_id,public_code from solution where solution_id=$sol_id");
 $row=mysql_fetch_row($result);

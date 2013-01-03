@@ -3,7 +3,7 @@ if(!isset($_GET['problem_id']))
    die('Wrong argument.');
 $prob_id=intval($_GET['problem_id']);
 
-session_start();
+require('inc/checklogin.php');
 ?>
 <!DOCTYPE html>
 <html>

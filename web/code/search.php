@@ -20,6 +20,7 @@ else
   $page_id=0;
 if(strlen($req)>600)
   die('Keyword is too long');
+require('inc/checklogin.php');
 require('inc/database.php');
 check_problemid($req);
 $keyword=mysql_real_escape_string(trim($req));
@@ -29,7 +30,6 @@ if(mysql_num_rows($result)==1){
   header('location: problempage.php?problem_id='.$row[0]);
   exit();
 }
-session_start();//for login
 ?>
 <!DOCTYPE html>
 <html>

@@ -1,16 +1,3 @@
-<?php
-$require_auth = false; //NOT use global authorization
-
-if(!isset($_SESSION['user'])){
-  require_once 'inc/cookie.php';
-  if(!check_cookie()) {
-    if($require_auth) {
-      header("location: auth.php");
-      exit(0);
-    }
-  }
-}
-?>
 <!--[if lt IE 9]>
   <script>window.fix_ie_pre=true;</script>
 <![endif]-->

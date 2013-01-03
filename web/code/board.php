@@ -1,5 +1,6 @@
 <?php
-session_start();
+require('inc/checklogin.php');
+
 if(isset($_GET['start_id']))
   $top=intval($_GET['start_id']);
 else

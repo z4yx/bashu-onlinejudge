@@ -1,9 +1,8 @@
 <?php 
 require('inc/result_type.php');
 require('inc/lang_conf.php');
-//if(!isset($_GET['problem_id']))
-//    die('Wrong argument.');
-session_start();
+require('inc/checklogin.php');
+
 if(isset($_GET['problem_id']))
   $prob_id=intval($_GET['problem_id']);
 else if(isset($_SESSION['view']))

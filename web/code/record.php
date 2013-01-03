@@ -1,8 +1,7 @@
 <?php
 require('inc/result_type.php');
 require('inc/lang_conf.php');
-session_start();
-
+require('inc/checklogin.php');
 require('inc/database.php');
 
 $cond="";

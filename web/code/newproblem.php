@@ -1,6 +1,4 @@
-<?php
-session_start();
-?>
+<?php require('inc/checklogin.php') ?>
 <!DOCTYPE html>
 <html>
   <head>

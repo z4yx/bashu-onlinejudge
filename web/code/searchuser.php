@@ -9,10 +9,10 @@ else
   $page_id=0;
 if(strlen($req)>600)
   die('Keyword is too long');
+require('inc/checklogin.php');
 require('inc/database.php');
 $keyword=mysql_real_escape_string(trim($req));
 $result=mysql_query("select user_id,nick,solved,submit from users where user_id like '%$keyword%' or nick like '%$keyword%' order by solved desc limit $page_id,100");
-session_start();//for login
 ?>
 <!DOCTYPE html>
 <html>

@@ -1,5 +1,6 @@
 <?php
-session_start();
+require('inc/checklogin.php');
+
 if(isset($_GET['page_id']))
   $page_id=intval($_GET['page_id']);
 else if(isset($_SESSION['view']))
