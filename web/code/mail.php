@@ -5,6 +5,14 @@ if(isset($_GET['start_id']))
 	$page=intval($_GET['start_id']);
 else
 	$page=0;
+
+if(!isset($_SESSION['user']))
+	$info = 'Not logged in.';
+else{
+	require('inc/database.php');
+	$user_id=$_SESSION['user'];
+	$result=mysql_query("select mail_id,title,from_user,new_mail,in_date from mail where to_user='$user_id' and UPPER(defunct)='N' order by mail_id desc limit $page,20");
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,25 +33,25 @@ else
 	</head>
 
 	<body>
-		<?php require('page_header.php'); ?>       
+		<?php require('page_header.php'); ?>
 		<div class="container-fluid">
-<?php 
-if(!isset($_SESSION['user'])){
-			echo '<div style="text-align: center">Not logged in.</div>';
-}else{?>
-			<div class="row-fluid"><div class="span2 offset2">
-				<span id="sendnew" style="margin:5px" class="btn btn-small"><i class="icon-inbox"></i> Send Mail</span>
-			</div></div>
+			<?php 
+			if(isset($info)){
+				echo '<div class="center">',$info,'</div>';
+			}else{
+			?>
+			<div class="row-fluid">
+				<div class="span2 offset2">
+					<span id="sendnew" style="margin:5px" class="btn btn-small"><i class="icon-inbox"></i> Send Mail</span>
+				</div>
+			</div>
 			<div class="row-fluid" style="font-size:14px">
 				<div class="span8 offset2" id="maillist">
 						<ul>
-<?php
-	require('inc/database.php');
-	$user_id=$_SESSION['user'];
-	$result=mysql_query("select mail_id,title,from_user,new_mail,in_date from mail where to_user='$user_id' and UPPER(defunct)='N' order by mail_id desc limit $page,20");
-	while($row=mysql_fetch_row($result)){
-		echo      '<li class="mail-item" id="mail',$row[0],'">';
-?>
+						<?php
+						while($row=mysql_fetch_row($result)){
+							echo '<li class="mail-item" id="mail',$row[0],'">';
+						?>
 								<div class="mail-container">
 									<div class="mail-title">
 										<?php 
@@ -69,9 +77,7 @@ if(!isset($_SESSION['user'])){
 									</div>
 								</div>
 							</li>
-<?php
-	}
-?>
+						<?php } ?>
 						</ul>
 				</div>
 			</div>  
@@ -121,8 +127,7 @@ if(!isset($_SESSION['user'])){
 					<a href="#" class="btn" data-dismiss="modal">Close</a>
 				</div>
 			</div>
-<?php
-}?>
+			<?php } ?>
 			<hr>
 			<footer class="muted" style="text-align: center;font-size:12px;">
 				<p>&copy; 2012 Bashu Middle School</p>

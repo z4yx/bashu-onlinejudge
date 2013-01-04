@@ -76,6 +76,47 @@ if(!$rank_mode){
 }
 if($problem_id==0)
   $problem_id="";
+
+$max_solution=0;
+$min_solution=2100000000;
+$num=mysql_num_rows($res);
+
+function get_next_link()
+{
+  global $rank_mode,$min_solution,$num;
+  parse_str($_SERVER["QUERY_STRING"],$arr); 
+  if($rank_mode){
+    global $start_id;
+    $arr['start_id']=($num ? $start_id+20 : $start_id);
+  }else{
+    if($num)
+      $arr['solution_id']=$min_solution-1;
+  }
+  return http_build_query($arr);
+}
+function get_pre_link()
+{
+  global $rank_mode,$max_solution;
+  parse_str($_SERVER["QUERY_STRING"],$arr); 
+  if($rank_mode){
+    global $start_id;
+    $arr['start_id']=($start_id>=20 ? $start_id-20 : 0);
+  }else{
+    global $filter;
+    $sql="select solution_id from solution where solution_id>$max_solution $filter order by solution_id limit 20";
+    $res=mysql_query($sql);
+    $num=mysql_num_rows($res);
+    if($num==0)
+      $arr['solution_id']=$max_solution;
+    else{
+      while(--$num)
+        mysql_fetch_row($res);
+      $row=mysql_fetch_row($res);
+      $arr['solution_id']=$row[0];
+    }
+  }
+  return http_build_query($arr); 
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -145,10 +186,7 @@ if($problem_id==0)
                 <th style="width:17%">Submit Date</th>
               </tr></thead>
               <tbody id="tab_record">
-                <?php 
-                $max_solution=0;
-                $min_solution=2100000000;
-                $num=mysql_num_rows($res);
+              <?php
                 while($row=mysql_fetch_row($res)){
                   if($row[0]<$min_solution)
                     $min_solution=$row[0];
@@ -171,32 +209,6 @@ if($problem_id==0)
                   echo '<td>',$row[9],'</td>';
                   echo '</tr>';
                 }
-
-                parse_str($_SERVER["QUERY_STRING"],$arr); 
-                if($rank_mode){
-                  $arr['start_id']=($num ? $start_id+20 : $start_id);
-                }else{
-                  if($num)
-                    $arr['solution_id']=$min_solution-1;
-                }
-                $query_next=http_build_query($arr);
-
-                if($rank_mode){
-                  $arr['start_id']=($start_id>=20 ? $start_id-20 : 0);
-                }else{
-                  $sql="select solution_id from solution where solution_id>$max_solution $filter order by solution_id limit 20";
-                  $res=mysql_query($sql);
-                  $num=mysql_num_rows($res);
-                  if($num==0)
-                    $arr['solution_id']=$max_solution;
-                  else{
-                    while(--$num)
-                      mysql_fetch_row($res);
-                    $row=mysql_fetch_row($res);
-                    $arr['solution_id']=$row[0];
-                  }
-                }
-                $query_pre=http_build_query($arr); 
               ?>
               </tbody>
             </table>
@@ -205,10 +217,10 @@ if($problem_id==0)
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a href="record.php?<?php echo htmlspecialchars($query_pre)?>" id="btn-pre">&larr; Previous</a>
+            <a href="record.php?<?php echo htmlspecialchars(get_pre_link())?>" id="btn-pre">&larr; Previous</a>
           </li>
           <li>
-            <a href="record.php?<?php echo htmlspecialchars($query_next)?>" id="btn-next">Next &rarr;</a>
+            <a href="record.php?<?php echo htmlspecialchars(get_next_link())?>" id="btn-next">Next &rarr;</a>
           </li>
         </ul>
       </div>

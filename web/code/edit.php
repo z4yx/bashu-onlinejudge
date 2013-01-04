@@ -4,6 +4,36 @@ if(!isset($_GET['problem_id']))
 $prob_id=intval($_GET['problem_id']);
 
 require('inc/checklogin.php');
+if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
+  $info = 'You are not administrator';
+}else {
+  require('inc/database.php');
+
+  $query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,compare_way from problem where problem_id=$prob_id";
+  $result=mysql_query($query);
+  $row=mysql_fetch_row($result);
+  if(!$row)
+    $info = 'Wrong Problem ID';
+  else { 
+    $way='tra';
+    $prec=-1;
+    switch ($row[11] >> 16) {
+      case 0:
+        $way='tra';
+        break;
+      case 1:
+        $way='float';
+        $prec=($row[11] & 65535);
+        break;
+      case 2:
+        $way='int';
+        break;
+      case 3:
+        $way='spj';
+        break;
+    }
+  }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,40 +70,13 @@ require('inc/checklogin.php');
   </head>
 
   <body>
-    <?php 
-    require('page_header.php'); 
-    if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])) {
-      echo '<div style="text-align:center">You are not administrator</div>';
-    }else {
-      require('inc/database.php');
-
-      $query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,compare_way from problem where problem_id=$prob_id";
-      $result=mysql_query($query);
-      $row=mysql_fetch_row($result);
-      if(!$row)
-        echo '<div style="text-align:center">Wrong Problem ID</div>';
-      else { 
-        $way='tra';
-        $prec=-1;
-        switch ($row[11] >> 16) {
-          case 0:
-            $way='tra';
-            break;
-          case 1:
-            $way='float';
-            $prec=($row[11] & 65535);
-            break;
-          case 2:
-            $way='int';
-            break;
-          case 3:
-            $way='spj';
-            break;
-        }
-
-    ?>
-
+    <?php require('page_header.php'); ?>
     <div class="container-fluid" style="font-size:16px">
+      <?php
+      if(isset($info))
+        echo "<div class=\"center\">$info</div>";
+      else{
+      ?>
       <form action="editproblem.php" method="post" id="edit_form">
         <input type="hidden" name="op" value="edit">
         <input type="hidden" name="problem_id" value="<?php echo $prob_id?>">
@@ -181,6 +184,7 @@ require('inc/checklogin.php');
           </div>
         </div>
       </form>
+      <?php } ?>
       <hr>
       <footer class="muted" style="text-align: center;font-size:12px;">
         <p>&copy; 2012 Bashu Middle School</p>
@@ -236,12 +240,6 @@ require('inc/checklogin.php');
         <button class="btn btn-info" id="btn_upload">Upload Image</button>
       </div>
     </div>
-
-    <?php
-      }
-    }
-    ?>
-
 
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>

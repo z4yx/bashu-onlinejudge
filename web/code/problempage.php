@@ -17,6 +17,40 @@ $row=mysql_fetch_row($result);
 if(!$row)
   die('Wrong Problem ID.');
 
+if($row[11]=='Y' && !isset($_SESSION['administrator']))
+  $forbidden=true;
+else{
+  $forbidden=false;
+  $_SESSION['view']=$prob_id;
+
+  if(isset($_SESSION['user'])){
+    $query='select min(result) from solution where user_id=\''.$_SESSION['user']."' and problem_id=$prob_id group by problem_id";
+    $user_status=mysql_query($query);
+    if(mysql_num_rows($user_status)==0)
+      $info = '<tr><td colspan="2" id="user_status_gray">Haven\'t submitted yet.</td></tr>';
+    else{
+      $statis=mysql_fetch_row($user_status);
+      if($statis[0]==0){
+        $info = '<tr><td colspan="2" id="user_status_green"><i class="icon-ok icon-white"></i> Congratulation !</td></tr>';
+      }else{
+        $info = '<tr><td colspan="2" id="user_status_red"><i class="icon-remove icon-white"></i> Try Again !</td></tr>';
+      }
+    }
+  }else{
+    $info = '<tr><td colspan="2" id="user_status_gray">Not logged in.</td></tr>';
+  } 
+  $result=mysql_query("select submit_user,solved,submit from problem where problem_id=$prob_id");
+  $statis=mysql_fetch_row($result);
+  $submit_user=$statis[0];
+  $solved_user=$statis[1];
+  $total_submit=$statis[2];
+
+  $result=mysql_query("select result,count(*) as sum from solution where problem_id=$prob_id group by result");
+  $arr=array();
+  while($statis=mysql_fetch_row($result))
+    $arr[$statis[0]]=$statis[1];
+  ksort($arr);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,48 +73,13 @@ if(!$row)
   </head>
 
   <body style="min-width:980px;">
-    <?php 
-      require('page_header.php');
-      if($row[11]=='Y' && !isset($_SESSION['administrator']))
-        $forbidden=true;
-      else{
-        $forbidden=false;
-        $_SESSION['view']=$prob_id;
-
-        if(isset($_SESSION['user'])){
-          $query='select min(result) from solution where user_id=\''.$_SESSION['user']."' and problem_id=$prob_id group by problem_id";
-          $user_status=mysql_query($query);
-          if(mysql_num_rows($user_status)==0)
-            $info = '<tr><td colspan="2" id="user_status_gray">Haven\'t submitted yet.</td></tr>';
-          else{
-            $statis=mysql_fetch_row($user_status);
-            if($statis[0]==0){
-              $info = '<tr><td colspan="2" id="user_status_green"><i class="icon-ok icon-white"></i> Congratulation !</td></tr>';
-            }else{
-              $info = '<tr><td colspan="2" id="user_status_red"><i class="icon-remove icon-white"></i> Try Again !</td></tr>';
-            }
-          }
-        }else{
-          $info = '<tr><td colspan="2" id="user_status_gray">Not logged in.</td></tr>';
-        } 
-        $result=mysql_query("select submit_user,solved,submit from problem where problem_id=$prob_id");
-        $statis=mysql_fetch_row($result);
-        $submit_user=$statis[0];
-        $solved_user=$statis[1];
-        $total_submit=$statis[2];
-
-        $result=mysql_query("select result,count(*) as sum from solution where problem_id=$prob_id group by result");
-        $arr=array();
-        while($statis=mysql_fetch_row($result))
-          $arr[$statis[0]]=$statis[1];
-        ksort($arr);
-      }
-    ?>
+    <?php require('page_header.php'); ?>
     <div id="probdisp" class="container-fluid" style="font-size:16px">
       <?php 
-      if($forbidden)
+      if($forbidden){
         echo '<div class="span12 center">Problem is not available!</div>';
-      else{ ?>
+      }else{ 
+      ?>
       <div class="row-fluid">
         <div class="span9" id="leftside">
           <div style="margin-left: auto; margin-right: auto;text-align: center">

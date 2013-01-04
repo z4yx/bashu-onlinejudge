@@ -1,4 +1,24 @@
-<?php require('inc/checklogin.php') ?>
+<?php
+require('inc/checklogin.php');
+
+if(!isset($_SESSION['user'],$_SESSION['administrator'])){
+  $info='<div class="center">You are not administrator.</div>';
+}else{
+  require('inc/database.php');
+  if(isset($_POST['paswd'])){
+
+    require('inc/checkpwd.php');
+    if(password_right($_SESSION['user'], $_POST['paswd']))
+      $_SESSION['admin_panel']=1;
+  }
+  $need_password=true;
+  if(isset($_SESSION['admin_panel'])){
+    $need_password=false;
+    $res=mysql_query('select content from news where news_id=0');
+    $index_text=($res && ($row=mysql_fetch_row($res))) ? str_replace('<br>', "\n", $row[0]) : '';
+  }
+}
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -24,21 +44,11 @@
           
     <div class="container-fluid" style="font-size:13px">
       <div class="row-fluid">
-<?php 
-if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
-       echo '<div class="center">You are not administrator.</div>';
-}else{
-  require('inc/database.php');
-  if(isset($_POST['paswd'])){
-
-    require('inc/checkpwd.php');
-    if(password_right($_SESSION['user'], $_POST['paswd']))
-      $_SESSION['admin_panel']=1;
-  }
-  if(isset($_SESSION['admin_panel'])){
-    $res=mysql_query('select content from news where news_id=0');
-    $index_text=($res && ($row=mysql_fetch_row($res))) ? str_replace('<br>', "\n", $row[0]) : '';
-?>
+      <?php
+      if(isset($info)) {
+        echo $info;
+      }else if(!$need_password) {
+      ?>
         <div class="span12">
           <div class="tabbable tabs-left">
             <ul class="nav nav-tabs" id="nav_tab">
@@ -117,8 +127,7 @@ if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
             </div>
           </div>
         </div>
-<?php
-  }else{?>
+      <?php }else { ?>
         <div class="span5 offset5">
           <form action="admin.php" class="form-inline" method="post">
             <div><label for="input_adminpass">Please enter your password</label></div>
@@ -126,10 +135,7 @@ if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])){
             <input type="submit" class="btn" value="Go">
           </form>
         </div>
-<?php
-  }
-}
-?>
+      <?php } ?>
       </div>
       <hr>
       <footer class="muted center" style="font-size:12px;">

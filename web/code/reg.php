@@ -21,11 +21,11 @@
           
     <div class="container-fluid">
       <div class="row-fluid">
-<?php 
-if(isset($_SESSION['user'])){
-       echo '<div style="text-align: center">Please sign out first.</div>';
-}else{
-?>
+      <?php 
+      if(isset($_SESSION['user'])){
+        echo '<div style="text-align: center">Please sign out first.</div>';
+      }else{
+      ?>
         <div class="span8 offset3">
           <form class="form-horizontal" id="form_profile" action="#" method="post">
             <input type="hidden" value="reg" name="type">
@@ -77,7 +77,7 @@ if(isset($_SESSION['user'])){
             </fieldset>
           </form>
         </div>
-<?php } ?>
+      <?php } ?>
       </div>
       <hr>
       <footer class="muted center" style="font-size:12px;">

@@ -11,18 +11,26 @@ $result=mysql_query("select user_id,time,memory,result,language,code_length,prob
 $row=mysql_fetch_row($result);
 if(!$row)
   die('No such solution.');
+
+if(!isset($_SESSION['user']) || !$row[7] && strcmp($row[0],$_SESSION['user'])!=0 && !isset($_SESSION['source_browser']))
+  $info = 'You cannot view this code.';
+else{
+  $result=mysql_query("select source from source_code where solution_id=$sol_id");
+  if($tmp=mysql_fetch_row($result))
+    $source=$tmp[0];
+  else
+    $info = 'Source code is not available!';
+}
 if(isset($_GET['raw'])){
-  if(!isset($_SESSION['user']) || !$row[7] && strcmp($row[0],$_SESSION['user'])!=0 && !isset($_SESSION['source_browser'])){
-    echo 'You cannot view the code.';
+  if(isset($info)){
+    echo $info;
   }else{
-    $result=mysql_query("select source from source_code where solution_id=$sol_id");
-    if($row=mysql_fetch_row($result)){
-      header("Content-Type: text/plain; charset=UTF-8");
-      echo $row[0];
-    }
+    header("Content-Type: text/plain; charset=UTF-8");
+    echo $source;
   }
   exit(0);
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -47,46 +55,38 @@ if(isset($_GET['raw'])){
     <?php require('page_header.php'); ?>  
           
     <div class="container-fluid" style="font-size:13px">
-<?php
-if(!isset($_SESSION['user']) || !$row[7] && strcmp($row[0],$_SESSION['user'])!=0 && !isset($_SESSION['source_browser'])){
-  echo '<div class="row-fluid" style="text-align: center;">You cannot view the code.</div>';
-}else{?>
-      <div class="row-fluid" style="text-align: center">
-          User:<?php echo $row[0];?>
-      </div>
-      <div class="row-fluid" style="text-align: center">
-          Problem:<?php echo $row[6];?>&nbsp;&nbsp;
-          Result:<?php echo $RESULT_TYPE[$row[3]];?>
-      </div>
-      <div class="row-fluid" style="text-align: center">
-          Length:<?php echo $row[5];?>&nbsp;&nbsp;
-          Language:<?php echo $LANG_NAME[$row[4]];?>
-      </div>
-      <div class="row-fluid" style="text-align: center">
-          Time:<?php echo $row[1];?>&nbsp;ms&nbsp;
-          Memory:<?php echo $row[2];?>&nbsp;KB
-      </div>
-<?php
-  $result=mysql_query('select source from source_code where solution_id='.$sol_id);
-  if($row=mysql_fetch_row($result)){
-?>
-      <div class="row-fluid">
-        <div class="span10 offset1">
-          <a href="sourcecode.php?raw=1&amp;solution_id=<?php echo $sol_id?>" onclick="return show_raw();">Raw</a>
-          <!--[if IE]>&nbsp;&nbsp;<a href="#" onclick="return copy_ie();">Copy</a> <![endif]-->
+      <?php
+      if(isset($info))
+        echo '<div class="row-fluid center">',$info,'</div>';
+      else{
+      ?>
+        <div class="row-fluid center">
+            User:<?php echo $row[0];?>
         </div>
-      </div>
-      <div class="row-fluid">
-        <div class="span10 offset1" id="div_code">
-            <pre class="prettyprint linenums"><?php echo htmlspecialchars($row[0]);?></pre>
+        <div class="row-fluid center">
+            Problem:<?php echo $row[6];?>&nbsp;&nbsp;
+            Result:<?php echo $RESULT_TYPE[$row[3]];?>
         </div>
-      </div>
-<?php
-  }else{
-    echo '<div class="row-fluid" style="text-align: center">Source code is not available!</div>';
-  }
-}
-?>
+        <div class="row-fluid center">
+            Length:<?php echo $row[5];?>&nbsp;&nbsp;
+            Language:<?php echo $LANG_NAME[$row[4]];?>
+        </div>
+        <div class="row-fluid center">
+            Time:<?php echo $row[1];?>&nbsp;ms&nbsp;
+            Memory:<?php echo $row[2];?>&nbsp;KB
+        </div>
+        <div class="row-fluid">
+          <div class="span10 offset1">
+            <a href="sourcecode.php?raw=1&amp;solution_id=<?php echo $sol_id?>" onclick="return show_raw();">Raw</a>
+            <!--[if IE]>&nbsp;&nbsp;<a href="#" onclick="return copy_ie();">Copy</a> <![endif]-->
+          </div>
+        </div>
+        <div class="row-fluid">
+          <div class="span10 offset1" id="div_code">
+              <pre class="prettyprint linenums"><?php echo htmlspecialchars($source);?></pre>
+          </div>
+        </div>
+      <?php } ?>
       <hr>
       <footer class="muted" style="text-align: center;font-size:12px;">
         <p>&copy; 2012 Bashu Middle School</p>

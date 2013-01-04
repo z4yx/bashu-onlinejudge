@@ -1,4 +1,8 @@
-<?php require('inc/checklogin.php') ?>
+<?php 
+require('inc/checklogin.php');
+if(!isset($_SESSION['user'],$_SESSION['administrator']))
+  $info = 'You are not administrator';
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -34,13 +38,14 @@
   </head>
 
   <body>
-    <?php 
-    require('page_header.php'); 
-    if(!isset($_SESSION['user']) || !isset($_SESSION['administrator'])) {
-      echo '<div style="text-align:center">You are not administrator</div>';
-    }else { ?>
+    <?php require('page_header.php'); ?>
 
     <div class="container-fluid" style="font-size:16px">
+      <?php
+      if(isset($info))
+        echo "<div class=\"center\">$info</div>";
+      else{
+      ?>
       <form action="editproblem.php" method="post" id="edit_form" style="padding-top:10px">
         <input type="hidden" name="op" value="add">
         <div class="row-fluid">
@@ -139,6 +144,7 @@
           </div>
         </div>
       </form>
+      <?php } ?>
       <hr>
       <footer class="muted" style="text-align: center;font-size:12px;">
         <p>&copy; 2012 Bashu Middle School</p>
@@ -194,11 +200,6 @@
         <button class="btn btn-info" id="btn_upload">Upload Image</button>
       </div>
     </div>
-
-    <?php
-    }
-    ?>
-
 
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>

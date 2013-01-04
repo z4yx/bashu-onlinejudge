@@ -13,6 +13,18 @@ $row=mysql_fetch_row(mysql_query('select max(problem_id) from problem'));
 $maxpage=intval($row[0]/100);
 if($page_id<10 || $page_id>$maxpage)
   die('Argument out of range.');
+
+if(isset($_SESSION['administrator']))
+  $addt_cond='';
+else
+  $addt_cond=" defunct='N' and ";
+$range="between $page_id"."00 and $page_id".'99';
+if(isset($_SESSION['user'])){
+  $user_id=$_SESSION['user'];
+  $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct,res from problem LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id $range group by problem_id) as temp on(pid=problem_id) where $addt_cond problem_id $range order by problem_id");
+}else{
+  $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct from problem where $addt_cond problem_id $range  order by problem_id");
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,35 +45,21 @@ if($page_id<10 || $page_id>$maxpage)
   </head>
 
   <body>
-    <?php
-      require('page_header.php');
-
-      if(isset($_SESSION['administrator']))
-        $addt_cond='';
-      else
-        $addt_cond=" defunct='N' and ";
-      $range="between $page_id"."00 and $page_id".'99';
-      if(isset($_SESSION['user'])){
-        $user_id=$_SESSION['user'];
-        $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct,res from problem LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id $range group by problem_id) as temp on(pid=problem_id) where $addt_cond problem_id $range order by problem_id");
-      }else
-        $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct from problem where $addt_cond problem_id $range  order by problem_id");
-    ?>
+    <?php require('page_header.php') ?>
     <div class="container-fluid" style="font-size:14px">
       <?php
       if($maxpage>10){
         echo '<div class="pagination pagination-centered"><ul>';
-            for($i=10;$i<=$maxpage;++$i)
-              if($i!=$page_id)
-                echo '<li><a href="problemset.php?page_id=',$i,'">',$i,'</a></li>';
-              else
-                echo '<li class="active"><a href="problemset.php?page_id=',$i,'">',$i,'</a></li>';
+        for($i=10;$i<=$maxpage;++$i)
+          if($i!=$page_id)
+            echo '<li><a href="problemset.php?page_id=',$i,'">',$i,'</a></li>';
+          else
+            echo '<li class="active"><a href="problemset.php?page_id=',$i,'">',$i,'</a></li>';
         echo '</ul></div>';
       }
       ?>
       <div class="row-fluid">
         <div class="span10 offset1">
-
             <table class="table table-striped table-bordered">
               <thead><tr>
                 <th style="width:6%">ID</th>
@@ -78,27 +76,26 @@ if($page_id<10 || $page_id>$maxpage)
               <tbody>
                 <?php 
                   while($row=mysql_fetch_row($result)){
-                echo '<tr>';
-                echo '<td>',$row[0],'</td>';
-                if(isset($_SESSION['user'])){
-                  echo '<td class="',is_null($row[6]) ? 'prob-not' : ($row[6] ? 'prob-wa' : 'prob-ac'),'"><i></i></td>';
-                  echo '<td style="text-align:left;border-left:0;">';
-                }else{
-                  echo '<td style="text-align:left">';
-                }
-                echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1];
-                if($row[5]=='Y')echo '<span class="label label-important">Deleted</span>';
-                echo '</a></td>';
-                echo '<td><a href="record.php?result=0&amp;problem_id=',$row[0],'">',$row[2],'</a>/';
-                echo '<a href="record.php?problem_id=',$row[0],'">',$row[3],'</a></td>';
-                echo '<td>',$row[3] ? intval($row[2]/$row[3]*100) : 0,'%</td>';
-                echo '<td>',$row[4],'</td>';
-                echo "</tr>\n";
+                    echo '<tr>';
+                    echo '<td>',$row[0],'</td>';
+                    if(isset($_SESSION['user'])){
+                      echo '<td class="',is_null($row[6]) ? 'prob-not' : ($row[6] ? 'prob-wa' : 'prob-ac'),'"><i></i></td>';
+                      echo '<td style="text-align:left;border-left:0;">';
+                    }else{
+                      echo '<td style="text-align:left">';
+                    }
+                    echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1];
+                    if($row[5]=='Y')echo '<span class="label label-important">Deleted</span>';
+                    echo '</a></td>';
+                    echo '<td><a href="record.php?result=0&amp;problem_id=',$row[0],'">',$row[2],'</a>/';
+                    echo '<a href="record.php?problem_id=',$row[0],'">',$row[3],'</a></td>';
+                    echo '<td>',$row[3] ? intval($row[2]/$row[3]*100) : 0,'%</td>';
+                    echo '<td>',$row[4],'</td>';
+                    echo "</tr>\n";
                   }
                 ?>
               </tbody>
             </table>
-
         </div>  
       </div>
       <hr>

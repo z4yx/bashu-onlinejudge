@@ -1,4 +1,15 @@
-<?php require('inc/checklogin.php') ?>
+<?php
+require('inc/checklogin.php');
+ 
+if(!isset($_SESSION['user'])){
+  $info='<div style="text-align: center">Not logged in.</div>';
+}else{
+  require('inc/database.php');
+  $user_id=$_SESSION['user'];
+  $result=mysql_query('select email,nick,school from users where user_id=\''.$user_id."'");
+  $row=mysql_fetch_row($result);
+}
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -21,15 +32,11 @@
           
     <div class="container-fluid">
       <div class="row-fluid">
-<?php 
-if(!isset($_SESSION['user'])){
-       echo '<div style="text-align: center">Not logged in.</div>';
-}else{
-  require('inc/database.php');
-  $user_id=$_SESSION['user'];
-  $result=mysql_query('select email,nick,school from users where user_id=\''.$user_id."'");
-  $row=mysql_fetch_row($result);
-?>
+      <?php
+      if(isset($info)){
+        echo $info;
+      }else{
+      ?>
         <div class="span8 offset3">
           <form class="form-horizontal" id="form_profile" action="#" method="post">
             <input type="hidden" value="profile" name="type">
@@ -88,7 +95,7 @@ if(!isset($_SESSION['user'])){
             </fieldset>
           </form>
         </div>
-<?php } ?>
+      <?php } ?>
       </div>
       <hr>
       <footer class="muted" style="text-align: center;font-size:12px;">
