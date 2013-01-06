@@ -216,7 +216,10 @@ else{
           <label style="display:inline-block;"><input style="margin:0 3px" type="checkbox" name="public">Share this code</label>
           <select name="language" id="slt_lang">
             <?php foreach ($LANG_NAME as $langid => $lang) {
-              echo '<option value="',$langid,'">',$lang,'</option>';
+              echo "<option value=\"$langid\" ";
+              if(isset($_SESSION['lang']) && $_SESSION['lang']==$langid)
+                echo 'selected="selected"';
+              echo ">$lang</option>";
             } ?>
           </select>
           <input class="btn btn-primary" value="Submit" type="submit">
@@ -277,10 +280,6 @@ else{
           $('#rightside').show();
           $('#show_tool').hide();
         });
-        <?php 
-        if(isset($_SESSION['lang']))
-          echo '$(\'#slt_lang>option[value=',$_SESSION['lang'],']\').attr("selected","selected");';
-        ?>
       });
     </script>
   </body>

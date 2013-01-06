@@ -73,7 +73,7 @@ if(isset($_FILES['file'])){
 		<?php }else{ ?>
 			<form action="upload.php" method="post" enctype="multipart/form-data" onsubmit="return check_upload();">
 				<input type="file" name="file" id="file">
-				<div><span>File name: </span><input type="text" name="savename" value="<?php echo $filename?>" style="width:200px;"></div>
+				<div><span>File name: </span><input type="text" name="savename" value="<?php echo htmlspecialchars($filename);?>" style="width:200px;"></div>
 				<div style="text-align:center">
 					<div id="info"> </div>
 					<input type="submit" value="Upload"> 

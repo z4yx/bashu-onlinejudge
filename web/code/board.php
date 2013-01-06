@@ -149,7 +149,7 @@ $range=$row[0];
     <script type="text/javascript"> 
       $(document).ready(function(){
         var cur=<?php echo $top?>;
-        var prob_id="<?php if(isset($_GET['problem_id'])) echo 'problem_id=',$_GET['problem_id'],'&';?>";
+        var prob_id="<?php if(isset($_GET['problem_id'])) echo 'problem_id=',intval($_GET['problem_id']),'&';?>";
         $('#nav_bbs').parent().addClass('active');
         $('#ret_url').val('board.php?'+prob_id+'start_id='+cur);
         <?php 
@@ -184,7 +184,13 @@ $range=$row[0];
               sp.html('- ');
               a.parent().after('<pre id="'+ID+'"></pre>');
               $.get('ajax_message.php?message_id='+E.target.id.substring(3),function(data){
-                document.getElementById(ID).innerHTML=parseBBCode(data);
+                $(document.getElementById(ID)).html(parseBBCode(data)).find('a').each(function(){
+                  var Href = this.getAttribute("href",2);
+                  Href=Href.replace(/^([ \t\n\r]*javascript:)+/i,'');
+                  if(!(/(ht|f)tps?:\/\//i.test(Href)))
+                    Href = "http://"+Href;
+                  this.href=Href;
+                });
               });
             }else{
               var tmp=$('#alert_nothing').show();

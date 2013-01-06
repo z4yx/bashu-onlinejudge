@@ -16,7 +16,7 @@ $rank_mode=false;
 if(isset($_GET['problem_id'])){
   $problem_id=intval($_GET['problem_id']);
 }
-if(isset($_GET['way'])){
+if(isset($_GET['way']) && !preg_match('/\W/',$_GET['way'])){
   $way=$_GET['way'];
   if($way=="time"||$way=="memory"){
     $rank_mode=true;
