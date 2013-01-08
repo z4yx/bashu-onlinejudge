@@ -238,7 +238,9 @@ static int sc_handle(struct sablebox* pbox, struct __child_t* pson, struct profi
 			if(pson->program_break)
 				ret->memory += newbrk - pson->program_break;
 			pson->program_break = newbrk;
-		}	
+		}// else if(scno == __NR_open){
+		// 	ptrace(PTRACE_POKEUSER, pson->pid, RAX * 8, EACCES);
+		// }
 	}else{
 		pson->insyscall = 1;
 		scno = ptrace(PTRACE_PEEKUSER, pson->pid, ORIG_RAX * 8, 0);
@@ -255,9 +257,30 @@ static int sc_handle(struct sablebox* pbox, struct __child_t* pson, struct profi
 #endif
 #ifndef ALLOW_FOR_DEBUG
 		if(!pbox->scp->set[scno]){
-			ret->status = PROF_RUNTIME_ERROR;
-			ret->info = scnames[scno];
-			return 1;
+			if(scno == __NR_open) {
+				// int i;
+				long addr;
+				union{
+					long x;
+					char c[8];
+				}data;
+				// puts("call open");
+				addr = ptrace(PTRACE_PEEKUSER, pson->pid, RDI * 8, 0);
+				// printf("addr %ld\n", addr);
+				data.x = ptrace(PTRACE_PEEKDATA, pson->pid, addr, 0);
+				// printf("char " );
+				// for(i=0; i<sizeof(long); i++)
+					// putchar(data.c[i]);
+				// puts("");
+				data.c[0] = '\0';
+				if(addr != -1 && data.x != -1 && ptrace(PTRACE_POKEDATA, pson->pid, addr, data.x) != -1){
+					puts("modify the first argument of open");
+				}
+			}else {
+				ret->status = PROF_RUNTIME_ERROR;
+				ret->info = scnames[scno];
+				return 1;
+			}
 		}
 #endif
 		if(pbox->scp->set[scno] > 0)
