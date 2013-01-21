@@ -12,7 +12,7 @@ int main(int argc,char *argv[])
 	score=atoi(argv[1]);//取得测试点的满分
 
 	fin=fopen("user.in","r");//测试数据的输入
-	fout=fopen("user.out","w");//选手的输出
+	fout=fopen("user.out","r");//选手的输出
 
 	//评测
 
