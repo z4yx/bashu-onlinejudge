@@ -134,6 +134,9 @@ static int server_handler_post(
 	}else{
 		pair *p = (pair*)*con_cls;
 		if(0 != *upload_size) { //next, read body
+#ifdef DUMP_FOR_DEBUG
+			p->second->raw_post_data += upload_data;
+#endif
 			MHD_post_process(p->first, upload_data, *upload_size);
 			*upload_size = 0;
 			//puts("next");

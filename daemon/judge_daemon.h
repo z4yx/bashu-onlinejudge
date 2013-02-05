@@ -18,6 +18,9 @@ struct solution
 	std::vector<case_info> detail_results;
 	void *mutex_for_query;//use void* to avoid including <mutex>
 	time_t timestamp;
+#ifdef DUMP_FOR_DEBUG
+	std::string raw_post_data;
+#endif
 
 	solution();
 	~solution();
