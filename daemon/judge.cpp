@@ -35,7 +35,7 @@ extern std::string lang_ext[], lang_compiler[];
 char target_path[MAXPATHLEN+16];
 char buffer[65536];
 
-bool clean_files()
+bool clean_files() throw ()
 {
 	int ret;
 #ifdef _WIN32
@@ -45,20 +45,28 @@ bool clean_files()
 #endif
 	return ret == 0;
 }
-bool solution::compile()
+void solution::copy_setting(const solution &from) throw ()
+{
+	problem=from.problem;
+	compare_way=from.compare_way;
+	lang=from.lang;
+	time_limit=from.time_limit;
+	mem_limit=from.mem_limit;
+	score=from.score;
+	type=from.type;
+}
+bool solution::compile() throw (const char *)
 {
 	puts("compile");
 	if(!lang_exist[lang]) {
-		applog("Error: Language doesn't exist.");
-		throw 1;
+		throw "Language doesn't exist";
 	}
 	std::string filename("target.");
 	filename += lang_ext[lang];
 
 	FILE *code_file = fopen(filename.c_str(), "wb");
 	if(code_file == NULL) {
-		applog("Error: Write code file failed.");
-		throw 1;
+		throw "Write code file failed";
 	}
 	
 	int size = code.size();
@@ -68,9 +76,8 @@ bool solution::compile()
 #ifdef _WIN32
 	int ret = system((std::string("..\\win32_run_compiler.exe \"") + lang_compiler[lang] + ' ' + filename + '"').c_str());
 	if(ret) {
-		applog("Error: Can not run compiler");
 		//printf("Can not run compiler using %s\n", (std::string("win32_run_compiler.exe ") + lang_compiler[lang] + ' ' + filename).c_str());
-		throw 1;
+		throw "Can not run compiler";
 	}
 #else
 	std::string command(lang_compiler[lang]);
@@ -80,8 +87,7 @@ bool solution::compile()
 #endif
 	FILE *output = fopen("err.out", "r");
 	if(!output) {
-		applog("Error: Can't open compiler output");
-		throw 1;
+		throw "Can't open compiler output";
 	}
 	int read_size = fread(buffer, 1, 65400, output);
 	buffer[read_size] = '\0';
@@ -94,8 +100,7 @@ bool solution::compile()
 		}
 	}else{
 		if(strstr(buffer, "@~good~@") != NULL) {
-			applog("Error: Compiler returned 0, but execute file doesn't exist.");
-			throw 1;
+			throw "Compiler returned 0, but execute file doesn't exist.";
 		}else {
 			last_state = buffer;
 			score = time_limit = mem_limit = 0;
@@ -110,17 +115,16 @@ bool solution::compile()
 	}
 	return true;
 }
-void solution::judge()
+void solution::judge() throw (const char *)
 {
 	puts("judge");
 
 	sprintf(dir_name, "%s/%d", DataDir, problem);
 	DIR *dp = opendir(dir_name);
 	if(dp == NULL) {
-		applog("Error: Can't open data dir");
 		error_code = RES_SE;
 		last_state = "No data files";
-		throw 1;
+		throw "Can't open data dir";
 	}
 	std::vector<std::string> in_files;
 	struct dirent *ep;
@@ -149,8 +153,7 @@ void solution::judge()
 		if(run_judge(target_path, buffer, "user.out", time_limit, (lang_extra_mem[lang] + mem_limit) << 10 /*to byte*/, &result)) {
 			error_code = RES_SE;
 			last_state = "Cannot run target program";
-			applog("Error: Cannot run target program");
-			throw 1;
+			throw "Cannot run target program";
 		}else if(result.state == 0) {
 			int len = d_name.size()+dir_len+1; //dir+'/'+file
 			buffer[len-2] = 'o';
@@ -261,7 +264,7 @@ void solution::judge()
 	time_limit = total_time;
 	printf("error_code %d, time %dms, memory %dkB, score %d\n", error_code, time_limit, mem_limit, score);
 }
-void solution::write_database()
+void solution::write_database() throw (const char *)
 {
 	int id = get_next_solution_id();
 	printf("solution_id: %d\n", id);

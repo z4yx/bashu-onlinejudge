@@ -11,7 +11,7 @@ public:
 	{
 		buf = (char*)malloc((in.size() << 1)+3);
 		if(!buf)
-			throw 0;
+			throw "encoder: Can't allocate memory";
 		char *p = buf;
 		*(p++) = '"';
 		for(char &c : in) {

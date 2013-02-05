@@ -57,17 +57,7 @@ solution::~solution()
 {
 	delete (std::mutex*)mutex_for_query;
 }
-void solution::copy_setting(const solution &from)
-{
-	problem=from.problem;
-	compare_way=from.compare_way;
-	lang=from.lang;
-	time_limit=from.time_limit;
-	mem_limit=from.mem_limit;
-	score=from.score;
-	type=from.type;
-}
-void applog(const char *str)
+void applog(const char *str, const char *info) throw ()
 {
 	time_t now_time = time(NULL);
 	std::unique_lock<std::mutex> Lock(applog_mutex);
@@ -77,7 +67,7 @@ void applog(const char *str)
 #else
 	std::strftime(time_str, 24, "%F %T", std::localtime(&now_time));
 #endif
-	printf("[%s] %s\n", time_str, str);
+	printf("[%s] %s (%s)\n", time_str, str, info);
 	fflush(stdout);
 }
 void json_builder(std::ostringstream &, solution *);
@@ -178,10 +168,10 @@ void thread_judge()
 				cur->write_database();
 			}
 			cur->timestamp = time(0);
-		}catch(int) {
+		}catch(const char *e) {
 			std::string message("Error: Exception occur when judging ");
 			message += cur->key; 
-			applog(message.c_str());
+			applog(message.c_str(), e);
 
 			try {
 				std::unique_lock<std::mutex> Lock_map(* (std::mutex*)(cur->mutex_for_query));
@@ -200,7 +190,7 @@ void thread_judge()
 				}
 	
 			}catch(...) {
-				;
+				applog("Info: Can't create dump file.");
 			}
 		}
 
@@ -244,17 +234,17 @@ void thread_rejudge()
 				while(rejudging);
 
 				update_exist_solution_info(solution_id, sol);
-			}catch(...) {
+			}catch(const char *e) {
 				char tmp[64];
 				sprintf(tmp, "Error: Exception occur when rejudging %d", solution_id);
-				applog(tmp);
+				applog(tmp, e);
 			}
 			delete sol;
 		}
 		try {
 			refresh_users_problem(rejudge_init.problem);
-		}catch(...) {
-			applog("Error: Exception occur when refreshing user info");
+		}catch(const char *e) {
+			applog("Error: Exception occur when refreshing user info", e);
 		}
 		applog("Info: Rejudge thread finished");
 	}
@@ -272,8 +262,8 @@ char *JUDGE_start_rejudge(solution *&new_sol)
 			rejudge_mutex.unlock();
 			strcpy(p, "OK");
 			return p;
-		}catch(...) {
-			applog("Error: Cannot start rejudging");
+		}catch(const char *e) {
+			applog("Error: Cannot start rejudging", e);
 			rejudge_mutex.unlock();
 
 			strcpy(p, "error");
@@ -287,7 +277,7 @@ char *JUDGE_accept_submit(solution *&new_sol)
 {
 	try {
 		if(!new_sol)
-			throw 1;
+			throw "invalid pointer";
 		new_sol->error_code = -1;
 		new_sol->timestamp = 0;
 		do {
