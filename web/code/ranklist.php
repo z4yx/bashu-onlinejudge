@@ -91,10 +91,10 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a href="#" id="btn-pre">&larr; Previous</a>
+            <a href="ranklist.php?start_id=<?php echo $page_id-50 ?>" id="btn-pre">&larr; Previous</a>
           </li>
           <li>
-            <a href="#" id="btn-next">Next &rarr;</a>
+            <a href="ranklist.php?start_id=<?php echo $page_id+50 ?>" id="btn-next">Next &rarr;</a>
           </li>
         </ul>
       </div>  
@@ -189,12 +189,12 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
         });
         $('#btn-next').click(function(){
           if(cur+1+50<=<?php echo $total?>)
-            location.href='ranklist.php?start_id='+(cur+50);
+            return true;
           return false;
         });
         $('#btn-pre').click(function(){
           if(cur+1-50>=1)
-            location.href='ranklist.php?start_id='+(cur-50);
+            return true;
           return false;
         });
         $('#searchuser_form').submit(function(){

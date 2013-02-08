@@ -2,21 +2,35 @@
 require('inc/checklogin.php');
 
 if(isset($_GET['start_id']))
-  $top=intval($_GET['start_id']);
+  $query_id=intval($_GET['start_id']);
 else
-  $top=2100000000;
-if(isset($_GET['problem_id']))
-  $cond_prob='and problem_id='.intval($_GET['problem_id']);
-else
-  $cond_prob='';
+  $query_id=2100000000;
 
+if(isset($_GET['problem_id'])){
+  $cond_prob='and problem_id='.intval($_GET['problem_id']);
+  $query_prob=substr($cond_prob, 4);
+}else{
+  $query_prob=$cond_prob='';
+}
 require('inc/database.php');
-$subquery="select thread_id from message where thread_id<$top $cond_prob order by thread_id desc limit 50";
+$subquery="select thread_id from message where thread_id<$query_id $cond_prob order by thread_id desc limit 50";
 $res=mysql_query("select min(thread_id) from ($subquery) as tmptab");
 if(!$res)
   die('Wrong argument');
 $row=mysql_fetch_row($res);
 $range=$row[0];
+
+function get_pre_link($top)
+{
+  global $cond_prob;
+  $res=mysql_query("select max(thread_id) from (select thread_id from message where thread_id>=$top $cond_prob order by thread_id limit 50) as tmptab");
+  $row=mysql_fetch_row($res);
+  if($row[0])
+    $pre=$row[0]+1;
+  else
+    $pre=2100000000;
+  return $pre;
+}
 
 ?>
 <!DOCTYPE html>
@@ -75,9 +89,10 @@ $range=$row[0];
       <div class="row-fluid">
         <div class="span12" id="comments">
           <a href="#" class="btn btn-primary btn-small" id="new_msg" style="margin-left:25px">Post New Message</a>
-          <?php 
+          <?php
+            $top=$query_id;
             if($range){
-              $res=mysql_query("select title,depth,user_id,message_id,in_date,thread_id,problem_id,ASCII(content) from message where thread_id<$top and thread_id>=$range $cond_prob order by thread_id desc,orderNum");
+              $res=mysql_query("select title,depth,user_id,message_id,in_date,thread_id,problem_id,ASCII(content) from message where thread_id<$query_id and thread_id>=$range $cond_prob order by thread_id desc,orderNum");
               $deep=-1;
               $top=0;
               $cnt=0;
@@ -127,10 +142,10 @@ $range=$row[0];
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a href="#" id="btn-pre">&larr; Newer</a>
+            <a href="board.php?<?php echo $query_prob,'&amp;start_id=',get_pre_link($top) ?>" id="btn-pre">&larr; Newer</a>
           </li>
           <li>
-            <a href="#" id="btn-next">Older &rarr;</a>
+            <a href="<?php if($range) echo 'board.php?',$query_prob,'&amp;start_id=',$range; ?>#" id="btn-next">Older &rarr;</a>
           </li>
         </ul>
       </div> 
@@ -148,29 +163,9 @@ $range=$row[0];
 
     <script type="text/javascript"> 
       $(document).ready(function(){
-        var cur=<?php echo $top?>;
-        var prob_id="<?php if(isset($_GET['problem_id'])) echo 'problem_id=',intval($_GET['problem_id']),'&';?>";
         $('#nav_bbs').parent().addClass('active');
-        $('#ret_url').val('board.php?'+prob_id+'start_id='+cur);
-        <?php 
-          $subquery="select thread_id from message where thread_id>=$top $cond_prob order by thread_id limit 50";
-          $res=mysql_query("select max(thread_id) from ($subquery) as tmptab");
-          $row=mysql_fetch_row($res);
-          if($row[0])
-            $pre=$row[0]+1;
-          else
-            $pre=2100000000;
-        ?>
-        $('#btn-next').click(function(){
-          <?php if($range){?>
-          location.href='board.php?'+prob_id+'start_id='+<?php echo $range?>;
-          <?php }?>
-          return false;
-        });
-        $('#btn-pre').click(function(){
-          location.href='board.php?'+prob_id+'start_id='+<?php echo $pre?>;
-          return false;
-        });
+        $('#ret_url').val('board.php?<?php echo $query_prob,"&start_id=",$query_id?>');
+
         $('#comments p>a').click(function(E){
           var ID=E.target.id+'_detail';
           var node=document.getElementById(ID);
