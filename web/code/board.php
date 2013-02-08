@@ -125,7 +125,7 @@ function get_pre_link($top)
                 echo ' <button id="reply_msg',$row[3],'" class="btn btn-mini">Reply</button><p>';
                 if($row[7])
                   echo '<span>+ </span>';
-                echo '<a href="#" id="msg',$row[3],'">',htmlspecialchars($row[0]),'</a></p></div></div>';
+                echo '<a href="ajax_message.php?message_id=',$row[3],'" id="msg',$row[3],'">',htmlspecialchars($row[0]),'</a></p></div></div>';
               }
               echo '</li>';
               while($deep>0){
