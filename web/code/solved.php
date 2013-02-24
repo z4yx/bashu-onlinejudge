@@ -35,7 +35,7 @@ $result=mysql_query("select solution_id,user_id,solution.problem_id,score,soluti
           <div style="width:250px;margin:0 auto">
             <form id="searchuser_form" action="solved.php" method="get" class="form-inline" style="margin-bottom:5px;">
               <label for="searchuser_input" class="label-select">User: </label>
-              <div class="input-append"><input value="<?php if(isset($search))echo htmlspecialchars($search);?>" id="searchuser_input" type="text" name="q" class="input-medium" placeholder="Search User"><span id="search_addon" class="add-on"><i class="icon-search"></i></span></div>
+              <div class="input-append"><input autofocus="autofocus" value="<?php if(isset($search))echo htmlspecialchars($search);?>" id="searchuser_input" type="text" name="q" class="input-medium" placeholder="Search User"><span id="search_addon" class="add-on"><i class="icon-search"></i></span></div>
             </form>
           </div>
         </div>

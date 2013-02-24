@@ -217,10 +217,10 @@ function get_pre_link()
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a href="record.php?<?php echo htmlspecialchars(get_pre_link())?>" id="btn-pre">&larr; Previous</a>
+            <a class="pager-pre-link" title="Alt+A" href="record.php?<?php echo htmlspecialchars(get_pre_link())?>" id="btn-pre">&larr; Previous</a>
           </li>
           <li>
-            <a href="record.php?<?php echo htmlspecialchars(get_next_link())?>" id="btn-next">Next &rarr;</a>
+            <a class="pager-next-link" title="Alt+D" href="record.php?<?php echo htmlspecialchars(get_next_link())?>" id="btn-next">Next &rarr;</a>
           </li>
         </ul>
       </div>

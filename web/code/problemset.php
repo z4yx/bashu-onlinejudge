@@ -98,6 +98,16 @@ if(isset($_SESSION['user'])){
             </table>
         </div>  
       </div>
+      <div class="row-fluid">
+        <ul class="pager">
+          <li>
+            <a class="pager-pre-link" title="Alt+A" href="#" id="btn-pre">&larr; Previous</a>
+          </li>
+          <li>
+            <a class="pager-next-link" title="Alt+D" href="#" id="btn-next">Next &rarr;</a>
+          </li>
+        </ul>
+      </div>
       <hr>
       <footer class="muted" style="text-align: center;font-size:12px;">
         <p>&copy; 2012 Bashu Middle School</p>
@@ -109,8 +119,24 @@ if(isset($_SESSION['user'])){
 
     <script type="text/javascript"> 
       $(document).ready(function(){
+        var cur_page=<?php echo $page_id ?>;
         $('#nav_set').parent().addClass('active');
-        $('#ret_url').val("problemset.php?page_id=<?php echo $page_id ?>");
+        $('#ret_url').val("problemset.php?page_id="+cur_page);
+
+        $('#btn-next').click(function(){
+          <?php
+            if($page_id<$maxpage){
+              $nextpage=$page_id+1;
+              echo "location.href='problemset.php?page_id=$nextpage';";
+            }
+          ?>
+          return false;
+        });
+        $('#btn-pre').click(function(){
+          if(cur_page>10)
+            location.href='problemset.php?page_id='+(cur_page-1);
+          return false;
+        });
       });
     </script>
   </body>

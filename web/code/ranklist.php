@@ -41,7 +41,7 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
         <select class="input-small pull-left" id="user_page"></select>
         <div class="pull-right">
           <form id="searchuser_form" action="searchuser.php" method="get" style="margin: 0 0">
-            <div class="input-append"><input id="searchuser_input" type="text" name="q" class="input-medium" placeholder="Search User"><span id="search_addon" class="add-on"><i class="icon-search"></i></span></div>
+            <div class="input-append"><input id="searchuser_input" autofocus="autofocus" type="text" name="q" class="input-medium" placeholder="Search User"><span id="search_addon" class="add-on"><i class="icon-search"></i></span></div>
           </form>
         </div>
         <div class="btn-group pull-right" style="margin-right:9px">
@@ -91,10 +91,10 @@ $result=mysql_query('select user_id,nick,solved,submit,score from users order by
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a href="ranklist.php?start_id=<?php echo $page_id-50 ?>" id="btn-pre">&larr; Previous</a>
+            <a class="pager-pre-link" title="Alt+A" href="ranklist.php?start_id=<?php echo $page_id-50 ?>" id="btn-pre">&larr; Previous</a>
           </li>
           <li>
-            <a href="ranklist.php?start_id=<?php echo $page_id+50 ?>" id="btn-next">Next &rarr;</a>
+            <a class="pager-next-link" title="Alt+D" href="ranklist.php?start_id=<?php echo $page_id+50 ?>" id="btn-next">Next &rarr;</a>
           </li>
         </ul>
       </div>  

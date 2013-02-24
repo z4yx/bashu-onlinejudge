@@ -132,7 +132,7 @@ else{
         </div>
         <div class="span3" style="font-size:14px;" id="rightside">
           <div class="row-fluid">
-            <h2 style="text-align:right"><span id="btn_hide" class="btn btn-small">Hide Information &raquo;</span></h2>
+            <h2 style="text-align:right"><span id="btn_hide" title="Alt+H" class="btn btn-small">Hide Information &raquo;</span></h2>
           </div>
           <div class="row-fluid">
             <h3>&nbsp;</h3>
@@ -170,7 +170,7 @@ else{
           </div></div>
           <div class="row-fluid"><div class="span12" style="text-align: center;">
             <div id="function" class="well well-small" style="margin-top:10px">
-              <a href="#" class="btn btn-primary" id="action_submit">Submit</a>
+              <a href="#" title="Alt+S" class="btn btn-primary" id="action_submit">Submit</a>
               <a href="record.php?way=time&amp;problem_id=<?php echo $prob_id?>" class="btn btn-info">Status</a>
               <a href="board.php?problem_id=<?php echo $prob_id;?>" class="btn btn-warning">Discuss</a>
             </div>
@@ -222,22 +222,23 @@ else{
               echo ">$lang</option>";
             } ?>
           </select>
-          <input class="btn btn-primary" value="Submit" type="submit">
+          <input class="btn btn-primary" title="Alt+S" value="Submit" type="submit">
           <a href="#" class="btn" data-dismiss="modal">Close</a>
         </div>
       </form>
     </div>
 
     <div id="show_tool">
-      <span id="btn_submit2" class="btn btn-mini btn-primary">Submit</span>
-      <span id="btn_show" class="btn btn-mini btn-primary">&laquo; Show Information</span>
+      <span id="btn_submit2" title="Alt+S" class="btn btn-mini btn-primary">Submit</span>
+      <span id="btn_show" title="Alt+H" class="btn btn-mini btn-primary">&laquo; Show Information</span>
     </div>
 
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="common.js"></script>
 
-    <script type="text/javascript"> 
+    <script type="text/javascript">
+      var hide_info = 0;
       $(document).ready(function(){
         var prob=<?php echo $prob_id?>;
         $('#nav_prob').parent().addClass('active');
@@ -260,26 +261,40 @@ else{
             return true;
           }
         });
-        $('#action_submit').click(function(){
+        function click_submit(){
           <?php if(!isset($_SESSION['user'])){?>
             alert("You haven't logged in.");
           <?php }else{?>
             $('#prob_input').val(''+prob);
             $('#SubmitModal').modal('show');
+            $('#detail_input').focus();
           <?php }?>
           return false;
+        }
+        $('#action_submit').click(click_submit);
+        $('#btn_submit2').click(click_submit);
+        function toggle_info(){
+          if(hide_info) {
+            $('#leftside').addClass('span9').removeClass('span12');
+            $('#rightside').show();
+            $('#show_tool').hide();
+            hide_info=0;
+          }else {
+            $('#rightside').hide();
+            $('#leftside').addClass('span12').removeClass('span9');
+            $('#show_tool').show();
+            hide_info=1;
+          }
+        }
+        $('#btn_hide').click(toggle_info);
+        $('#btn_show').click(toggle_info);
+        reg_hotkey(83, function(){ //Alt+S
+          if($('#SubmitModal').is(":visible"))
+            $('#form_submit').submit();
+          else
+            click_submit();
         });
-        $('#btn_submit2').click(function(){$('#action_submit').click();});
-        $('#btn_hide').click(function(){
-          $('#rightside').hide();
-          $('#leftside').addClass('span12').removeClass('span9');
-          $('#show_tool').show();
-        });
-        $('#btn_show').click(function(){
-          $('#leftside').addClass('span9').removeClass('span12');
-          $('#rightside').show();
-          $('#show_tool').hide();
-        });
+        reg_hotkey(72, toggle_info); //Alt+H
       });
     </script>
   </body>

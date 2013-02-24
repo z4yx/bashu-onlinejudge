@@ -72,7 +72,7 @@ function get_pre_link($top)
             </div>
             <div style="float:right">
               <input id="post_input" type="submit" class="btn btn-primary" value="Post">
-              <span id="cancel_input" class="btn">Cancel</span>
+              <button id="cancel_input" class="btn">Cancel</button>
             </div>
             <div id="post_status"></div>
           </fieldset>
@@ -88,7 +88,7 @@ function get_pre_link($top)
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span12" id="comments">
-          <a href="#" class="btn btn-primary btn-small" id="new_msg" style="margin-left:25px">Post New Message</a>
+          <a href="#" title="Alt+N" class="btn btn-primary btn-small" id="new_msg" style="margin-left:25px">Post New Message</a>
           <?php
             $top=$query_id;
             if($range){
@@ -142,10 +142,10 @@ function get_pre_link($top)
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a href="board.php?<?php echo $query_prob,'&amp;start_id=',get_pre_link($top) ?>" id="btn-pre">&larr; Newer</a>
+            <a class="pager-pre-link" title="Alt+A" href="board.php?<?php echo $query_prob,'&amp;start_id=',get_pre_link($top) ?>" id="btn-pre">&larr; Newer</a>
           </li>
           <li>
-            <a href="<?php if($range) echo 'board.php?',$query_prob,'&amp;start_id=',$range; ?>#" id="btn-next">Older &rarr;</a>
+            <a class="pager-next-link" title="Alt+D" href="<?php if($range) echo 'board.php?',$query_prob,'&amp;start_id=',$range; ?>#" id="btn-next">Older &rarr;</a>
           </li>
         </ul>
       </div> 
@@ -196,23 +196,20 @@ function get_pre_link($top)
         });
         var detail_ele=document.getElementById('detail_input');
         var minW=150,minH=100;
-        $('#new_msg').click(function(){
+        function open_replypanel(msg_id){
           <?php if(isset($_SESSION['user'])){?>
-          $('#msgid_input').val('0');
-          $('#replypanel h4').html('Post New Message');
+          var title = ((msg_id=='0')?'Post New Message':'Reply for #'+msg_id);
+          $('#msgid_input').val(msg_id);
+          $('#replypanel h4').html(title);
           $('#replypanel').show();
+          $('#msg_input').focus();
           <?php }else{echo 'alert("Please login first");';}?>
           return false;
-        });
-        $('#comments button').click(function(E){
-          <?php if(isset($_SESSION['user'])){?>
-          var ID=E.target.id.substring(9);
-          $('#msgid_input').val(ID);
-          $('#replypanel h4').html('Reply for #'+ID);
-          $('#replypanel').show();
-          <?php }else{echo 'alert("Please login first");';}?>
-          return false;
-        });
+        }
+        $('#new_msg').click(function(){open_replypanel('0')});
+        $('#comments button').click(function(E){open_replypanel(E.target.id.substring(9))});
+        reg_hotkey(78,function(){$('#new_msg').click()}); //Alt+N
+
         $('#replypanel form').submit(function(){
           var msg=$.trim($('#msg_input').val());
           if(msg.length==0){
@@ -226,9 +223,14 @@ function get_pre_link($top)
           $('#post_status').html('');
           return true;
         });
+        reg_hotkey(83,function(){$('#replypanel form').submit()}); //Alt+S
+
         $('#cancel_input').click(function(){
           $('#replypanel').hide();
           return false;
+        });
+        $('#replypanel').keyup(function(E){
+          E.which==27 && $('#replypanel').hide();
         });
         function move_handle(E){
           var w=origX-E.clientX+origW;

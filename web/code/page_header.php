@@ -23,7 +23,7 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-          <li><a href="mail.php">Mail</a></li>
+          <li><a href="mail.php" id="nav_mail">Mail</a></li>
           <li><a href="profile.php">Profile</a></li>
 <?php   if(isset($_SESSION['administrator']))
           echo '<li class="divider"></li><li><a href="admin.php">Admin</a></li>'; 
@@ -32,20 +32,20 @@
           <li><a id='logoff_btn' href="#">Sign Out</a></li>
         </ul>
 <?php }else{?>
-        <a id="login_btn" data-toggle="modal" href="#LoginModal" class="btn">Login</a>
+        <a id="login_btn" title="Alt+L" data-toggle="modal" href="#LoginModal" class="btn">Login</a>
         <a href="reg.php" class="btn">Sign Up</a>
 <?php }?>
       </div>
         <ul class="nav">
-          <li><a id="nav_bbs" href="board.php">Board</a></li>
+          <li><a id="nav_bbs" title="Alt+B" href="board.php">Board</a></li>
           <li><a id="nav_set" href="problemset.php">Problemset</a></li>
-          <li><a id="nav_prob" href="problempage.php">Problem</a></li>
-          <li><a id="nav_record" href="record.php">Record</a></li>
+          <li><a id="nav_prob" title="Alt+P" href="problempage.php">Problem</a></li>
+          <li><a id="nav_record" title="Alt+R" href="record.php">Record</a></li>
           <li><a id="nav_rank" href="ranklist.php">Ranklist</a></li>
           <li><a id="nav_about" href="about.php">About</a></li>
         </ul>
         <form class="navbar-search pull-left" id="search_form" action="search.php" method="get">
-          <input type="text" name="q" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" autocomplete="off" placeholder="Problem ID,Title,Source">
+          <input type="text" name="q" title="Alt+I" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" autocomplete="off" placeholder="Problem ID,Title,Source">
         </form>
     </div>
   </div>

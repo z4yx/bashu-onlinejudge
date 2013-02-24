@@ -84,10 +84,10 @@ else{
 			<div class="row-fluid">
 				<ul class="pager">
 					<li>
-						<a href="#" id="btn-pre">&larr; Previous</a>
+						<a class="pager-pre-link" title="Alt+A" href="#" id="btn-pre">&larr; Previous</a>
 					</li>
 					<li>
-						<a href="#" id="btn-next">Next &rarr;</a>
+						<a class="pager-next-link" title="Alt+D" href="#" id="btn-next">Next &rarr;</a>
 					</li>
 				</ul>
 			</div>  
@@ -135,12 +135,13 @@ else{
 
 		</div><!--/.container-->
 		<script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap.min.js"></script>
+	    <script src="../assets/js/bootstrap.min.js"></script>
 		<script src="common.js"></script>
 
 		<script type="text/javascript"> 
 			$(document).ready(function(){
 				var cur=<?php echo $page?>;
+				$('#ret_url').val("mail.php");
 				$('#btn-next').click(function(){
 					location.href='mail.php?start_id='+(cur+20);
 					return false;
@@ -210,8 +211,10 @@ else{
 				$('#sendnew').click(function(){
 					$('#send_result').hide();
 					$('#MailModal').modal('show');
+					$('#to_input').focus();
 				});
-				$('#ret_url').val("mail.php");
+				reg_hotkey(78,function(){$('#sendnew').click()}); //Alt+N
+		        reg_hotkey(83,function(){$('#send_btn').click()}); //Alt+S
 			}); 
 		</script>
 	</body>

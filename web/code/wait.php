@@ -46,8 +46,8 @@ if(strlen($key)!=32 || preg_match('/\W/',$key))
           </div>
           <div class="hide" id="ele_finish">
             <p>Done! You can get back to the problem or go to see the record.</p>
-            <ul class="pager"><li class="previous"><a id="btn_back" href="#">&larr; Problem Page</a></li>
-            <li class="next"><a href="record.php">Record Page &rarr;</a></li></ul>
+            <ul class="pager"><li class="previous"><a class="pager-pre-link" title="Alt+P" id="btn_back" href="#">&larr; Problem Page</a></li>
+            <li class="next"><a class="pager-next-link" title="Alt+R" href="record.php">Record Page &rarr;</a></li></ul>
           </div>
         </div>
     	</div>
@@ -163,6 +163,15 @@ if(strlen($key)!=32 || preg_match('/\W/',$key))
           history.go(-1);
           return false;
         });
+      }).keydown(function(E){
+        if(E.altKey && !E.metaKey){
+          var key=E.keyCode;
+          if(key==80)
+            history.go(-1);
+          else if(key==82)
+            location.href="record.php";
+          return false;
+        }
       });
     </script>
   </body>

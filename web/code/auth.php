@@ -36,7 +36,7 @@
             <div id="uid_ctl" class="control-group">
               <label class="control-label" for="uid">Name:</label>
               <div class="controls">
-                <input type="text" id="uid" name="uid" placeholder="Username">
+                <input autofocus="autofocus" type="text" id="uid" name="uid" placeholder="Username">
               </div>
             </div>
             <div id="pwd_ctl" class="control-group">

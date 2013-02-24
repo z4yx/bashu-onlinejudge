@@ -70,10 +70,10 @@ $result=mysql_query("select user_id,nick,solved,submit from users where user_id 
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a href="#" id="btn-pre">&larr; Previous</a>
+            <a class="pager-pre-link" title="Alt+A" href="#" id="btn-pre">&larr; Previous</a>
           </li>
           <li>
-            <a href="#" id="btn-next">Next &rarr;</a>
+            <a class="pager-next-link" title="Alt+D" href="#" id="btn-next">Next &rarr;</a>
           </li>
         </ul>
       </div>

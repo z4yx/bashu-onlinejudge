@@ -476,3 +476,17 @@ h1,h2,h3,h4,h5,h6{
   -ms-user-select: text;
   user-select: text;
 }
+.shortcuts-tip {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  font-size: 8px;
+  padding: 1px;
+  line-height: 10px;
+  /*line-height: 14px;*/
+  color: #ffffff;
+  text-shadow: 0 0 0 rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: #b94a48;
+}
