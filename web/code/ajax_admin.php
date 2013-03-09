@@ -7,7 +7,7 @@ if(!isset($_POST['op']))
 $op=$_POST['op'];
 require('inc/database.php');
 if($op=="list_usr"){ 
-	$res=mysql_query("select user_id from users where defunct='Y'");
+	$res=mysql_query("select user_id,accesstime from users where defunct='Y'");
 	if(mysql_num_rows($res)==0)
 		die ('<div class="row-fluid"><div class="alert alert-info span4">No disabled users</div></div>');
 ?>
@@ -23,7 +23,10 @@ if($op=="list_usr"){
 		<tbody>
 			<?php
 				while($row=mysql_fetch_row($res)){
-					echo '<tr><td>',$row[0],'</td><td><a href="#"><i class="icon icon-ok"></i></a></td><td><a href="#"><i class="icon icon-remove"></i></a></td></tr>';
+					echo '<tr><td>',$row[0];
+					if(is_null($row[1]))
+						echo '<span style="color:red">(new)</span>';
+					echo '</td><td><a href="#"><i class="icon icon-ok"></i></a></td><td><a href="#"><i class="icon icon-remove"></i></a></td></tr>';
 				}
 			?>
 		</tbody>
