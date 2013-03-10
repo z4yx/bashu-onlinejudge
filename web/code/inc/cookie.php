@@ -25,6 +25,9 @@ function check_cookie()
 		$_SESSION['administrator']=true;
 	if(isset($arr['source_browser']))
 		$_SESSION['source_browser']=true;
+
+	if(isset($arr['pref']))
+		$_SESSION['pref']=$arr['pref'];
 	return true;
 }
 function write_cookie()
@@ -32,6 +35,7 @@ function write_cookie()
 	$arr = array('web'=>'bsoj');
 	$arr['user']=$_SESSION['user'];
 	$arr['lang']=$_SESSION['lang'];
+	$arr['pref']=$_SESSION['pref'];
 	if(isset($_SESSION['administrator']))
 		$arr['administrator']=true;
 	if(isset($_SESSION['source_browser']))

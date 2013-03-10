@@ -66,9 +66,13 @@ $(document).ready(function(){
 			$nav.removeClass('navbar-fixed-top');
 		}
 	}
-	if($nav.length){
+	if($nav.length && $('header').length){
 		processScroll();
 		$win.on('scroll', processScroll);
+	}else if($nav.length){
+		navFixed = true;
+		$container.css('margin-top','62px');
+		$nav.addClass('navbar-fixed-top');
 	}
 	$('#LoginModal').on('shown',function(){
 		$('#uid').focus();

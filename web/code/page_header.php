@@ -5,9 +5,18 @@
   <script>var LETSKILLIE6_DELAY=1;</script>
   <script src="http://letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
+<?php
+require_once 'inc/preferences.php';
+if(isset($_SESSION['pref']))
+  $pref=unserialize($_SESSION['pref']);
+else
+  $pref=new preferences();
+
+if($pref->hidelogo=='off'){ ?>
 <header>
   <a href="index.php"><img src="../assets/img/logo.jpg" alt="Logo" class="img-rounded"></a>
 </header>
+<?php }?>
 <div class="navbar" id="navbar_top">
   <div class="navbar-inner" style="padding:0">
     <div class="container-fluid navbar-padding-fix">
@@ -25,6 +34,7 @@
         <ul class="dropdown-menu">
           <li><a href="mail.php" id="nav_mail">Mail</a></li>
           <li><a href="profile.php">Profile</a></li>
+          <li><a href="control.php">Control Panel</a></li>
 <?php   if(isset($_SESSION['administrator']))
           echo '<li class="divider"></li><li><a href="admin.php">Admin</a></li>'; 
 ?>

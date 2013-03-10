@@ -28,6 +28,16 @@ try{
 		if($r[0]=='administrator' || $r[0]=='source_browser')
 			$_SESSION[$r[0]]=true;
 	}
+	
+	require 'inc/preferences.php';
+	$pref=new preferences();
+	$res=mysql_query("select property,value from preferences where user_id='$user'");
+	while($r=mysql_fetch_row($res)){
+		$property=$r[0];
+		$pref->$property=$r[1];
+	}
+	$_SESSION['pref']=serialize($pref);
+
 	$ip=mysql_escape_string($_SERVER["REMOTE_ADDR"]);
 	mysql_query("update users set accesstime=NOW(),ip='$ip' where user_id='$user'");
 

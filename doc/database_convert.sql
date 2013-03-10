@@ -98,3 +98,12 @@ alter table attend CONVERT TO CHARACTER SET utf8;
 
 update solution set valid=0;
 update solution,(select solution_id from(select solution_id,problem_id,user_id,result FROM solution order by solution_id) as t where result=0 group by problem_id,user_id)as s SET valid=1 where solution.solution_id=s.solution_id;
+
+CREATE TABLE `preferences` (
+  `id` int AUTO_INCREMENT,
+  `user_id` varchar(20) NOT NULL DEFAULT '',
+  `property` varchar(20) NOT NULL DEFAULT '',
+  `value` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `u_p` (`user_id`,`property`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
