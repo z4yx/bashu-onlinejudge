@@ -120,6 +120,8 @@ function get_pre_link($top)
                 else
                   echo '<div class="msg msg_even">';
                 echo '<div class="msg_container"><strong>',$row[2],'</strong> ',$row[4];
+                if($row[3]==$row[5] && $deep>0)
+                  echo '&nbsp;<span class="label label-warning">latest</span>';
                 if($deep==0 && $row[6])
                     echo '&nbsp;&nbsp;<a class="prob_link" href="problempage.php?problem_id=',$row[6],'">Problem ',$row[6],'</a>';
                 echo ' <button id="reply_msg',$row[3],'" class="btn btn-mini">Reply</button><p>';
