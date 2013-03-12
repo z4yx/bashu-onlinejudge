@@ -241,6 +241,7 @@ samp {
   position: fixed;
   right: 0px;
   top: 50%;
+  z-index: 999;
 }
 @media (max-width: 500px) {
   .replypanel{

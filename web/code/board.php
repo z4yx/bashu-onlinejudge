@@ -49,6 +49,12 @@ function get_pre_link($top)
     <!--[if lt IE 9]>
       <script src="../assets/js/html5.js"></script>
     <![endif]-->
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      skipStartupTypeset:true
+    });
+    </script>
+    <?php require('inc/mathjax_head.php');?>
   </head>
 
   <body>
@@ -179,15 +185,16 @@ function get_pre_link($top)
             var sp=a.prev('span');
             if(sp.length){
               sp.html('- ');
-              a.parent().after('<pre id="'+ID+'"></pre>');
+              a.parent().after('<pre id="'+ID+'"><div id="'+ID+'_div"></div></pre>');
               $.get('ajax_message.php?message_id='+E.target.id.substring(3),function(data){
-                $(document.getElementById(ID)).html(parseBBCode(data)).find('a').each(function(){
+                $('#'+ID+'>div').html(parseBBCode(data)).find('a').each(function(){
                   var Href = this.getAttribute("href",2);
                   Href=Href.replace(/^([ \t\n\r]*javascript:)+/i,'');
                   if(!(/(ht|f)tps?:\/\//i.test(Href)))
                     Href = "http://"+Href;
                   this.href=Href;
                 });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub,(ID+'_div')]);
               });
             }else{
               var tmp=$('#alert_nothing').show();
