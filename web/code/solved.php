@@ -55,7 +55,7 @@ $result=mysql_query("select solution_id,user_id,solution.problem_id,score,soluti
                   while($row=mysql_fetch_row($result)){
                     echo '<tr><td><a href="record.php?solution_id=',$row[0],'">',$row[0],'</a></td>';
                     echo '<td><a href="#linkU">',$row[1],'</a></td>';
-                    echo '<td style="text-align:left"><a href="problempage.php?problem_id=',$row[2],'">',$row[2],' -- ',htmlspecialchars($row[5]),'</a></td>';
+                    echo '<td style="text-align:left"><a href="problempage.php?problem_id=',$row[2],'">',$row[2],' -- ',$row[5],'</a></td>';
                     echo '<td>',$row[3],'</td>';
                     echo '<td>',$row[4],'</td>';
                     echo "</tr>\n";
