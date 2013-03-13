@@ -12,34 +12,20 @@ function check_cookie()
 	$arr = unserialize($cookie);
 	//print_r($arr);
 
-	if(!isset($arr['web'],$arr['user'],$arr['lang']) || $arr['web']!="bsoj")
+	if(false===$arr || !isset($arr['magic']) || $arr['magic']!="bsoj")
 		return false;
 	$user = $arr['user'];
 	if(preg_match('/\W/',$user))
 		return false;
 
 	$_SESSION['user'] = $user;
-	$_SESSION['lang'] = intval($arr['lang']);
-
-	if(isset($arr['administrator']))
-		$_SESSION['administrator']=true;
-	if(isset($arr['source_browser']))
-		$_SESSION['source_browser']=true;
-
-	if(isset($arr['pref']))
-		$_SESSION['pref']=$arr['pref'];
 	return true;
 }
 function write_cookie()
 {
-	$arr = array('web'=>'bsoj');
+	$arr = array('magic'=>'bsoj');
 	$arr['user']=$_SESSION['user'];
-	$arr['lang']=$_SESSION['lang'];
-	$arr['pref']=$_SESSION['pref'];
-	if(isset($_SESSION['administrator']))
-		$arr['administrator']=true;
-	if(isset($_SESSION['source_browser']))
-		$arr['source_browser']=true;
+
 	$data = encrypt(cookie_key, serialize($arr));
 	setcookie('SID', $data, time()+cookie_expire);
 }

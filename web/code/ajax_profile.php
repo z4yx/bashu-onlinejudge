@@ -15,7 +15,7 @@ if($_POST['type']=='profile'){
 		die('Not logged in.');
 	$user=$_SESSION['user'];
 	require('inc/database.php');
-    require('inc/checkpwd.php');
+    require_once('inc/checkpwd.php');
     if(!password_right($user, $_POST['oldpwd']))
 		die('Old password is not correct!');
 	

@@ -7,7 +7,7 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
   require('inc/database.php');
   if(isset($_POST['paswd'])){
 
-    require('inc/checkpwd.php');
+    require_once('inc/checkpwd.php');
     if(password_right($_SESSION['user'], $_POST['paswd']))
       $_SESSION['admin_panel']=1;
   }
