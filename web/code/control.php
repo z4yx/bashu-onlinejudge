@@ -2,7 +2,7 @@
 require('inc/checklogin.php');
  
 if(!isset($_SESSION['user'])){
-  $info='<div style="text-align: center">Not logged in.</div>';
+  $info='<div class="center">Not logged in.</div>';
 }else{
   require('inc/database.php');
   $user_id=$_SESSION['user'];
@@ -44,6 +44,16 @@ if(!isset($_SESSION['user'])){
             <input type="submit" class="btn" value="Save">
           </form>
 
+          <h3>Backup my code</h3>
+          <p>
+            Download your last accepted submit of every problem.<br>You can do this only once a week.
+            <?php
+            if(!is_null($pref->backuptime))
+              echo "<br><strong>Last Backup Time: ",date('Y-m-d H:i:s', $pref->backuptime),"</strong>";
+            ?>
+          </p>
+          <!-- <button class="btn" id="create_btn">Create Backup</button> -->
+          <button class="btn" id="download_btn">Backup &amp; Download</button>
         </div>
       <?php }?>
       </div>
@@ -66,6 +76,10 @@ if(!isset($_SESSION['user'])){
               data:$('#form_preferences').serialize()
             });
             return false;
+        });
+        $('#download_btn').click(function(){
+          $('body>iframe').remove();
+          $('<iframe>').hide().attr('src','backupcode.php').appendTo('body');
         });
         $('#ret_url').val("control.php");
       });
