@@ -213,7 +213,7 @@ else{
               <label class="control-label" style="display:inline-block;" for="prob_input">Problem</label>
               <input type="text" class="input-mini" style="font-weight: bold;margin-bottom: 0;" id="prob_input" name="problem">
           </div>
-          <label style="display:inline-block;"><input style="margin:0 3px" type="checkbox" name="public">Share this code</label>
+          <label style="display:inline-block;"><input style="margin:0 3px" type="checkbox" <?php if($pref->sharecode=='on')echo 'checked';?> name="public">Share this code</label>
           <select name="language" id="slt_lang">
             <?php foreach ($LANG_NAME as $langid => $lang) {
               echo "<option value=\"$langid\" ";

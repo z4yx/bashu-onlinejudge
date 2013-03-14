@@ -7,13 +7,21 @@ if(!isset($_SESSION['user']))
 $user=$_SESSION['user'];
 $pref=unserialize($_SESSION['pref']);
 
-if(isset($_POST['hidelogo'])){
-	$tmp='on';
-}else{
-	$tmp='off';
+function processOption($name)
+{
+	global $pref,$user;
+	if(isset($_POST[$name])){
+		$tmp='on';
+	}else{
+		$tmp='off';
+	}
+	$pref->$name=$tmp;
+	mysql_query("insert into preferences(user_id,property,value) values ('$user','$name','$tmp') ON DUPLICATE KEY UPDATE value='$tmp'");
+
 }
-$pref->hidelogo=$tmp;
-mysql_query("insert into preferences(user_id,property,value) values ('$user','hidelogo','$tmp') ON DUPLICATE KEY UPDATE value='$tmp'");
+
+processOption('hidelogo');
+processOption('sharecode');
 
 $_SESSION['pref']=serialize($pref);
 
