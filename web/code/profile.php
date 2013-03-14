@@ -135,6 +135,7 @@ if(!isset($_SESSION['user'])){
                 $('#ajax_result').html(msg).removeClass('alert-success').show();
                 if(/success/.test(msg)){
                   $('#ajax_result').addClass('alert-success');
+                  setTimeout(function(){location.href='ranklist.php';},500);
                 }
               }
             });
