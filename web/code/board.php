@@ -41,7 +41,7 @@ function get_pre_link($top)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../assets/css/bootstrap.css" rel="stylesheet">
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
+    <link href="../assets/css/docs.css?v=1" rel="stylesheet">
 
     <!--[if IE 6]>
     <link href="ie6.min.css" rel="stylesheet">
@@ -55,6 +55,45 @@ function get_pre_link($top)
     });
     </script>
     <?php require('inc/mathjax_head.php');?>
+    <style>
+      .popover-title{
+        font-weight: bolder;
+      }
+      .popover-content{
+        max-height: 200px;
+        width: 450px;
+        overflow-y: auto;
+      }
+      .popover{
+        width: auto;
+        top: 60px; 
+        left: -475px; 
+      }
+      #preview_content{
+        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+        color: #333;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        padding: 9.5px;
+        margin: 0 0 10px;
+        font-size: 13px;
+        line-height: 20px;
+        word-break: break-all;
+        word-wrap: break-word;
+        white-space: pre;
+        white-space: pre-wrap;
+        background-color: #F5F5F5;
+        border: 1px solid #CCC;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+      }
+      .close{
+        line-height: 18px;
+      }
+    </style>
   </head>
 
   <body>
@@ -75,6 +114,18 @@ function get_pre_link($top)
               <div class="controls">
                 <textarea class="input-xxlarge" id="detail_input" rows="7" name="detail"></textarea>
               </div>
+            </div>
+            <div id="PreviewPopover" class="popover left" >
+              <div class="arrow"></div>
+              <div class="popover-inner">
+                <h3 class="popover-title">Preview<a class="close">×</a></h3>
+                <div class="popover-content">
+                    <div id="preview_content"></div>
+                </div>
+              </div>
+            </div>
+            <div style="float:left">
+              <span type="button" style="margin-left: 60px;" id="post_preview" class="btn btn-info">Preview</span>
             </div>
             <div style="float:right">
               <input id="post_input" type="submit" class="btn btn-primary" value="Post">
@@ -174,6 +225,16 @@ function get_pre_link($top)
         $('#nav_bbs').parent().addClass('active');
         $('#ret_url').val('board.php?<?php echo $query_prob,"&start_id=",$query_id?>');
 
+        function dealwithlinks($jqobj)
+        {
+          $jqobj.find('a').each(function(){
+            var Href = this.getAttribute("href",2);
+            Href=Href.replace(/^([ \t\n\r]*javascript:)+/i,'');
+            if(!(/(ht|f)tps?:\/\//i.test(Href)))
+              Href = "http://"+Href;
+            this.href=Href;
+          });
+        }
         $('#comments p>a').click(function(E){
           var ID=E.target.id+'_detail';
           var node=document.getElementById(ID);
@@ -187,13 +248,7 @@ function get_pre_link($top)
               sp.html('- ');
               a.parent().after('<pre id="'+ID+'"><div id="'+ID+'_div"></div></pre>');
               $.get('ajax_message.php?message_id='+E.target.id.substring(3),function(data){
-                $('#'+ID+'>div').html(parseBBCode(data)).find('a').each(function(){
-                  var Href = this.getAttribute("href",2);
-                  Href=Href.replace(/^([ \t\n\r]*javascript:)+/i,'');
-                  if(!(/(ht|f)tps?:\/\//i.test(Href)))
-                    Href = "http://"+Href;
-                  this.href=Href;
-                });
+                dealwithlinks( $('#'+ID+'_div').html(parseBBCode(data)) );
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub,(ID+'_div')]);
               });
             }else{
@@ -204,7 +259,7 @@ function get_pre_link($top)
           return false;
         });
         var detail_ele=document.getElementById('detail_input');
-        var minW=150,minH=100;
+        var minW=260,minH=100;
         function open_replypanel(msg_id){
           <?php if(isset($_SESSION['user'])){?>
           var title = ((msg_id=='0')?'Post New Message':'Reply for #'+msg_id);
@@ -240,6 +295,15 @@ function get_pre_link($top)
         });
         $('#replypanel').keyup(function(E){
           E.which==27 && $('#replypanel').hide();
+        });
+        $('#post_preview').click(function(){
+          var data=$('#detail_input').val();
+          dealwithlinks( $('#preview_content').html(parseBBCode(data)));
+          $('#PreviewPopover').show();
+          MathJax.Hub.Queue(["Typeset",MathJax.Hub,('preview_content')]);
+        });
+        $('#PreviewPopover a.close').click(function(){
+          $('#PreviewPopover').hide();
         });
         function move_handle(E){
           var w=origX-E.clientX+origW;

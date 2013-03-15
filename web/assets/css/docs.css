@@ -235,7 +235,7 @@ samp {
 .replypanel{
   display: none;
   margin-top: -147px;
-  overflow: hidden;
+  /*overflow: hidden;*/
   width: auto;
   height: auto;
   position: fixed;
