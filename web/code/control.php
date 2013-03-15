@@ -23,6 +23,11 @@ if(!isset($_SESSION['user'])){
     <!--[if lt IE 9]>
       <script src="../assets/js/html5.js"></script>
     <![endif]-->
+    <style>
+      h2{
+        margin-top: 20px;
+      }
+    </style>
   </head>
 
   <body>
@@ -36,7 +41,7 @@ if(!isset($_SESSION['user'])){
       }else{
       ?>
         <div class="span6 offset3">
-          <h3>Preferences</h3>
+          <h2>Preferences</h2>
           <form id="form_preferences" action="ajax_preferences.php" method="post">
             <label class="checkbox">
               <input name="hidelogo" type="checkbox" <?php if($pref->hidelogo=='on')echo 'checked'; ?> > Hide logo
@@ -47,7 +52,7 @@ if(!isset($_SESSION['user'])){
             <input type="submit" class="btn" value="Save">
           </form>
 
-          <h3>Backup my code</h3>
+          <h2>Backup my code</h2>
           <p>
             Download your last accepted submit of every problem.<br>You can do this only once a week.
             <?php
@@ -55,8 +60,18 @@ if(!isset($_SESSION['user'])){
               echo "<br><strong>Last Backup Time: ",date('Y-m-d H:i:s', $pref->backuptime),"</strong>";
             ?>
           </p>
-          <!-- <button class="btn" id="create_btn">Create Backup</button> -->
           <button class="btn" id="download_btn">Backup &amp; Download</button>
+
+          <h2>Open source</h2>
+          <p>
+            <strong>Why Should I Open Source My Codes?</strong>
+            <ol>
+              <li>Open source softwares are a kind of great cultures which can date back to the early ages of the computer science history, and they are also the foundation of the web, the Internet, and our world.</li>
+              <li>If everybody shares his code with the world, it will give everyone chances to use the programs, distribute the programs, understand the programs and improve the programs, which helps the original author in turn.</li>
+              <li>Codes in the OI are relatively short, but they can also be very obscure. Making them open-source is to help ourselves in the past time.</li>
+            </ol>
+          </p>
+          <button class="btn" id="open_source">Open all my source code</button>
         </div>
       <?php }?>
       </div>
@@ -83,6 +98,11 @@ if(!isset($_SESSION['user'])){
         $('#download_btn').click(function(){
           $('body>iframe').remove();
           $('<iframe>').hide().attr('src','backupcode.php').appendTo('body');
+        });
+        $('#open_source').click(function(){
+          if(!window.confirm("Are you sure to do this?"))
+            return false;
+          $.post('ajax_opensource.php',{id:'all'});
         });
         $('#ret_url').val("control.php");
       });
