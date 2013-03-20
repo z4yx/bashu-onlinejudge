@@ -233,12 +233,21 @@ samp {
 .msg_container {
   padding: 7px 5px 0px 10px;
 }
-.msg_container>p {
+.msg_content {
   font-size: 14px;
   line-height: 20px;
 }
-.msg_container>p>span{
+.msg_detailed:before{
+  content: "+";
+  /*display: inline-block;*/
+  margin-right: 6px;
+  font-weight: bold;
+/*  line-height: 14px;
+  vertical-align: text-top;*/
   font-family: monospace, "Courier New";
+}
+.msg_detailed.expanded:before{
+  content: "−";
 }
 .msg_container .btn-mini {
   margin-top: -3px;

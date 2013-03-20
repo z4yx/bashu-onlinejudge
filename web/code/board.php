@@ -41,7 +41,7 @@ function get_pre_link($top)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../assets/css/bootstrap.css" rel="stylesheet">
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css?v=1" rel="stylesheet">
+    <link href="../assets/css/docs.css?v=2" rel="stylesheet">
 
     <!--[if IE 6]>
     <link href="ie6.min.css" rel="stylesheet">
@@ -125,7 +125,7 @@ function get_pre_link($top)
               </div>
             </div>
             <div style="float:left">
-              <span type="button" style="margin-left: 60px;" id="post_preview" class="btn btn-info">Preview</span>
+              <span  style="margin-left: 60px;" id="post_preview" class="btn btn-info">Preview</span>
             </div>
             <div style="float:right">
               <input id="post_input" type="submit" class="btn btn-primary" value="Post">
@@ -181,10 +181,13 @@ function get_pre_link($top)
                   echo '&nbsp;<span class="label label-warning">latest</span>';
                 if($deep==0 && $row[6])
                     echo '&nbsp;&nbsp;<a class="prob_link" href="problempage.php?problem_id=',$row[6],'">Problem ',$row[6],'</a>';
-                echo ' <button id="reply_msg',$row[3],'" class="btn btn-mini">Reply</button><p>';
+                echo ' <button id="reply_msg',$row[3],'" class="btn btn-mini">Reply</button>';
                 if($row[7])
-                  echo '<span>+ </span>';
-                echo '<a href="ajax_message.php?message_id=',$row[3],'" id="msg',$row[3],'">',htmlspecialchars($row[0]),'</a></p></div></div>';
+                  echo '<p class="msg_content msg_detailed">';
+                else
+                  echo '<p class="msg_content">';
+                echo '<a class="msg_link" href="ajax_message.php?message_id=',$row[3],'" id="msg',$row[3],'">',htmlspecialchars($row[0]),'</a>';
+                echo '</p></div></div>';
               }
               echo '</li>';
               while($deep>0){
@@ -235,18 +238,19 @@ function get_pre_link($top)
             this.href=Href;
           });
         }
-        $('#comments p>a').click(function(E){
+        $('#comments').click(function(E){
+          if(! $(E.target).is("a.msg_link"))
+            return;
           var ID=E.target.id+'_detail';
           var node=document.getElementById(ID);
-          var a=$(E.target);
+          var p=$(E.target).parent();
           if(node){
             $(node).remove();
-            a.prev('span').html('+ ');
+            p.removeClass("expanded");
           }else{
-            var sp=a.prev('span');
-            if(sp.length){
-              sp.html('- ');
-              a.parent().after('<pre id="'+ID+'"><div id="'+ID+'_div"></div></pre>');
+            if(p.hasClass("msg_detailed")){
+              p.addClass("expanded");
+              p.after('<pre id="'+ID+'"><div id="'+ID+'_div"></div></pre>');
               $.get('ajax_message.php?message_id='+E.target.id.substring(3),function(data){
                 dealwithlinks( $('#'+ID+'_div').html(parseBBCode(data)) );
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub,(ID+'_div')]);
