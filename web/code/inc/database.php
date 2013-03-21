@@ -1,5 +1,5 @@
 <?php
-if(!mysql_connect('localhost','root','')){
+if(!mysql_connect('localhost','root','1995714')){
 	echo 'Can not connect to mysql!';
 	throw new Exception('Can not connect to mysql!');
 }
