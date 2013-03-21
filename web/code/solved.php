@@ -8,24 +8,11 @@ if(isset($_GET['q']) && strlen($search=trim($_GET['q'])))
   $cond='and user_id=\''.mysql_real_escape_string($search).'\'';
 
 $result=mysql_query("select solution_id,user_id,solution.problem_id,score,solution.in_date,title from solution LEFT JOIN problem USING(problem_id) where valid=1 $cond order by solution_id desc limit 100");
+$Title="Recent Solved";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Recent Solved</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-  </head>
+  <?php require('head.php'); ?>
 
   <body>
     <?php require('page_header.php'); ?>       
@@ -55,7 +42,7 @@ $result=mysql_query("select solution_id,user_id,solution.problem_id,score,soluti
                   while($row=mysql_fetch_row($result)){
                     echo '<tr><td><a href="record.php?solution_id=',$row[0],'">',$row[0],'</a></td>';
                     echo '<td><a href="#linkU">',$row[1],'</a></td>';
-                    echo '<td style="text-align:left"><a href="problempage.php?problem_id=',$row[2],'">',$row[2],' -- ',htmlspecialchars($row[5]),'</a></td>';
+                    echo '<td style="text-align:left"><a href="problempage.php?problem_id=',$row[2],'">',$row[2],' -- ',$row[5],'</a></td>';
                     echo '<td>',$row[3],'</td>';
                     echo '<td>',$row[4],'</td>';
                     echo "</tr>\n";

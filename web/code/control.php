@@ -7,28 +7,15 @@ if(!isset($_SESSION['user'])){
   require('inc/database.php');
   $user_id=$_SESSION['user'];
 }
+$Title="Control panel";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Control panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-  </head>
-
+  <?php require('head.php'); ?>
   <body>
     <?php require('page_header.php'); ?>  
           
-    <div class="container-fluid">
+    <div class="container-fluid control_panel">
       <div class="row-fluid">
       <?php
       if(isset($info)){
@@ -36,15 +23,18 @@ if(!isset($_SESSION['user'])){
       }else{
       ?>
         <div class="span6 offset3">
-          <h3>Preferences</h3>
+          <h2>Preferences</h2>
           <form id="form_preferences" action="ajax_preferences.php" method="post">
             <label class="checkbox">
               <input name="hidelogo" type="checkbox" <?php if($pref->hidelogo=='on')echo 'checked'; ?> > Hide logo
             </label>
+            <label class="checkbox">
+              <input name="sharecode" type="checkbox" <?php if($pref->sharecode=='on')echo 'checked'; ?> > Share my code by default
+            </label>
             <input type="submit" class="btn" value="Save">
           </form>
 
-          <h3>Backup my code</h3>
+          <h2>Backup my code</h2>
           <p>
             Download your last accepted submit of every problem.<br>You can do this only once a week.
             <?php
@@ -52,8 +42,18 @@ if(!isset($_SESSION['user'])){
               echo "<br><strong>Last Backup Time: ",date('Y-m-d H:i:s', $pref->backuptime),"</strong>";
             ?>
           </p>
-          <!-- <button class="btn" id="create_btn">Create Backup</button> -->
           <button class="btn" id="download_btn">Backup &amp; Download</button>
+
+          <h2>Open source</h2>
+          <p>
+            <strong>Why Should I Open Source My Codes?</strong>
+            <ol>
+              <li>Open source softwares are a kind of great cultures which can date back to the early ages of the computer science history, and they are also the foundation of the web, the Internet, and our world.</li>
+              <li>If everybody shares his code with the world, it will give everyone chances to use the programs, distribute the programs, understand the programs and improve the programs, which helps the original author in turn.</li>
+              <li>Codes in the OI are relatively short, but they can also be very obscure. Making them open-source is to help ourselves in the past time.</li>
+            </ol>
+          </p>
+          <button class="btn" id="open_source">Open all my source code</button>
         </div>
       <?php }?>
       </div>
@@ -80,6 +80,11 @@ if(!isset($_SESSION['user'])){
         $('#download_btn').click(function(){
           $('body>iframe').remove();
           $('<iframe>').hide().attr('src','backupcode.php').appendTo('body');
+        });
+        $('#open_source').click(function(){
+          if(!window.confirm("Are you sure to do this?"))
+            return false;
+          $.post('ajax_opensource.php',{id:'all'});
         });
         $('#ret_url').val("control.php");
       });

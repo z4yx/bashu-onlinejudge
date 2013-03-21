@@ -32,32 +32,19 @@ function get_pre_link($top)
   return $pre;
 }
 
+$Title="Web Board";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Web Board</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
+  <?php require('head.php'); ?>
+  <body>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       skipStartupTypeset:true
     });
     </script>
     <?php require('inc/mathjax_head.php');?>
-  </head>
 
-  <body>
     <?php require('page_header.php'); ?>
     <div class="replypanel" id="replypanel">
       <div class="backsqare" style="background-color: #CCCCCC;">
@@ -75,6 +62,18 @@ function get_pre_link($top)
               <div class="controls">
                 <textarea class="input-xxlarge" id="detail_input" rows="7" name="detail"></textarea>
               </div>
+            </div>
+            <div id="PreviewPopover" class="popover left" >
+              <div class="arrow"></div>
+              <div class="popover-inner">
+                <h3 class="popover-title">Preview<a class="close">×</a></h3>
+                <div class="popover-content">
+                    <div id="preview_content"></div>
+                </div>
+              </div>
+            </div>
+            <div style="float:left">
+              <span  style="margin-left: 60px;" id="post_preview" class="btn btn-info">Preview</span>
             </div>
             <div style="float:right">
               <input id="post_input" type="submit" class="btn btn-primary" value="Post">
@@ -130,10 +129,13 @@ function get_pre_link($top)
                   echo '&nbsp;<span class="label label-warning">latest</span>';
                 if($deep==0 && $row[6])
                     echo '&nbsp;&nbsp;<a class="prob_link" href="problempage.php?problem_id=',$row[6],'">Problem ',$row[6],'</a>';
-                echo ' <button id="reply_msg',$row[3],'" class="btn btn-mini">Reply</button><p>';
+                echo ' <button id="reply_msg',$row[3],'" class="btn btn-mini">Reply</button>';
                 if($row[7])
-                  echo '<span>+ </span>';
-                echo '<a href="ajax_message.php?message_id=',$row[3],'" id="msg',$row[3],'">',htmlspecialchars($row[0]),'</a></p></div></div>';
+                  echo '<p class="msg_content msg_detailed">';
+                else
+                  echo '<p class="msg_content">';
+                echo '<a class="msg_link" href="ajax_message.php?message_id=',$row[3],'" id="msg',$row[3],'">',htmlspecialchars($row[0]),'</a>';
+                echo '</p></div></div>';
               }
               echo '</li>';
               while($deep>0){
@@ -174,26 +176,31 @@ function get_pre_link($top)
         $('#nav_bbs').parent().addClass('active');
         $('#ret_url').val('board.php?<?php echo $query_prob,"&start_id=",$query_id?>');
 
-        $('#comments p>a').click(function(E){
+        function dealwithlinks($jqobj)
+        {
+          $jqobj.find('a').each(function(){
+            var Href = this.getAttribute("href",2);
+            Href=Href.replace(/^([ \t\n\r]*javascript:)+/i,'');
+            if(!(/(ht|f)tps?:\/\//i.test(Href)))
+              Href = "http://"+Href;
+            this.href=Href;
+          });
+        }
+        $('#comments').click(function(E){
+          if(! $(E.target).is("a.msg_link"))
+            return;
           var ID=E.target.id+'_detail';
           var node=document.getElementById(ID);
-          var a=$(E.target);
+          var p=$(E.target).parent();
           if(node){
             $(node).remove();
-            a.prev('span').html('+ ');
+            p.removeClass("expanded");
           }else{
-            var sp=a.prev('span');
-            if(sp.length){
-              sp.html('- ');
-              a.parent().after('<pre id="'+ID+'"><div id="'+ID+'_div"></div></pre>');
+            if(p.hasClass("msg_detailed")){
+              p.addClass("expanded");
+              p.after('<pre id="'+ID+'"><div id="'+ID+'_div"></div></pre>');
               $.get('ajax_message.php?message_id='+E.target.id.substring(3),function(data){
-                $('#'+ID+'>div').html(parseBBCode(data)).find('a').each(function(){
-                  var Href = this.getAttribute("href",2);
-                  Href=Href.replace(/^([ \t\n\r]*javascript:)+/i,'');
-                  if(!(/(ht|f)tps?:\/\//i.test(Href)))
-                    Href = "http://"+Href;
-                  this.href=Href;
-                });
+                dealwithlinks( $('#'+ID+'_div').html(parseBBCode(data)) );
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub,(ID+'_div')]);
               });
             }else{
@@ -204,7 +211,7 @@ function get_pre_link($top)
           return false;
         });
         var detail_ele=document.getElementById('detail_input');
-        var minW=150,minH=100;
+        var minW=260,minH=100;
         function open_replypanel(msg_id){
           <?php if(isset($_SESSION['user'])){?>
           var title = ((msg_id=='0')?'Post New Message':'Reply for #'+msg_id);
@@ -240,6 +247,15 @@ function get_pre_link($top)
         });
         $('#replypanel').keyup(function(E){
           E.which==27 && $('#replypanel').hide();
+        });
+        $('#post_preview').click(function(){
+          var data=$('#detail_input').val();
+          dealwithlinks( $('#preview_content').html(parseBBCode(data)));
+          $('#PreviewPopover').show();
+          MathJax.Hub.Queue(["Typeset",MathJax.Hub,('preview_content')]);
+        });
+        $('#PreviewPopover a.close').click(function(){
+          $('#PreviewPopover').hide();
         });
         function move_handle(E){
           var w=origX-E.clientX+origW;

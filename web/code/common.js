@@ -58,11 +58,11 @@ $(document).ready(function(){
 			navTop = $('header').height();
 		if(now>navTop && !navFixed){
 			navFixed = true;
-			$container.css('margin-top','62px');
+			$container.addClass('margin-for-navbar');
 			$nav.addClass('navbar-fixed-top');
 		}else if(now<=navTop && navFixed){
 			navFixed = false;
-			$container.css('margin-top','0');
+			$container.removeClass('margin-for-navbar');
 			$nav.removeClass('navbar-fixed-top');
 		}
 	}
@@ -71,7 +71,7 @@ $(document).ready(function(){
 		$win.on('scroll', processScroll);
 	}else if($nav.length){
 		navFixed = true;
-		$container.css('margin-top','62px');
+		$container.addClass('margin-for-navbar');
 		$nav.addClass('navbar-fixed-top');
 	}
 	$('#LoginModal').on('shown',function(){

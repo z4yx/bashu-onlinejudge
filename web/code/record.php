@@ -117,23 +117,12 @@ function get_pre_link()
   }
   return http_build_query($arr); 
 }
+$Title="Record";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Record</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-    <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-  </head>
+  <?php require('head.php'); ?>
+
   <body>
     <?php require('page_header.php'); ?>
     <div class="container-fluid">

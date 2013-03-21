@@ -18,27 +18,11 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
     $index_text=($res && ($row=mysql_fetch_row($res))) ? str_replace('<br>', "\n", $row[0]) : '';
   }
 }
+$Title="Admin panel";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Admin panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <!--<link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">-->
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-    <style type="text/css">
-      .mainbutton>.btn{margin-top: 20px;}
-    </style>
-  </head>
-
+  <?php require('head.php'); ?>
   <body>
     <?php require('page_header.php'); ?>  
           
@@ -61,22 +45,27 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
             <div class="tab-content">
               <div class="tab-pane active" id="tab_A">
                 <div class="row-fluid">
-                  <div class="span3 offset1 mainbutton">
-                    <a href="newproblem.php" style="margin-top:20px" class="btn btn-primary">Add Problem</a>
-                    <div> </div>
-                    <a href="#" id="btn_rejudge" style="width:82px" class="btn btn-info">Rejudge...</a>
+                  <div class="span3 mainbutton">
+                    <h3 class="center">Operation</h3>
+                    <a href="newproblem.php" class="btn btn-primary">Add Problem</a>
+                    <a href="#" id="btn_rejudge" class="btn btn-info">Rejudge...</a>
                     <div class="alert hide" id="rejudge_res" style="margin-top:20px"></div>
                   </div>
-                  <div class="span5 offset1">
+                  <div class="span5">
                     <h3 class="center">Home Page</h3>
                     <form action="#" method="post" id="form_index">
                       <input type="hidden" name="op" value="update_index">
-                      <textarea name="text" rows="10" style="width:100%"><?php echo htmlspecialchars($index_text)?></textarea>
+                      <textarea name="text" rows="10" class="border-box" style="width:100%"><?php echo htmlspecialchars($index_text)?></textarea>
                       <div class="alert hide" id="alert_result">Updated successfully.</div>
                       <div class="pull-right">
                         <input type="submit" class="btn btn-small btn-primary" value="Update">
                       </div>
                     </form>
+                  </div>
+                  <div class="span4">
+                    <h3 class="center" id="meter_title">System Info</h3>
+                    <div id="cpumeter" class="meter"></div>
+                    <div id="memmeter" class="meter"></div>
                   </div>
                 </div>
               </div>
@@ -131,7 +120,7 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
         <div class="span5 offset5">
           <form action="admin.php" class="form-inline" method="post">
             <div><label for="input_adminpass">Please enter your password</label></div>
-            <input type="password" id="input_adminpass" name="paswd" class="input-small">
+            <input type="password" autofoucs id="input_adminpass" name="paswd" class="input-small">
             <input type="submit" class="btn" value="Go">
           </form>
         </div>
@@ -147,6 +136,8 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="common.js"></script>
+    <script src="../assets/js/highcharts.js"></script>
+    <script src="../assets/js/highcharts-more.js"></script>
 
     <script type="text/javascript">
       $(document).ready(function(){
@@ -286,6 +277,135 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
           });
           return false;
         });
+      });
+
+      function update_chart(){
+        $.getJSON('ajax_usage.php',function(data){
+          // console.log(data);
+          if(data&&"number"==typeof(data.cpu)){
+            if(!window.cpuChart){
+              window.cpuChart = new Highcharts.Chart({
+                chart: {
+                  renderTo: 'cpumeter',
+                },        
+                yAxis: [{
+                  title: {
+                    text: 'CPU'
+                  }
+                }],
+                series: [{
+                  data: [0],
+                  yAxis: 0
+                }]
+              });
+              // console.log("cpuChart");
+              console.log(window.cpuChart);
+            }
+            cpuChart.series[0].points[0].update(data.cpu,true);
+          }
+          if(data&&"number"==typeof(data.mem)){
+            if(!window.memChart){
+              window.memChart = new Highcharts.Chart({
+                chart: {
+                  renderTo: 'memmeter',
+                },        
+                yAxis: [{
+                  title: {
+                    text: 'Memory'
+                  }
+                }],
+                series: [{
+                  data: [0],
+                  yAxis: 0
+                }]
+              });
+              // console.log("memChart");
+              console.log(window.memChart);
+
+              $('#meter_title').show();
+            }
+            memChart.series[0].points[0].update(data.mem,true);
+          }
+
+          setTimeout('update_chart()',3000);
+        });
+      }
+      $(function () {
+        Highcharts.setOptions({
+          chart: {
+            type: 'gauge',
+            plotBorderWidth: 1,
+            plotBackgroundColor: {
+              linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+              stops: [
+                [0, '#FFF9D9'],
+                [0.2, '#FFFFFF'],
+                [1, '#FFF4C6']
+              ]
+            },
+            plotBackgroundImage: null,
+            height: 150
+          },
+          credits: {
+            enabled: false
+          },
+
+          title: {
+            text: null//'VU meter'
+          },
+          
+          pane: [{
+            startAngle: -45,
+            endAngle: 45,
+            background: null,
+            center: ['50%', '145%'],
+            size: 260
+          }],                 
+        
+          yAxis: [{
+            min: 0,
+            max: 100,
+            tickInterval: 25,
+            minorTickPosition: 'outside',
+            tickPosition: 'outside',
+            labels: {
+              rotation: 'auto',
+              distance: 20,
+              formatter: function() {
+                return this.value + '%';
+              }
+            },
+            plotBands: [{
+              from: 70,
+              to: 100,
+              color: '#C02316',
+              innerRadius: '100%',
+              outerRadius: '105%'
+            }],
+            pane: 0,
+            title: {
+              // text: 'Memory',
+              y: -40
+            }
+          }],
+          plotOptions: {
+            gauge: {
+              animation: false,
+              dataLabels: {
+                enabled: false
+              },
+              dial: {
+                radius: '100%'
+              }
+            }
+          },
+          series: [{
+            data: [0],
+            yAxis: 0
+          }]
+        });
+
+        update_chart();
       });
     </script>
   </body>

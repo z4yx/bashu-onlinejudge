@@ -9,23 +9,11 @@ if(!isset($_SESSION['user'])){
   $result=mysql_query('select email,nick,school from users where user_id=\''.$user_id."'");
   $row=mysql_fetch_row($result);
 }
+$Title="Profile";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Profile</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-  </head>
+  <?php require('head.php'); ?>
 
   <body>
     <?php require('page_header.php'); ?>  
@@ -135,6 +123,7 @@ if(!isset($_SESSION['user'])){
                 $('#ajax_result').html(msg).removeClass('alert-success').show();
                 if(/success/.test(msg)){
                   $('#ajax_result').addClass('alert-success');
+                  setTimeout(function(){location.href='ranklist.php';},500);
                 }
               }
             });
