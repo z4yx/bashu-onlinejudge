@@ -58,7 +58,7 @@ $Title="Welcome to Bashu OnlineJudge";
       $(document).ready(function(){
         $('#ret_url').val("index.php");
 
-        var originColor = '#E7E7E7';
+        var originColor = '#E3E3E3';
         $('#newspad #title').click(function(){
             $('#newspad #mainarea').slideToggle();
             var tmp = $('#newspad').css('background-color');
