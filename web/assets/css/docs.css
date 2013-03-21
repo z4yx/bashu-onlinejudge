@@ -89,16 +89,14 @@ samp {
 }
 #LoginModal{
   margin-left: -130px;
-  margin-top: -250px;
   width: 260px;
 }
 #SubmitModal{
   margin-left: -400px;
-  margin-top: -250px;
   width: auto;
 }
 @media (max-width: 767px){
-  #LoginModal,#SubmitModal,#UserModal{
+  .modal,#SubmitModal,#LoginModal{
     margin: 0;
     position: fixed;
   }
@@ -575,6 +573,7 @@ input.error{
 }
 #PreviewPopover{
   width: auto;
+  max-width: none;
   top: 60px; 
   left: -475px; 
 }
