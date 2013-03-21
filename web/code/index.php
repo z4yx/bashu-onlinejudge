@@ -24,11 +24,11 @@ $Title="Welcome to Bashu OnlineJudge";
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span10 offset1">
-          <div id="newspad" class="well" style="font-size:16px;padding:19px 40px">
+          <div id="newspad" class="well" style="font-size:16px;padding:19px 40px; background-color: #FFF">
             <div id="title" style="text-align:center; font-size:24px;">
                 <h1 style="padding-bottom: 10px;">Welcome to Bashu OnlineJudge</h1>
             </div> 
-            <div id="mainarea">
+            <div id="mainarea" style="display: none;">
                 <?php echo $index_text?>
             </div>
           </div>
@@ -57,8 +57,17 @@ $Title="Welcome to Bashu OnlineJudge";
     <script type="text/javascript"> 
       $(document).ready(function(){
         $('#ret_url').val("index.php");
+
+        var originColor = '#E7E7E7';
+        $('#newspad #title').click(function(){
+            $('#newspad #mainarea').slideToggle();
+            var tmp = $('#newspad').css('background-color');
+            $('#newspad').css('background-color', originColor);
+            originColor = tmp;
+        });
       });
     </script>
+
     <script type="text/javascript">
 $(function () {
     var chart;
@@ -123,16 +132,6 @@ $(function () {
     });
     
 });
-    </script>
-
-    <script type="text/javascript">
-        var originColor = '#FFF';
-        $('#newspad #title').click(function(){
-            $('#newspad #mainarea').slideToggle();
-            var tmp = $('#newspad').css('background-color');
-//            $('#newspad').css('background-color', originColor);
-            originColor = tmp;
-        });
     </script>
 
   </body>
