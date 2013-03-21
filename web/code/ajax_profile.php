@@ -54,6 +54,6 @@ if($_POST['type']=='profile'){
 	else if($code==1062)
 		echo "User '$user' exists.";
 	else 
-		echo "Unknow error.";
+		echo "Unknown error.";
 }
 ?>
