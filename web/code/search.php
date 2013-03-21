@@ -30,37 +30,15 @@ if(mysql_num_rows($result)==1){
   header('location: problempage.php?problem_id='.$row[0]);
   exit();
 }
+$Title="Search result $page_id";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Search result <?php echo $page_id;?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-    <style type="text/css">
-      .table td{
-        text-align: left;
-      }
-      .table td:first-child{
-        text-align: center;
-      }
-    </style>
-
-  </head>
+  <?php require('head.php'); ?>
 
   <body>
     <?php require('page_header.php'); ?>      
-    <div class="container-fluid" style="font-size:14px">
+    <div class="container-fluid">
       <div class="row-fluid">
         <div class="span10 offset1" style="text-align: center;">
           <h2>Search Result</h2>
@@ -69,7 +47,7 @@ if(mysql_num_rows($result)==1){
       <div class="row-fluid">
         <div class="span10 offset1">
 
-            <table class="table table-hover table-bordered" style="margin-bottom:0">
+            <table class="table table-hover table-bordered search-result" style="margin-bottom:0">
               <thead><tr>
                 <th style="width:7%">ID</th>
                 <th style="width:63%">Title</th>

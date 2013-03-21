@@ -18,36 +18,11 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
     $index_text=($res && ($row=mysql_fetch_row($res))) ? str_replace('<br>', "\n", $row[0]) : '';
   }
 }
+$Title="Admin panel";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Admin panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <!--<link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">-->
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-    <style type="text/css">
-      .mainbutton>.btn{
-        width: 85px;
-        margin: 20px auto;
-        display: block;
-      }
-      .meter{
-        width: 260px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    </style>
-  </head>
-
+  <?php require('head.php'); ?>
   <body>
     <?php require('page_header.php'); ?>  
           

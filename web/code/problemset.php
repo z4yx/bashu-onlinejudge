@@ -25,24 +25,11 @@ if(isset($_SESSION['user'])){
 }else{
   $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct from problem where $addt_cond problem_id $range  order by problem_id");
 }
+$Title="Problemset $page_id";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Problemset <?php echo $page_id;?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-  </head>
+  <?php require('head.php'); ?>
 
   <body>
     <?php require('page_header.php') ?>

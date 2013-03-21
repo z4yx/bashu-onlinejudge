@@ -32,71 +32,19 @@ function get_pre_link($top)
   return $pre;
 }
 
+$Title="Web Board";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Web Board</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css?v=2" rel="stylesheet">
-
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
+  <?php require('head.php'); ?>
+  <body>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       skipStartupTypeset:true
     });
     </script>
     <?php require('inc/mathjax_head.php');?>
-    <style>
-      .popover-title{
-        font-weight: bolder;
-      }
-      .popover-content{
-        max-height: 200px;
-        width: 450px;
-        overflow-y: auto;
-      }
-      .popover{
-        width: auto;
-        top: 60px; 
-        left: -475px; 
-      }
-      #preview_content{
-        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-        color: #333;
-        -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        border-radius: 3px;
-        padding: 9.5px;
-        margin: 0 0 10px;
-        font-size: 13px;
-        line-height: 20px;
-        word-break: break-all;
-        word-wrap: break-word;
-        white-space: pre;
-        white-space: pre-wrap;
-        background-color: #F5F5F5;
-        border: 1px solid #CCC;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        -webkit-border-radius: 4px;
-        -moz-border-radius: 4px;
-        border-radius: 4px;
-      }
-      .close{
-        line-height: 18px;
-      }
-    </style>
-  </head>
 
-  <body>
     <?php require('page_header.php'); ?>
     <div class="replypanel" id="replypanel">
       <div class="backsqare" style="background-color: #CCCCCC;">

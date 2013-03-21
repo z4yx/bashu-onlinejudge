@@ -34,44 +34,15 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
     }
   }
 }
+$Title="Edit problem $prob_id";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Edit problem <?php echo $prob_id;?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <style type="text/css">
-      #edit_form span{
-        vertical-align: middle;
-      }
-      input.error{
-        color: #B94A48;
-        border-color: #B94A48;
-      }
-      textarea, #edit_form input, #edit_form select{
-        margin-bottom: 0;
-      }
-      textarea[rows="1"]{
-        height: 18px;
-      }
-    </style>
-    <script type="text/javascript" src="edit.js"></script>
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-    <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-  </head>
+  <?php require('head.php'); ?>
 
   <body>
     <?php require('page_header.php'); ?>
-    <div class="container-fluid" style="font-size:16px">
+    <div class="container-fluid edit-page">
       <?php
       if(isset($info))
         echo "<div class=\"center\">$info</div>";

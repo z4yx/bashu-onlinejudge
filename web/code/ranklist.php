@@ -14,24 +14,11 @@ if($page_id<0 || $page_id>=$total)
   die('Argument out of range.');
 $rank=$page_id;
 $result=mysql_query('select user_id,nick,solved,submit,score from users order by solved desc,submit desc limit '.$page_id.',50');
+$Title="Ranklist";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Ranklist</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-  </head>
+  <?php require('head.php'); ?>
 
   <body>
     <?php require('page_header.php'); ?>       

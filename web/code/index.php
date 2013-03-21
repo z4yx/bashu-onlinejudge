@@ -11,26 +11,12 @@ require('inc/checklogin.php');
 require('inc/database.php');
 $res=mysql_query("select content from news where news_id=0");
 $index_text=($row=mysql_fetch_row($res)) ? $row[0] : '';
+
+$Title="Welcome to Bashu OnlineJudge";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Welcome to Bashu OnlineJudge</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-  </head>
-
+  <?php require('head.php'); ?>
   <body>
     <?php require('page_header.php'); ?>  
           

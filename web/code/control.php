@@ -7,33 +7,15 @@ if(!isset($_SESSION['user'])){
   require('inc/database.php');
   $user_id=$_SESSION['user'];
 }
+$Title="Control panel";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Control panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-    <style>
-      h2{
-        margin-top: 20px;
-      }
-    </style>
-  </head>
-
+  <?php require('head.php'); ?>
   <body>
     <?php require('page_header.php'); ?>  
           
-    <div class="container-fluid">
+    <div class="container-fluid control_panel">
       <div class="row-fluid">
       <?php
       if(isset($info)){

@@ -51,29 +51,18 @@ else{
     $arr[$statis[0]]=$statis[1];
   ksort($arr);
 }
+$Title="Problem $prob_id";
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Problem <?php echo $prob_id;?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/docs.css" rel="stylesheet">
-
-    <!--[if IE 6]>
-    <link href="ie6.min.css" rel="stylesheet">
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5.js"></script>
-    <![endif]-->
-    <?php if($row[12])require('inc/mathjax_head.php') ?>
-  </head>
+  <?php require('head.php'); ?>
 
   <body style="min-width:980px;">
-    <?php require('page_header.php'); ?>
+    <?php
+    if($row[12])
+      require('inc/mathjax_head.php');
+    require('page_header.php');
+    ?>
     <div id="probdisp" class="container-fluid" style="font-size:16px">
       <?php 
       if($forbidden){
