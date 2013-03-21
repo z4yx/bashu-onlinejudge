@@ -61,9 +61,11 @@ $Title="Welcome to Bashu OnlineJudge";
         var originColor = '#E3E3E3';
         $('#newspad #title').click(function(){
             $('#newspad #mainarea').slideToggle();
+            /* change color, unnecessary in this theme
             var tmp = $('#newspad').css('background-color');
             $('#newspad').css('background-color', originColor);
             originColor = tmp;
+             */
         });
       });
     </script>

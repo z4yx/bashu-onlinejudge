@@ -30,10 +30,6 @@ header{
 }
 .navbar .brand{
   margin-left: 0;
-  padding: 8px 10px 12px;
-}
-.navbar .nav > li > a {
-  padding: 10px 13px;
 }
 .margin-for-navbar{
   margin-top: 62px;
