@@ -108,7 +108,7 @@ bool solution::compile() throw (const char *)
 			puts("Compile Error");
 
 			std::unique_lock<std::mutex> Lock(* (std::mutex*)mutex_for_query);
-			detail_results.push_back({RES_CE, 0, 0, last_state, 0});
+			detail_results.push_back((case_info){RES_CE, 0, 0, last_state, 0});
 
 			return false;
 		}
