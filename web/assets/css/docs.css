@@ -68,6 +68,9 @@ code {
 samp {
   font-family: monospace, "Courier New";
 }
+.btn {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
 .backsqare {
   padding: 9px;
   background-color: #f5f5f5;
