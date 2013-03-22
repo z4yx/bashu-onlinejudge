@@ -180,7 +180,7 @@ void thread_judge()
 			try {
 				std::unique_lock<std::mutex> Lock_map(* (std::mutex*)(cur->mutex_for_query));
 				cur->detail_results.clear();
-				cur->detail_results.push_back({RES_SE, 0, 0, cur->last_state, 0});
+				cur->detail_results.push_back((case_info){RES_SE, 0, 0, cur->last_state, 0});
 				cur->timestamp = time(0);
 
 #ifdef DUMP_FOR_DEBUG
