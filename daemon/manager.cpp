@@ -230,7 +230,7 @@ void thread_rejudge()
 				sol->copy_setting(rejudge_init); //Get problem settings, like compare_way
 				get_exist_solution_info(solution_id, sol);
 				sol->error_code = -1;
-				sol->key = std::to_string(solution_id);
+				sol->key = std::to_string((long long int)solution_id);
 
 				rejudging = true;
 				do { //insert to queue
