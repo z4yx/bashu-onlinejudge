@@ -12,7 +12,7 @@ string lang_ext[MAXLANG];
 string lang_compiler[MAXLANG];  
 typedef INI <string, string, string> ini_t;
 
-extern char DATABASE_USER[], DATABASE_PASS[];
+extern char DATABASE_HOST[], DATABASE_USER[], DATABASE_PASS[];
 extern char DataDir[];
 
 bool read_config()
