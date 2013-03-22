@@ -31,7 +31,10 @@ bool read_config()
 	}
 	strncpy(DataDir, tmp.c_str(), MAXPATHLEN);
 
-	tmp = ini.Get(std::string("DATABASE_USER"), std::string(""));
+	tmp = ini.Get(std::string("DATABASE_HOST"), std::string("localhost"));
+	strncpy(DATABASE_HOST, tmp.c_str(), 62);
+
+	tmp = ini.Get(std::string("DATABASE_USER"), std::string("root"));
 	strncpy(DATABASE_USER, tmp.c_str(), 120);
 
 	tmp = ini.Get(std::string("DATABASE_PASS"), std::string(""));

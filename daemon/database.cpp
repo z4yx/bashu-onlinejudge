@@ -19,14 +19,14 @@ std::mutex database_mutex;
 static MYSQL *hMySQL;
 char statements[65536*2]; //escaped compile info becomes longer
 
-char DATABASE_USER[128], DATABASE_PASS[128];
+char DATABASE_HOST[64], DATABASE_USER[128], DATABASE_PASS[128];
 
 bool init_mysql_con() throw ()
 {
 	hMySQL = mysql_init(NULL);
 	if(!hMySQL)
 		return false;
-	hMySQL = mysql_real_connect(hMySQL, "localhost", DATABASE_USER, DATABASE_PASS, "bsoj", 0, NULL, 0);
+	hMySQL = mysql_real_connect(hMySQL, DATABASE_HOST, DATABASE_USER, DATABASE_PASS, "bsoj", 0, NULL, 0);
 	if(!hMySQL)
 		return false;
 	if(mysql_set_character_set(hMySQL, "utf8"))
