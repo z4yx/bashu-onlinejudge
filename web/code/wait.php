@@ -49,16 +49,6 @@ $Title="Waiting";
     <script src="../assets/js/bootstrap.min.js"></script>
 
     <script type="text/javascript"> 
-			$(function(){
-			if($.browser.msie&&parseInt($.browser.version,10)===6){
-			  $('.row div[class^="span"]:last-child').addClass("last-child");
-			  $('[class="span"]').addClass("margin-left-20");
-			  $(':button[class="btn"], :reset[class="btn"], :submit[class="btn"], input[type="button"]').addClass("button-reset");
-			  $(":checkbox").addClass("input-checkbox");
-			  $('[class^="icon-"], [class=" icon-"]').addClass("icon-sprite");
-			  $(".pagination li:first-child a").addClass("pagination-first-child")
-			}
-			});
       res_tyep={"0":"Correct","2":"Time Out","3":"MLE","4":"Wrong Answer","5":"Runtime Error","99":"Validator Error"};
       function disp_CE(str){
         $("#ele_judge").hide();
