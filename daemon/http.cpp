@@ -16,6 +16,7 @@ char robots_txt[] = "User-agent: *\nDisallow: /\n";
 
 char HTTP_BIND_IP[32];
 uint16_t HTTP_BIND_PORT;
+static struct sockaddr_in sock_addr;
 
 typedef std::pair<MHD_PostProcessor*, solution*> pair;
 int ignore_requst(struct MHD_Connection *connection)
@@ -175,15 +176,14 @@ static int on_client_connect(void *cls, const struct sockaddr * addr, socklen_t 
 #else
 	uint32_t ip = addr1->sin_addr.S_un.S_addr;
 #endif
-	//printf("ip: %x\n", ip);
-	if(ip == 0x00000000 || ip == 0x0100007f) //0.0.0.0 or 127.0.0.1
+	// printf("ip: %x\n", ip);
+	if((ip & 0xff) == 0x7f) //127.x.x.x
 		return MHD_YES;
 	return MHD_NO;
 }
 bool start_http_interface()
 {
 	struct MHD_Daemon *handle;
-	struct sockaddr_in sock_addr;
 
 	sock_addr.sin_family = AF_INET;
 	sock_addr.sin_port = htons(HTTP_BIND_PORT);
