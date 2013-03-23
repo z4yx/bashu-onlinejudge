@@ -14,6 +14,8 @@ typedef INI <string, string, string> ini_t;
 
 extern char DATABASE_HOST[], DATABASE_USER[], DATABASE_PASS[];
 extern char DataDir[];
+extern char HTTP_BIND_IP[];
+extern uint16_t HTTP_BIND_PORT;
 
 bool read_config()
 {
@@ -39,6 +41,11 @@ bool read_config()
 
 	tmp = ini.Get(std::string("DATABASE_PASS"), std::string(""));
 	strncpy(DATABASE_PASS, tmp.c_str(), 120);
+
+	tmp = ini.Get(std::string("HTTP_BIND_IP"), std::string("0.0.0.0"));
+	strncpy(HTTP_BIND_IP, tmp.c_str(), 30);
+
+	HTTP_BIND_PORT = ini.Get<const char*, unsigned short>("HTTP_BIND_PORT", 8881u);
 
 	for(auto i = ini.sections.begin(); i != ini.sections.end(); ++i) {
 		const string &lang = i->first;
