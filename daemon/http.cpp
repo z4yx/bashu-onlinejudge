@@ -23,33 +23,6 @@ int ignore_requst(struct MHD_Connection *connection)
 	MHD_destroy_response(response);
 	return ret;
 }
-static int server_handler_get(
-	void *cls, struct MHD_Connection *connection, const char *url, const char *method,
-	const char *version, const char *upload_data, size_t *upload_size, void **con_cls) 
-{
-	if(strcmp(method, "GET") == 0) {
-		char *result;
-		applog(url);
-		if(strstr(url, "/query_") == url) { 
-			if(result=JUDGE_get_progress(url)) {
-				struct MHD_Response *response = 
-					MHD_create_response_from_buffer(strlen(result), result, MHD_RESPMEM_MUST_FREE);
-				// MHD_add_response_header(response, "Connection", "close");
-				int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
-				MHD_destroy_response(response);
-				return ret;
-			}
-		}else if(strcmp(url, "/robots.txt") == 0) {
-			struct MHD_Response *response = 
-				MHD_create_response_from_buffer(sizeof(robots_txt)-1, robots_txt, MHD_RESPMEM_PERSISTENT);
-			// MHD_add_response_header(response, "Connection", "close");
-			int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
-			MHD_destroy_response(response);
-			return ret;
-		}
-	}
-	return ignore_requst(connection);
-}
 template<class T>
 void numcat(T &left, const char *right)
 {
@@ -108,6 +81,29 @@ static int server_handler_post(
 	if(NULL == *con_cls) { //first time, read header
 		//puts("first");
 		//printf("%s %s\n", method, url);
+
+		if(strcmp(method, "GET") == 0) {
+			char *result;
+			applog(url);
+			if(strstr(url, "/query_") == url) { 
+				if(result=JUDGE_get_progress(url)) {
+					struct MHD_Response *response = 
+						MHD_create_response_from_buffer(strlen(result), result, MHD_RESPMEM_MUST_FREE);
+					// MHD_add_response_header(response, "Connection", "close");
+					int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+					MHD_destroy_response(response);
+					return ret;
+				}
+			}else if(strcmp(url, "/robots.txt") == 0) {
+				struct MHD_Response *response = 
+					MHD_create_response_from_buffer(sizeof(robots_txt)-1, robots_txt, MHD_RESPMEM_PERSISTENT);
+				// MHD_add_response_header(response, "Connection", "close");
+				int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+				MHD_destroy_response(response);
+				return ret;
+			}
+			return ignore_requst(connection);
+		}
 		if(strcmp(method, "POST") == 0 && strcmp(url, "/submit_prob") == 0) {
 			//puts("accept");
 
@@ -128,9 +124,8 @@ static int server_handler_post(
 			p->first = processor;
 			//puts("success");
 			return MHD_YES;
-		}else {
-			return MHD_NO;
 		}
+		return ignore_requst(connection);
 	}else{
 		pair *p = (pair*)*con_cls;
 		if(0 != *upload_size) { //next, read body
@@ -183,12 +178,8 @@ static int on_client_connect(void *cls, const struct sockaddr * addr, socklen_t 
 }
 bool start_http_interface()
 {
-	struct MHD_Daemon *handle =
-		MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION, 8888, NULL, NULL, &server_handler_get, NULL, MHD_OPTION_END);
-	if(handle == NULL){
-		applog("Error: Unable to start http server on 8888.");
-		return false;
-	}
+	struct MHD_Daemon *handle;
+
 	handle = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION, 8881, &on_client_connect, NULL, &server_handler_post, NULL, MHD_OPTION_NOTIFY_COMPLETED, request_completed, NULL, MHD_OPTION_END);
 	if(handle == NULL){
 		applog("Error: Unable to start http server on 8881.");
