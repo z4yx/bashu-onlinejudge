@@ -73,6 +73,7 @@ $Title="Control panel";
             $.ajax({
               type:"POST",
               url:"ajax_preferences.php",
+              success:function(msg){location.reload();},
               data:$('#form_preferences').serialize()
             });
             return false;
