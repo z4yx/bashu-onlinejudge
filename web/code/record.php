@@ -238,9 +238,9 @@ $Title="Record";
 
     <script type="text/javascript"> 
       $(document).ready(function(){
-        $('#slt_lang>option[value=<?php echo $lang;?>]').attr('selected','selected');
-        $('#slt_result>option[value=<?php echo $result?>]').attr('selected','selected');
-        $('#slt_way>option[value="<?php echo $way?>"]').attr('selected','selected');
+        $('#slt_lang>option[value=<?php echo $lang;?>]').prop('selected',true);
+        $('#slt_result>option[value=<?php echo $result?>]').prop('selected',true);
+        $('#slt_way>option[value="<?php echo $way?>"]').prop('selected',true);
         $('#nav_record').parent().addClass('active');
         $('#ret_url').val("record.php"+window.location.search);
 
