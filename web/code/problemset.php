@@ -66,7 +66,8 @@ $Title="Problemset $page_id";
                     echo '<tr>';
                     echo '<td>',$row[0],'</td>';
                     if(isset($_SESSION['user'])){
-                      echo '<td class="',is_null($row[6]) ? 'prob-not' : ($row[6] ? 'prob-wa' : 'prob-ac'),'"><i></i></td>';
+                      //echo '<td class="',is_null($row[6]) ? 'prob-not' : ($row[6] ? 'prob-wa' : 'prob-ac'),'"><i></i></td>';
+                      echo '<td><i class=', is_null($row[6]) ? '""' : ($row[6]? '"icon-remove icon-2x" style="color:red"' : '"icon-2x icon-ok" style="color:green"'), '></i>', '</td>';
                       echo '<td style="text-align:left;border-left:0;">';
                     }else{
                       echo '<td style="text-align:left">';
