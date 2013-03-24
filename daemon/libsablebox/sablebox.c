@@ -182,6 +182,7 @@ static void redirect_io(struct sablebox* pbox)
 	if((pbox->fin && !freopen(pbox->fin, "r", stdin))
 		|| (pbox->fout && !freopen(pbox->fout, "w", stdout)))
 			_exit(0);
+	freopen("/dev/null", "w", stderr);
 }
 
 /**********************************************************************/
@@ -231,8 +232,10 @@ static int sc_handle(struct sablebox* pbox, struct __child_t* pson, struct profi
 			long newbrk;
 			newbrk = ptrace(PTRACE_PEEKUSER, pson->pid, RAX * 8, 0); 
 			if(newbrk == -1){
-				//printf("HelloA");
-				ret->status = PROF_SYSTEM_ERROR;
+				if(errno != ESRCH){
+					perror("ptrace:"TOSTRING(__LINE__));
+					ret->status = PROF_SYSTEM_ERROR;
+				}
 				return 1;
 			}		
 			if(pson->program_break)

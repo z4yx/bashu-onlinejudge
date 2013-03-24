@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 static struct scmask safe_syscall;
 
@@ -62,6 +63,7 @@ int main(int argc, char **argv)
 		safe_syscall.set[5] = SCMASK_INFINITY;
 #endif
 	}
+	dup2(fileno(stdout), fileno(stderr));
 
 	sable_init(&sbox, argv[1], args, file_in, file_out, atol(argv[2]), atol(argv[3])>>10, &safe_syscall);
 	ret = sable_run(&sbox);
