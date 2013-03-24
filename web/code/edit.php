@@ -236,7 +236,7 @@ $Title="Edit problem $prob_id";
               $('#input_cmp_help').html('Please make sure there is "spj.exe"(on windows) or "spj.cpp"(on linux) in your data folder.');
           }
         }
-        $('#input_cmp>option[value="<?php echo $way?>"]').attr('selected','selected');
+        $('#input_cmp>option[value="<?php echo $way?>"]').prop('selected',true);
         (function(){
           var option='',k=<?php echo $prec?>;
           for(var i=0;i<10;i++){
