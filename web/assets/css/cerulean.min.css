@@ -1,4 +1,10 @@
-@import url(//fonts.googleapis.com/css?family=Telex);/*!
+@font-face {
+  font-family: 'Telex';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Telex-Regular'), url('../fonts/telex.woff') format('woff');
+}
+/*!
  * Bootstrap v2.3.1
  *
  * Copyright 2012 Twitter, Inc
