@@ -20,6 +20,7 @@ header{
 .table th,
 .table td {
   text-align: center;
+  vertical-align: middle;
 }
 #user_status td:first-child{
   text-align: left;
