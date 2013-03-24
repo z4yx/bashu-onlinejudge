@@ -7,11 +7,21 @@
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
+#else
+#include <winsock2.h>
+extern "C"{
+extern int inet_aton(const char *cp_arg, struct in_addr *addr);
+}
 #endif
 #include <microhttpd.h>
 #include "judge_daemon.h"
 
 char robots_txt[] = "User-agent: *\nDisallow: /\n";
+
+char HTTP_BIND_IP[32];
+uint16_t HTTP_BIND_PORT;
+static struct sockaddr_in sock_addr;
 
 typedef std::pair<MHD_PostProcessor*, solution*> pair;
 int ignore_requst(struct MHD_Connection *connection)
@@ -22,33 +32,6 @@ int ignore_requst(struct MHD_Connection *connection)
 	int ret = MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, response);
 	MHD_destroy_response(response);
 	return ret;
-}
-static int server_handler_get(
-	void *cls, struct MHD_Connection *connection, const char *url, const char *method,
-	const char *version, const char *upload_data, size_t *upload_size, void **con_cls) 
-{
-	if(strcmp(method, "GET") == 0) {
-		char *result;
-		applog(url);
-		if(strstr(url, "/query_") == url) { 
-			if(result=JUDGE_get_progress(url)) {
-				struct MHD_Response *response = 
-					MHD_create_response_from_buffer(strlen(result), result, MHD_RESPMEM_MUST_FREE);
-				// MHD_add_response_header(response, "Connection", "close");
-				int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
-				MHD_destroy_response(response);
-				return ret;
-			}
-		}else if(strcmp(url, "/robots.txt") == 0) {
-			struct MHD_Response *response = 
-				MHD_create_response_from_buffer(sizeof(robots_txt)-1, robots_txt, MHD_RESPMEM_PERSISTENT);
-			// MHD_add_response_header(response, "Connection", "close");
-			int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
-			MHD_destroy_response(response);
-			return ret;
-		}
-	}
-	return ignore_requst(connection);
 }
 template<class T>
 void numcat(T &left, const char *right)
@@ -101,13 +84,36 @@ static int iterate_post(void *arg, enum MHD_ValueKind, const char *name,
 	}
 	return MHD_YES;
 }
-static int server_handler_post(
+static int server_handler(
 	void *cls, struct MHD_Connection *connection, const char *url, const char *method,
 	const char *version, const char *upload_data, size_t *upload_size, void **con_cls) 
 {
 	if(NULL == *con_cls) { //first time, read header
 		//puts("first");
 		//printf("%s %s\n", method, url);
+
+		if(strcmp(method, "GET") == 0) {
+			char *result;
+			applog(url);
+			if(strstr(url, "/query_") == url) { 
+				if(result=JUDGE_get_progress(url)) {
+					struct MHD_Response *response = 
+						MHD_create_response_from_buffer(strlen(result), result, MHD_RESPMEM_MUST_FREE);
+					// MHD_add_response_header(response, "Connection", "close");
+					int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+					MHD_destroy_response(response);
+					return ret;
+				}
+			}else if(strcmp(url, "/robots.txt") == 0) {
+				struct MHD_Response *response = 
+					MHD_create_response_from_buffer(sizeof(robots_txt)-1, robots_txt, MHD_RESPMEM_PERSISTENT);
+				// MHD_add_response_header(response, "Connection", "close");
+				int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+				MHD_destroy_response(response);
+				return ret;
+			}
+			return ignore_requst(connection);
+		}
 		if(strcmp(method, "POST") == 0 && strcmp(url, "/submit_prob") == 0) {
 			//puts("accept");
 
@@ -128,9 +134,8 @@ static int server_handler_post(
 			p->first = processor;
 			//puts("success");
 			return MHD_YES;
-		}else {
-			return MHD_NO;
 		}
+		return ignore_requst(connection);
 	}else{
 		pair *p = (pair*)*con_cls;
 		if(0 != *upload_size) { //next, read body
@@ -176,22 +181,28 @@ static int on_client_connect(void *cls, const struct sockaddr * addr, socklen_t 
 #else
 	uint32_t ip = addr1->sin_addr.S_un.S_addr;
 #endif
-	//printf("ip: %x\n", ip);
-	if(ip == 0x00000000 || ip == 0x0100007f) //0.0.0.0 or 127.0.0.1
+	// printf("ip: %x\n", ip);
+	if((ip & 0xff) == 0x7f) //127.x.x.x
 		return MHD_YES;
 	return MHD_NO;
 }
 bool start_http_interface()
 {
-	struct MHD_Daemon *handle =
-		MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION, 8888, NULL, NULL, &server_handler_get, NULL, MHD_OPTION_END);
-	if(handle == NULL){
-		applog("Error: Unable to start http server on 8888.");
+	struct MHD_Daemon *handle;
+
+	sock_addr.sin_family = AF_INET;
+	sock_addr.sin_port = htons(HTTP_BIND_PORT);
+	if(!inet_aton(HTTP_BIND_IP, &sock_addr.sin_addr)) {
+		applog("Error: Invalid IP address.", HTTP_BIND_IP);
 		return false;
 	}
-	handle = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION, 8881, &on_client_connect, NULL, &server_handler_post, NULL, MHD_OPTION_NOTIFY_COMPLETED, request_completed, NULL, MHD_OPTION_END);
+	// printf("listen %s:%d\n", HTTP_BIND_IP, HTTP_BIND_PORT);
+
+	handle = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION, HTTP_BIND_PORT,
+		&on_client_connect, NULL, &server_handler, NULL, MHD_OPTION_NOTIFY_COMPLETED,
+		request_completed, NULL, MHD_OPTION_SOCK_ADDR, &sock_addr, MHD_OPTION_END);
 	if(handle == NULL){
-		applog("Error: Unable to start http server on 8881.");
+		applog("Error: Unable to start http server.");
 		return false;
 	}	
 	return true;

@@ -117,7 +117,7 @@ retry = 2;
 while True:
 	try:
 		conn.connect();
-		conn.request("GET", '/query/query_' + query_key);
+		conn.request("GET", 'proxy.php?url=query_' + query_key);
 		res = conn.getresponse();
 		if res.status != 200:
 			raise NameError('error');

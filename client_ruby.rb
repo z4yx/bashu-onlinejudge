@@ -66,7 +66,7 @@ retry_times = 3
 info_reted = 0
 loop do
 	begin
-		resp = conn.get '/query/query_' + query_key
+		resp = conn.get 'proxy.php?url=query_' + query_key
 		raise Exception if resp.code != '200'
 	rescue Exception
 		die "Connection closed without indication, please contact with ZYX" if retry_times == 0

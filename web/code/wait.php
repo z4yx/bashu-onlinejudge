@@ -76,7 +76,7 @@ $Title="Waiting";
       }
       last_i=0;
       function load_progress(){
-        var url='<?php echo "http://",$_SERVER["HTTP_HOST"],"/query/query_$key";?>';
+        var url='<?php echo "proxy.php?url=query_$key";?>';
         // alert(url);
         $.getJSON(url,function(obj){
           if(obj.state=="invalid"){
