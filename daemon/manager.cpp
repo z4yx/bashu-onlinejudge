@@ -23,6 +23,10 @@ namespace std {
 	using boost::unique_lock;
 	using boost::thread;
 }
+
+namespace std {
+	using boost::to_string;
+}
 #else
 #include <mutex>
 #include <thread>

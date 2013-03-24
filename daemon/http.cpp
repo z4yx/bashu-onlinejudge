@@ -8,6 +8,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#else
+#include <winsock2.h>
+extern "C"{
+extern int inet_aton(const char *cp_arg, struct in_addr *addr);
+}
 #endif
 #include <microhttpd.h>
 #include "judge_daemon.h"

@@ -1,6 +1,6 @@
 all: windows_binary/daemon.exe
-windows_binary/daemon.exe: http.o judge.o manager.o readconfig.o database.o cena_validator.o validator.o json_builder.o call_ruc.o
-	g++ -std=c++0x -O -L./mysql/mysql_win -o windows_binary/daemon.exe http.o judge.o manager.o json_builder.o call_ruc.o readconfig.o cena_validator.o database.o validator.o -lmysql -lmicrohttpd -lboost_thread-mgw47-mt-1_50 -lboost_system-mgw47-mt-1_50 -lboost_chrono-mgw47-mt-1_50
+windows_binary/daemon.exe: http.o inet_aton.o judge.o manager.o readconfig.o database.o cena_validator.o validator.o json_builder.o call_ruc.o
+	g++ -std=c++0x -O -L./mysql/mysql_win -o windows_binary/daemon.exe http.o inet_aton.o judge.o manager.o json_builder.o call_ruc.o readconfig.o cena_validator.o database.o validator.o -lmysql -lmicrohttpd -lboost_thread-mgw47-mt-1_50 -lboost_system-mgw47-mt-1_50 -lboost_chrono-mgw47-mt-1_50 -lws2_32
 http.o: http.cpp judge_daemon.h
 	g++ -std=c++0x -c -O http.cpp
 judge.o: judge.cpp judge_daemon.h
@@ -21,3 +21,5 @@ json_builder.o: json_builder.cpp judge_daemon.h
 	g++ -std=c++0x -c -O json_builder.cpp
 call_ruc.o: call_ruc.cpp
 	g++ -std=c++0x -c -O call_ruc.cpp
+inet_aton.o: inet_aton.c
+	gcc -c -DHAVE_WINSOCK2_H -O inet_aton.c
