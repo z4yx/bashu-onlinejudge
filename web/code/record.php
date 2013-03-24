@@ -194,8 +194,7 @@ $Title="Record";
                   }
                   echo '<td>',round($row[7]/1024,2),' KB</td>';
                   echo '<td><a target="_blank" href="sourcecode.php?solution_id=',$row[0],'">',$LANG_NAME[$row[8]],'</a>';
-                  //echo ' [<a href="#sw_open_',$row[0],'" class=',($row[10] ? '"a-green">O' : '"a-red">C'),'</a>]</td>';
-                  echo '<i class=', ($row[10] ? '"icon-eye-open" style="color:green"' : '"icon-eye-close"'), '></i> </td>';
+                  echo ' <a href="#sw_open_',$row[0],'"><i class=', ($row[10] ? '"icon-eye-open text-success"' : '"icon-eye-close muted"'), '></i></a> </td>';
                   echo '<td>',$row[9],'</td>';
                   echo '</tr>';
                 }
@@ -246,27 +245,32 @@ $Title="Record";
         $('#ret_url').val("record.php"+window.location.search);
 
         function toggle_s(obj){
-          if(obj.hasClass('a-red')){
-            obj.removeClass('a-red');
-            obj.addClass('a-green');
-            obj.html('O');
+          if(obj.hasClass('icon-eye-close')){
+            obj.removeClass('icon-eye-close');
+            obj.addClass('icon-eye-open');
+            obj.removeClass('muted');
+            obj.addClass('text-success');
           }else{
-            obj.removeClass('a-green');
-            obj.addClass('a-red');
-            obj.html('C');
+            obj.removeClass('icon-eye-open');
+            obj.addClass('icon-eye-close');
+            obj.removeClass('text-success');
+            obj.addClass('muted');
           }
         }
         $('#tab_record').click(function(E){
           var $target=$(E.target);
-          if(!$target.is('a'))
-            return true;
+          if(!$target.is('a')){
+            $target=$target.parent();
+            if(!$target || !$target.is('a'))
+              return;
+          }
           var h=$target.attr('href');
           if(h.substr(0,9)=='#sw_open_'){
             $.ajax({
               type:"POST",
               url:"ajax_opensource.php",
               data:{"id":$target.attr('href').substr(9)},
-              success:function(msg){if(/success/.test(msg))toggle_s($target);}
+              success:function(msg){if(/success/.test(msg))toggle_s($target.find('i'));}
             });
             return false;
           }else if(h=='#uid'){
