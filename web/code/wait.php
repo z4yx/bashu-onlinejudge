@@ -14,13 +14,13 @@ $Title="Waiting";
     <div class="container" style="font-size:13px">
     	<div class="row">
         <div class="span8 offset2 main_window">
-          <h3>Detail Results</h3>
-          <p class="muted tiny-font" style="margin-bottom:0">Please don't close or refresh this page, or you won't see your detailed results.</p>
+          <h3>Detailed Result</h3>
+          <p class="muted tiny-font" style="margin-bottom:0">Please don't close or refresh this page, or you won't see your detailed result.</p>
           <p class="muted tiny-font">This page will be refreshed automatically.</p>
           <div class="row">
             <div class="span4 offset2">
-              <div id="ele_queue" class="alert alert-info queueing"><i class="rotate-ico"></i> Queueing now...</div>
-              <div id="ele_judge" class="hide alert alert-info queueing"><i class="rotate-ico"></i> Judging now,Please wait...</div>
+              <div id="ele_queue" class="alert alert-info queueing"><i class="icon-spinner icon-large icon-spin"></i> Queueing...</div>
+              <div id="ele_judge" class="hide alert alert-info queueing"><i class="icon-spinner icon-spin"></i> Judging, please wait...</div>
             </div>
           </div>
           <div class="hide backsqare" id="ele_table">
@@ -32,9 +32,9 @@ $Title="Waiting";
             </table>
           </div>
           <div class="hide" id="ele_finish">
-            <p>Done! You can get back to the problem or go to see the record.</p>
-            <ul class="pager"><li class="previous"><a class="pager-pre-link" title="Alt+P" id="btn_back" href="#">&larr; Problem Page</a></li>
-            <li class="next"><a class="pager-next-link" title="Alt+R" href="record.php">Record Page &rarr;</a></li></ul>
+            <p>Finished! You can go back to the problem or go to the record page.</p>
+            <ul class="pager"><li class="previous"><a class="pager-pre-link" title="Alt+P" id="btn_back" href="#"><i class="icon-angle-left"></i> Problem Page</a></li>
+            <li class="next"><a class="pager-next-link" title="Alt+R" href="record.php">Record Page <i class="icon-angle-right"></i></a></li></ul>
           </div>
         </div>
     	</div>

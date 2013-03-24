@@ -49,8 +49,7 @@ shortcuts[54]=function(){location.href=$('#nav_about').attr('href');} //Alt+6
 shortcuts[55]=shortcuts[73]; //Alt+7
 
 function reg_hotkey (key, fun) {
-	shortcuts[key] = fun;
-}
+	shortcuts[key] = fun; }
 $(document).ready(function(){
 	var $nav=$('#navbar_top'),navFixed=false,$win=$(window),$container=$('body>.container-fluid'),$notifier=$('#notifier');
 	function processScroll () {
@@ -136,3 +135,10 @@ $(document).ready(function(){
 });
 
 	
+$(function(){
+    $('.nav a').hover(function(){
+        $('i', this).addClass('icon-large');
+    }, function(){
+        $('i', this).removeClass('icon-large');
+    });
+});    

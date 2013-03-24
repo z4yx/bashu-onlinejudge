@@ -93,7 +93,7 @@ $Title="Web Board";
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span12" id="comments">
-          <a href="#" title="Alt+N" class="btn btn-primary btn-small" id="new_msg" style="margin-left:25px">Post New Message</a>
+          <a href="#" title="Alt+N" class="btn btn-primary btn-small" id="new_msg" style="margin-left:25px"><i class="icon-file"></i> Post New Message</a>
           <?php
             $top=$query_id;
             if($range){
@@ -152,10 +152,10 @@ $Title="Web Board";
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a class="pager-pre-link" title="Alt+A" href="board.php?<?php echo $query_prob,'&amp;start_id=',get_pre_link($top) ?>" id="btn-pre">&larr; Newer</a>
+            <a class="pager-pre-link" title="Alt+A" href="board.php?<?php echo $query_prob,'&amp;start_id=',get_pre_link($top) ?>" id="btn-pre"> <i class="icon-angle-left"></i> Newer</a>
           </li>
           <li>
-            <a class="pager-next-link" title="Alt+D" href="<?php if($range) echo 'board.php?',$query_prob,'&amp;start_id=',$range; ?>#" id="btn-next">Older &rarr;</a>
+            <a class="pager-next-link" title="Alt+D" href="<?php if($range) echo 'board.php?',$query_prob,'&amp;start_id=',$range; ?>#" id="btn-next">Older <i class="icon-angle-right"></i></a>
           </li>
         </ul>
       </div> 

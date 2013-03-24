@@ -29,7 +29,7 @@ $Title="Mail List";
 			?>
 			<div class="row-fluid">
 				<div class="span2 offset2">
-					<span id="sendnew" style="margin:5px" class="btn btn-small"><i class="icon-inbox"></i> Send Mail</span>
+					<span id="sendnew" style="margin:5px" class="btn btn-small"><i class="icon-inbox"></i> COMPOSE </span>
 				</div>
 			</div>
 			<div class="row-fluid" style="font-size:14px">
@@ -71,10 +71,10 @@ $Title="Mail List";
 			<div class="row-fluid">
 				<ul class="pager">
 					<li>
-						<a class="pager-pre-link" title="Alt+A" href="#" id="btn-pre">&larr; Previous</a>
+						<a class="pager-pre-link" title="Alt+A" href="#" id="btn-pre"><i class="icon-angle-left"></i> Previous</a>
 					</li>
 					<li>
-						<a class="pager-next-link" title="Alt+D" href="#" id="btn-next">Next &rarr;</a>
+						<a class="pager-next-link" title="Alt+D" href="#" id="btn-next">Next <i class="icon-angle-right"></i></a>
 					</li>
 				</ul>
 			</div>  
@@ -82,25 +82,25 @@ $Title="Mail List";
 			<div class="modal hide" id="MailModal">
 				<div class="modal-header">
 					<a class="close" data-dismiss="modal">×</a>
-					<h4>Send Mail</h4>
+					<h4>New Message</h4>
 				</div>
 				<div class="modal-body">
 					<form class="form-horizontal" id="send_form">
 						<fieldset>
 							<div class="control-group">
-								<label class="control-label" for="to_input">To User</label>
+								<label class="control-label" for="to_input">To</label>
 								<div class="controls">
 									<input type="text" class="input-medium" id="to_input" name="touser">
 								</div>
 							</div>
 							<div class="control-group">
-								<label class="control-label" for="title_input">Title</label>
+								<label class="control-label" for="title_input">Subject</label>
 								<div class="controls">
 									<input type="text" style="width: 445px;" id="title_input" name="title">
 								</div>
 							</div>
 							<div class="control-group">
-								<label class="control-label" for="detail_input">Detail</label>
+								<label class="control-label" for="detail_input">Content</label>
 								<div class="controls">
 									<textarea style="width: 445px;" id="detail_input" rows="10" name="detail"></textarea>
 								</div>

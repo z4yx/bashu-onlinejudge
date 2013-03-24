@@ -53,7 +53,7 @@ $Title="Control panel";
               <li>Codes in the OI are relatively short, but they can also be very obscure. Making them open-source is to help ourselves in the past time.</li>
             </ol>
           </p>
-          <button class="btn" id="open_source">Open all my source code</button>
+          <button class="btn" id="open_source">Open source all my code</button>
         </div>
       <?php }?>
       </div>
@@ -83,7 +83,7 @@ $Title="Control panel";
           $('<iframe>').hide().attr('src','backupcode.php').appendTo('body');
         });
         $('#open_source').click(function(){
-          if(!window.confirm("Are you sure to do this?"))
+          if(!window.confirm("Are you sure?"))
             return false;
           $.post('ajax_opensource.php',{id:'all'});
         });

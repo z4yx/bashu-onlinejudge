@@ -194,7 +194,8 @@ $Title="Record";
                   }
                   echo '<td>',round($row[7]/1024,2),' KB</td>';
                   echo '<td><a target="_blank" href="sourcecode.php?solution_id=',$row[0],'">',$LANG_NAME[$row[8]],'</a>';
-                  echo ' [<a href="#sw_open_',$row[0],'" class=',($row[10] ? '"a-green">O' : '"a-red">C'),'</a>]</td>';
+                  //echo ' [<a href="#sw_open_',$row[0],'" class=',($row[10] ? '"a-green">O' : '"a-red">C'),'</a>]</td>';
+                  echo '<i class=', ($row[10] ? '"icon-eye-open" style="color:green"' : '"icon-eye-close"'), '></i></td>';
                   echo '<td>',$row[9],'</td>';
                   echo '</tr>';
                 }
@@ -206,10 +207,10 @@ $Title="Record";
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a class="pager-pre-link" title="Alt+A" href="record.php?<?php echo htmlspecialchars(get_pre_link())?>" id="btn-pre">&larr; Previous</a>
+            <a class="pager-pre-link" title="Alt+A" href="record.php?<?php echo htmlspecialchars(get_pre_link())?>" id="btn-pre"><i class="icon-angle-left"></i> Previous</a>
           </li>
           <li>
-            <a class="pager-next-link" title="Alt+D" href="record.php?<?php echo htmlspecialchars(get_next_link())?>" id="btn-next">Next &rarr;</a>
+            <a class="pager-next-link" title="Alt+D" href="record.php?<?php echo htmlspecialchars(get_next_link())?>" id="btn-next">Next <i class="icon-angle-right"></i></a>
           </li>
         </ul>
       </div>
