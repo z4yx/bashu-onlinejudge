@@ -195,7 +195,7 @@ $Title="Record";
                   echo '<td>',round($row[7]/1024,2),' KB</td>';
                   echo '<td><a target="_blank" href="sourcecode.php?solution_id=',$row[0],'">',$LANG_NAME[$row[8]],'</a>';
                   //echo ' [<a href="#sw_open_',$row[0],'" class=',($row[10] ? '"a-green">O' : '"a-red">C'),'</a>]</td>';
-                  echo '<i class=', ($row[10] ? '"icon-eye-open" style="color:green"' : '"icon-eye-close"'), '></i></td>';
+                  echo '<i class=', ($row[10] ? '"icon-eye-open" style="color:green"' : '"icon-eye-close"'), '></i> </td>';
                   echo '<td>',$row[9],'</td>';
                   echo '</tr>';
                 }
