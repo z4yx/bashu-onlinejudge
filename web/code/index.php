@@ -25,8 +25,8 @@ $Title="Welcome to Bashu OnlineJudge";
       <div class="row-fluid">
         <div class="span10 offset1">
           <div id="newspad" class="well" style="font-size:16px;padding:19px 40px; background-color: #FFF">
-            <div id="title" style="text-align:center; font-size:24px;">
-                <h1 style="padding-bottom: 10px;">Welcome to Bashu OnlineJudge</h1>
+            <div id="title" style="text-align:center; font-size:24px;cursor: pointer;">
+                <h1 style="padding-bottom: 10px;">Welcome to Bashu OnlineJudge <i class="icon-double-angle-down"></i></h1>
             </div> 
             <div id="mainarea" style="display: none;">
                 <?php echo $index_text?>
@@ -61,6 +61,8 @@ $Title="Welcome to Bashu OnlineJudge";
         var originColor = '#E3E3E3';
         $('#newspad #title').click(function(){
             $('#newspad #mainarea').slideToggle();
+            $('#title i').toggleClass('icon-double-angle-down');
+            $('#title i').toggleClass('icon-double-angle-up');
             /* change color, unnecessary in this theme
             var tmp = $('#newspad').css('background-color');
             $('#newspad').css('background-color', originColor);
