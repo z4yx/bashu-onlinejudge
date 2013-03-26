@@ -7,7 +7,7 @@
   <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
   <link href="../assets/css/font-awesome.min.css", rel="stylesheet">
   <link href="../assets/js/google-code-prettify/prettify.css" rel="stylesheet">
-  <link href="../assets/css/docs.css?v=4" rel="stylesheet">
+  <link href="../assets/css/docs.css?v=10" rel="stylesheet">
 
   <!--[if IE 6]>
   <link href="ie6.min.css" rel="stylesheet">

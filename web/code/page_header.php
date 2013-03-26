@@ -16,8 +16,16 @@ if($pref->hidelogo=='off'){ ?>
 <header>
   <a href="index.php"><img src="../assets/img/logo.jpg" alt="Logo" class="img-rounded"></a>
 </header>
-<?php }?>
+<div class="navbar hide" id="navbar_pseude">
+  <div class="navbar-inner" style="padding:0"></div>
+</div>
 <div class="navbar" id="navbar_top">
+<?php }else{?>
+<div class="navbar" id="navbar_pseude">
+  <div class="navbar-inner" style="padding:0"></div>
+</div>
+<div class="navbar navbar-fixed-top" id="navbar_top">
+<?php }?>
   <div class="navbar-inner" style="padding:0">
     <div class="container-fluid navbar-padding-fix">
       <a class="brand" href="index.php"><i class="icon-home"></i> Bashu OnlineJudge</a>

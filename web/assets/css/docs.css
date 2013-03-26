@@ -32,15 +32,16 @@ header{
 .navbar .brand{
   margin-left: 0;
 }
-.margin-for-navbar{
-  margin-top: 62px;
+#navbar_pseude{
+  visibility: hidden;
 }
 @media (max-width: 980px){
   .navbar-fixed-top{
     position: static;
   }
-  .margin-for-navbar{
-    margin-top: 0px;
+  #navbar_pseude{
+    visibility: hidden;
+    display: none;
   }
   .navbar-fixed-top .navbar-inner {
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);

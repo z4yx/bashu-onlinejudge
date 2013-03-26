@@ -54,14 +54,16 @@ $(document).ready(function(){
 	var $nav=$('#navbar_top'),navFixed=false,$win=$(window),$container=$('body>.container-fluid'),$notifier=$('#notifier');
 	function processScroll () {
 		var now = $win.scrollTop(),
-			navTop = $('header').height();
+			navTop = $('header').height(),
+			$navbar_pseude = $('#navbar_pseude');
 		if(now>navTop && !navFixed){
 			navFixed = true;
-			$container.addClass('margin-for-navbar');
+			$navbar_pseude.removeClass('hide');
 			$nav.addClass('navbar-fixed-top');
 		}else if(now<=navTop && navFixed){
 			navFixed = false;
-			$container.removeClass('margin-for-navbar');
+			//use class instead of style, so it can be overridden by @media{...}
+			$navbar_pseude.addClass('hide');
 			$nav.removeClass('navbar-fixed-top');
 		}
 	}
@@ -70,8 +72,6 @@ $(document).ready(function(){
 		$win.on('scroll', processScroll);
 	}else if($nav.length){
 		navFixed = true;
-		$container.addClass('margin-for-navbar');
-		$nav.addClass('navbar-fixed-top');
 	}
 	$('#LoginModal').on('shown',function(){
 		$('#uid').focus();
