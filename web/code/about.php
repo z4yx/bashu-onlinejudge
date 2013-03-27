@@ -26,10 +26,10 @@ $Title="About Bashu OnlineJudge";
           <div class="page-header">
             <h2>FAQ</h2>
           </div>
-          <div class="page-header">
+          <div>
             <h3>Q: What is the compiler the judge is using and what are the compiler options?</h3>
             A: We are using GNU GCC/G++ for C/C++ compile, Free Pascal for pascal compile. The compile options are:
-            <table class="table table-striped table-bordered table-condensed" id="tab_options">
+            <table class="table table-striped table-bordered table-condensed table-last-left-aligned" id="tab_options">
               <tbody>
                 <tr>
                   <td>C++</td>
@@ -50,14 +50,16 @@ $Title="About Bashu OnlineJudge";
               </tbody>
             </table>
           </div>
-          <div class="page-header">
+          <hr>
+          <div>
             <h3>Q: Where are the input and the output?</h3>
             A: Your program shall read input from stdin('Standard Input') and write output to stdout('Standard Output').For example,you can use 'scanf' in C or 'cin' in C++ to read from stdin,and use 'printf' in C or 'cout' in C++ to write to stdout.<br>User programs are not allowed to open and read from/write to files, you will get a "Runtime Error" if you try to do so.
           </div>
-          <div class="page-header">
+          <hr>
+          <div>
             <h3>Q: What is the meaning of the judge's replies?</h3>
             A: Here is a list of the judge's replies and their meaning:<br>
-            <table class="table table-condensed" id="about_msg">
+            <table class="table table-condensed table-last-left-aligned" id="about_msg">
               <tbody>
                 <tr>
                   <td><span class="label label-success">Accepted</span></td>
@@ -90,11 +92,12 @@ $Title="About Bashu OnlineJudge";
               </tbody>
             </table>
           </div>
+          <hr>
           <h5>Any questions/suggestions please post to <a href="board.php">web board</a>.</h5>
         </div>
       </div>
       <hr>
-      <footer class="muted center" style="font-size:12px">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
     </div>

@@ -11,27 +11,27 @@ $Title="Waiting";
   <?php require('head.php'); ?>
 
   <body>
-    <div class="container" style="font-size:13px">
+    <div class="container wait-page">
     	<div class="row">
-        <div class="span8 offset2 main_window">
+        <div class="span8 offset2">
           <h3>Detailed Result</h3>
           <p class="muted tiny-font" style="margin-bottom:0">Please don't close or refresh this page, or you won't see your detailed result.</p>
           <p class="muted tiny-font">This page will be refreshed automatically.</p>
           <div class="row">
             <div class="span4 offset2">
-              <div id="ele_queue" class="alert alert-info queueing"><i class="icon-spinner icon-large icon-spin"></i> Queueing...</div>
-              <div id="ele_judge" class="hide alert alert-info queueing"><i class="icon-spinner icon-spin"></i> Judging, please wait...</div>
+              <div id="ele_queue" class="alert alert-info center"><strong><i class="icon-spinner icon-large icon-spin"></i> Queueing...</strong></div>
+              <div id="ele_judge" class="hide alert alert-info center"><strong><i class="icon-spinner icon-spin"></i> Judging, please wait...</strong></div>
             </div>
           </div>
-          <div class="hide backsqare" id="ele_table">
-            <table class="table table-bordered" style="margin-bottom:0">
+          <div class="hide well well-small margin-0" id="ele_table">
+            <table class="table table-bordered result_table" style="margin-bottom:0">
               <thead>
                 <tr><th>Case</th><th>Result</th><th>Time</th><th>Memory</th><th>Score</th></tr>
               </thead>
-              <tbody id="ele_tbody"></tbody>
+              <tbody style="color:white" id="ele_tbody"></tbody>
             </table>
           </div>
-          <div class="hide" id="ele_finish">
+          <div class="hide" id="ele_finish" style="margin-top: 15px;">
             <p>Finished! You can go back to the problem or go to the record page.</p>
             <ul class="pager"><li class="previous"><a class="pager-pre-link" title="Alt+P" id="btn_back" href="#"><i class="icon-angle-left"></i> Problem Page</a></li>
             <li class="next"><a class="pager-next-link" title="Alt+R" href="record.php">Record Page <i class="icon-angle-right"></i></a></li></ul>
@@ -39,7 +39,7 @@ $Title="Waiting";
         </div>
     	</div>
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
 
@@ -59,7 +59,7 @@ $Title="Waiting";
       function disp_SE(){
         $("#ele_judge").hide();
         $('#ele_queue').hide();
-        $('#ele_table').removeClass('backsqare').html('<div class="alert alert-error center"><p>Sorry, something went wrong. Your code is not recorded.<br>Please contact administrator.</p></div>').show();
+        $('#ele_table').removeClass().html('<div class="alert alert-error center"><p>Sorry, something went wrong. Your code is not recorded.<br>Please contact administrator.</p></div>').show();
         $("#ele_finish").show();
       }
       function htmlEncode(str) {

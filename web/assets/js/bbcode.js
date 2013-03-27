@@ -86,14 +86,14 @@ function textToHtmlCB(mstr, m1, m2, m3, m4, offset, string)
 
       switch (m2) {
          case "code":
-            opentags.push(new taginfo_t(m2, "</code></pre>"));
+            opentags.push(new taginfo_t(m2, "</samp>"));
             crlf2br = false;
-            return "<pre><code>";
+            return '<samp class="well well-small samp-sourcecode">';
 
          case "pre":
-            opentags.push(new taginfo_t(m2, "</pre>"));
+            opentags.push(new taginfo_t(m2, "</samp>"));
             crlf2br = false;
-            return "<pre>";
+            return "<samp>";
 
          case "color":
          case "colour":

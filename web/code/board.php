@@ -46,8 +46,8 @@ $Title="Web Board";
     <?php require('inc/mathjax_head.php');?>
 
     <?php require('page_header.php'); ?>
-    <div class="replypanel" id="replypanel">
-      <div class="backsqare" style="background-color: #CCCCCC;">
+    <div class="replypanel hide" id="replypanel">
+      <div class="well well-small margin-0" style="background-color:#CCC">
         <h4 style="text-align:center;margin-bottom:10px;">Post New Message</h4>
         <form class="form-horizontal" method="post" action="postmessage.php">
           <fieldset>
@@ -66,9 +66,9 @@ $Title="Web Board";
             <div id="PreviewPopover" class="popover left" >
               <div class="arrow"></div>
               <div class="popover-inner">
-                <h3 class="popover-title">Preview<a class="close">×</a></h3>
+                <h3 class="popover-title">Preview<a class="close" style="line-height: inherit;">×</a></h3>
                 <div class="popover-content">
-                    <div id="preview_content"></div>
+                  <pre><div id="preview_content"></div></pre>
                 </div>
               </div>
             </div>
@@ -79,21 +79,21 @@ $Title="Web Board";
               <input id="post_input" type="submit" class="btn btn-primary" value="Post">
               <button id="cancel_input" class="btn">Cancel</button>
             </div>
-            <div id="post_status"></div>
+            <div class="center text-error"><strong id="post_status"></strong></div>
           </fieldset>
           <input type="hidden" name="message_id" id="msgid_input">
           <?php if(isset($_GET['problem_id'])){
             echo '<input type="hidden" name="problem_id" value="',$_GET['problem_id'],'">';
           }?>
         </form>
-        <div class="resize_sym" id="resize"></div>   
+        <div class="resize-ico" id="resize"></div>   
       </div>
     </div>
-    <div class="alert hide center nocontent" id="alert_nothing">No content in this message!</div>
+    <div class="alert hide center alert-popup" id="alert_nothing">No content in this message!</div>
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span12" id="comments">
-          <a href="#" title="Alt+N" class="btn btn-primary btn-small" id="new_msg" style="margin-left:25px"><i class="icon-file"></i> Post New Message</a>
+        <div class="span12" id="board">
+          <a href="#" title="Alt+N" class="btn btn-primary btn-small" id="new_msg"><i class="icon-file"></i> Post New Message</a>
           <?php
             $top=$query_id;
             if($range){
@@ -104,7 +104,7 @@ $Title="Web Board";
               while($row=mysql_fetch_row($res)){
                 if($row[1]>$deep){
                   if($deep>-1)
-                    echo '<ul>';
+                    echo '<ul class="unstyled msg_group">';
                 }else{
                   echo '</li>';
                   while($deep>$row[1]){
@@ -118,8 +118,8 @@ $Title="Web Board";
                 if($row[5]>$top)
                   $top=$row[5];
                 if($deep==0)
-                  echo '<hr><ul>';
-                echo '<li class="comment">';
+                  echo '<hr><ul class="unstyled">';
+                echo '<li class="msg_item">';
                 if((++$cnt)&1)
                   echo '<div class="msg msg_odd">';
                 else
@@ -161,7 +161,7 @@ $Title="Web Board";
       </div> 
       
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
 
@@ -186,7 +186,7 @@ $Title="Web Board";
             this.href=Href;
           });
         }
-        $('#comments').click(function(E){
+        $('#board').click(function(E){
           if(! $(E.target).is("a.msg_link"))
             return;
           var ID=E.target.id+'_detail';
@@ -223,7 +223,7 @@ $Title="Web Board";
           return false;
         }
         $('#new_msg').click(function(){open_replypanel('0')});
-        $('#comments button').click(function(E){open_replypanel(E.target.id.substring(9))});
+        $('#board button').click(function(E){open_replypanel(E.target.id.substring(9))});
         reg_hotkey(78,function(){$('#new_msg').click()}); //Alt+N
 
         $('#replypanel form').submit(function(){

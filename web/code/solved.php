@@ -20,14 +20,14 @@ $Title="Recent Solved";
       <div class="row-fluid">
         <div class="span10 offset1">
           <div style="width:250px;margin:0 auto">
-            <form id="searchuser_form" action="solved.php" method="get" class="form-inline" style="margin-bottom:5px;">
+            <form id="searchuser_form" action="solved.php" method="get" class="form-inline" style="margin-bottom:10px;">
               <label for="searchuser_input" class="label-select">User: </label>
               <div class="input-append"><input autofocus="autofocus" value="<?php if(isset($search))echo htmlspecialchars($search);?>" id="searchuser_input" type="text" name="q" class="input-medium" placeholder="Search User"><span id="search_addon" class="add-on"><i class="icon-search"></i></span></div>
             </form>
           </div>
         </div>
       </div>
-      <div class="row-fluid" style="font-size:14px">
+      <div class="row-fluid">
         <div class="span10 offset1">
             <table class="table table-hover table-bordered" style="margin-bottom:0">
               <thead><tr>
@@ -66,7 +66,7 @@ $Title="Recent Solved";
       </div>
       
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
 

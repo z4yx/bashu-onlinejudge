@@ -33,7 +33,7 @@ $Title="Problemset $page_id";
 
   <body>
     <?php require('page_header.php') ?>
-    <div class="container-fluid" style="font-size:14px">
+    <div class="container-fluid">
       <?php
       if($maxpage>10){
         echo '<div class="pagination pagination-centered"><ul>';
@@ -96,7 +96,7 @@ $Title="Problemset $page_id";
         </ul>
       </div>
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
     </div>

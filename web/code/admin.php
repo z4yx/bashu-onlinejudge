@@ -26,7 +26,7 @@ $Title="Admin panel";
   <body>
     <?php require('page_header.php'); ?>  
           
-    <div class="container-fluid" style="font-size:13px">
+    <div class="container-fluid admin-page">
       <div class="row-fluid">
       <?php
       if(isset($info)) {
@@ -45,7 +45,7 @@ $Title="Admin panel";
             <div class="tab-content">
               <div class="tab-pane active" id="tab_A">
                 <div class="row-fluid">
-                  <div class="span3 mainbutton">
+                  <div class="span3 operations">
                     <h3 class="center">Operation</h3>
                     <a href="newproblem.php" class="btn btn-primary">Add Problem</a>
                     <a href="#" id="btn_rejudge" class="btn btn-info">Rejudge...</a>
@@ -127,7 +127,7 @@ $Title="Admin panel";
       <?php } ?>
       </div>
       <hr>
-      <footer class="muted center" style="font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
 

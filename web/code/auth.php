@@ -6,7 +6,7 @@
           
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span12 center">
+        <div class="span12 center" style="padding:20px">
           <h1 id="top_title"></h1>
         </div>
       </div>
@@ -14,7 +14,7 @@
         <div style="width:560px;margin:0 auto;">
           <form class="form-horizontal well" id="form_login" action="login.php" method="post">
             <h1 class="center">Authorization Required</h1>
-            <hr class="fake-legend">
+            <hr style="border-bottom-color: #E5E5E5;">
             <div id="uid_ctl" class="control-group">
               <label class="control-label" for="uid">Name:</label>
               <div class="controls">
@@ -94,7 +94,7 @@
       </div>
 
       <hr>
-      <footer class="muted center" style="font-size:12px">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
     </div>

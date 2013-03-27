@@ -32,9 +32,9 @@ $Title="Mail List";
 					<span id="sendnew" style="margin:5px" class="btn btn-small"><i class="icon-inbox"></i> COMPOSE </span>
 				</div>
 			</div>
-			<div class="row-fluid" style="font-size:14px">
+			<div class="row-fluid">
 				<div class="span8 offset2" id="maillist">
-						<ul>
+						<ul class="unstyled">
 						<?php
 						while($row=mysql_fetch_row($result)){
 							echo '<li class="mail-item" id="mail',$row[0],'">';
@@ -107,7 +107,7 @@ $Title="Mail List";
 							</div>
 						</fieldset>
 					</form>
-					<div class="alert alert-error hide" id="send_result"></div>
+					<div class="alert alert-error hide margin-0" id="send_result"></div>
 				</div>
 				<div class="modal-footer">
 					<a href="#" class="btn btn-primary" id="send_btn">Send</a>
@@ -116,7 +116,7 @@ $Title="Mail List";
 			</div>
 			<?php } ?>
 			<hr>
-			<footer class="muted" style="text-align: center;font-size:12px;">
+			<footer>
 				<p>&copy; 2012 Bashu Middle School</p>
 			</footer>
 

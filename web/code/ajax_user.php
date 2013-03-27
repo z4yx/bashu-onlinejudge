@@ -29,7 +29,7 @@ if(isset($_GET['type'])&&$_GET['type']=='json'){
 	session_start();
 	header('Content-Type: text/html; charset=utf-8');
 ?>
-<table class="table table-condensed" style="margin-bottom:0px;">
+<table class="table table-condensed table-first-left-aligned" style="margin-bottom:0px;">
 	<colgroup>
 		<col style="width:12%">
 		<col style="width:5%">

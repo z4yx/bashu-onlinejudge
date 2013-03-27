@@ -38,7 +38,7 @@ $Title="Welcome to Bashu OnlineJudge";
         <div id="chart" class="span12" style="height: 400px; margin: 0 auto"></div>
       </div>
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
     </div>

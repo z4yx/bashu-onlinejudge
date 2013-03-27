@@ -157,12 +157,12 @@ $Title="Edit problem $prob_id";
       </form>
       <?php } ?>
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
     </div>
     <div class="html-tools">
-      <div class="backsqare" id="tools">
+      <div class="well well-small margin-0" id="tools">
         <table class="table table-bordered table-condensed table-striped" style="width:100%">
           <caption>HTML Tools</caption>
           <thead>

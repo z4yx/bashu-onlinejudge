@@ -58,7 +58,7 @@ $Title="Control panel";
       <?php }?>
       </div>
       <hr>
-      <footer class="muted center" style="font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
     </div>

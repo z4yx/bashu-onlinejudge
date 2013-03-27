@@ -21,7 +21,7 @@ $Title="Search result $page_id";
 
   <body>
     <?php require('page_header.php'); ?>      
-    <div class="container-fluid" style="font-size:14px">
+    <div class="container-fluid">
       <div class="row-fluid">
         <div class="span10 offset1" style="text-align: center;">
           <h2>Search Result</h2>
@@ -77,7 +77,7 @@ $Title="Search result $page_id";
         </div>
       </div> 
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
 

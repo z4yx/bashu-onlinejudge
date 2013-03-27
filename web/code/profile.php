@@ -86,7 +86,7 @@ $Title="Profile";
       <?php } ?>
       </div>
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
     </div>

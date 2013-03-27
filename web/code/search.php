@@ -47,7 +47,7 @@ $Title="Search result $page_id";
       <div class="row-fluid">
         <div class="span10 offset1">
 
-            <table class="table table-hover table-bordered search-result" style="margin-bottom:0">
+            <table class="table table-hover table-bordered table-left-aligned table-first-center-aligned" style="margin-bottom:0">
               <thead><tr>
                 <th style="width:7%">ID</th>
                 <th style="width:63%">Title</th>
@@ -79,7 +79,7 @@ $Title="Search result $page_id";
         </ul>
       </div> 
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
 

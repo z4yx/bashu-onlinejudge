@@ -23,9 +23,9 @@ $Title="Ranklist";
   <body>
     <?php require('page_header.php'); ?>       
     <div class="container-fluid">
-      <div style="clear:both">
-        <label for="user_page" class="label-select pull-left">Page: </label>
-        <select class="input-small pull-left" id="user_page"></select>
+      <div class="form-inline" style="margin-bottom:10px">
+        <label for="user_page">Page: </label>
+        <select class="input-small" id="user_page"></select>
         <div class="pull-right">
           <form id="searchuser_form" action="searchuser.php" method="get" style="margin: 0 0">
             <div class="input-append"><input id="searchuser_input" autofocus="autofocus" type="text" name="q" class="input-medium" placeholder="Search User"><span id="search_addon" class="add-on"><i class="icon-search"></i></span></div>
@@ -45,10 +45,11 @@ $Title="Ranklist";
         <div class="pull-right" style="margin-right:9px">
           <a href="solved.php" class="btn btn-success">Recent Solved...</a>
         </div>
+        <div class="clearfix"></div>
       </div>
-      <div class="row-fluid" style="font-size:14px">
+      <div class="row-fluid">
         <div class="span12">
-            <table class="table table-hover table-bordered" style="margin-bottom:0">
+            <table class="table table-hover table-bordered " style="margin-bottom:0">
               <thead><tr>
                 <th style="width:4%">No.</th>
                 <th style="width:15%">Name</th>
@@ -99,7 +100,7 @@ $Title="Ranklist";
       </div>
       
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
 
