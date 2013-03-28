@@ -16,6 +16,7 @@ if(!isset($_GET['op']))
 $op = $_GET['op'];
 
 require('inc/database.php');
+require('inc/mail_flags.php');
 
 if($op=='check'){
 	$uid=$_SESSION['user'];
@@ -60,5 +61,11 @@ if($op=='check'){
 			if(strcasecmp($row[0],$_SESSION['user'])==0)
 				mysql_query("update mail set defunct='Y' where mail_id=$mail");
 		}
+	}else if($op=='star'){
+		$uid=$_SESSION['user'];
+		$mask=MAIL_FLAG_STAR;
+		mysql_query("update mail set flags=(flags ^ $mask) where to_user='$uid' and mail_id=$mail");
+		if(mysql_affected_rows()==1)
+			echo  '__OK__';
 	}
 }

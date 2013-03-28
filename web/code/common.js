@@ -17,6 +17,29 @@ function encode_space(str) {
 	s=s.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 	return s;
 }
+function GetUrlParms()    
+{
+    var args=new Object();
+    var query=location.search.substring(1);
+    var pairs=query.split("&");
+    for(var i=0;i<pairs.length;i++)
+    {
+        var pos=pairs[i].indexOf('=');
+        if(pos==-1) 
+        	continue;
+        var argname=pairs[i].substring(0,pos);
+        var value=pairs[i].substring(pos+1);
+        args[argname]=decodeURIComponent(value);
+    }
+    return args;
+}
+function BuildUrlParms(obj) {
+	var arr = [];
+	for (var name in obj){
+		arr.push(name+'='+encodeURIComponent(obj[name]));
+	}
+	return '?'+arr.join('&');
+}
 shortcuts={
 	"65": function(){
 			try{

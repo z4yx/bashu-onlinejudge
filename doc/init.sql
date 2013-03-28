@@ -156,7 +156,7 @@ CREATE TABLE `mail` (
   `title` varchar(200) DEFAULT NULL,
   `content` mediumtext,
   `new_mail` tinyint(1) NOT NULL DEFAULT '1',
-  `reply` tinyint(4) DEFAULT '0',
+  `flags` tinyint(4) UNSIGNED DEFAULT '0',
   `in_date` datetime DEFAULT NULL,
   `defunct` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`mail_id`),

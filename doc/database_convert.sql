@@ -72,6 +72,7 @@ alter table mail modify title BLOB;
 alter table mail modify title varchar(200) CHARACTER SET gbk;
 alter table mail modify content BLOB;
 alter table mail modify content TEXT CHARACTER SET gbk;
+alter table mail change reply flags tinyint UNSIGNED NOT NULL DEFAULT 0;
 alter table mail CONVERT TO CHARACTER SET utf8;
 
 drop table loginlog;
