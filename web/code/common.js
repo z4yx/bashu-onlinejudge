@@ -111,7 +111,7 @@ $(document).ready(function(){
 	});
 	function checkMail()
 	{
-		$.get("ajax_checkmail.php",function(data){
+		$.get("ajax_mailfunc.php?op=check",function(data){
 			if(isNaN(data)||data=='0')
 				return;
 			$notifier.html('&nbsp;('+data+')');

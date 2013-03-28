@@ -153,7 +153,7 @@ $Title="Mail List";
 							mailid=k.parent().get(0).id.substr(4);
 							content=k.children('.mail-content');
 							if(content.is(":hidden")){
-								$.get('ajax_showmail.php?mail_id='+mailid,function(data){
+								$.get('ajax_mailfunc.php?op=show&mail_id='+mailid,function(data){
 									if(typeof(window.fix_ie_pre)!='undefined')
 										data=encode_space(data);
 									content.children('pre').html(data);
@@ -166,7 +166,7 @@ $Title="Mail List";
 							break;
 						case 'del':
 							k=$a.parents('li');
-							$.ajax('ajax_deletemail.php?mail_id='+k.attr('id').substr(4));
+							$.ajax('ajax_mailfunc.php?op=delete&mail_id='+k.attr('id').substr(4));
 							k.remove();
 							break;
 						case 'rep':
@@ -184,7 +184,7 @@ $Title="Mail List";
 				$('#send_btn').click(function(){
 					$.ajax({
 						type:"POST",
-						url:"ajax_sendmail.php",
+						url:"ajax_mailfunc.php?op=send",
 						data:$('#send_form').serialize(),
 						success:function(msg){
 							if(msg.indexOf('__OK__')!=-1){
