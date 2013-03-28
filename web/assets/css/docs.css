@@ -128,11 +128,9 @@ samp.samp-sourcecode {
 }
 .mail-info{
   text-align: right;
-  width: 30%;
-  float: left;
+  float: right;
 }
 .mail-title{
-  width: 70%;
   float: left;
 }
 .mail-container span + a{

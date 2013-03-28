@@ -44,7 +44,7 @@ $Title="Mail List";
 						<ul class="unstyled">
 						<?php
 						while($row=mysql_fetch_row($result)){
-							echo '<li class="mail-item" id="mail',$row[0],'">';
+							echo '<li class="mail-item" ',($row[3] ? 'style="background-color: #FCF8E3;"' : ''),' id="mail',$row[0],'">';
 						?>
 								<div class="mail-container">
 									<div class="mail-title">
@@ -52,7 +52,6 @@ $Title="Mail List";
 											<i class="<?php echo ($row[5]&MAIL_FLAG_STAR)?'icon-star':'icon-star-empty'?> icon-large text-warning"></i>
 										</a>
 										<?php 
-										if($row[3])echo '<span><i class="icon-chevron-right text-error"></i> </span>';
 										echo '<a href="#title">',htmlspecialchars($row[1]),'</a>';
 										?>
 									</div>
@@ -164,8 +163,8 @@ $Title="Mail List";
 					var j=$a.attr('href'),k,content,mailid;
 					switch(j.substr(j.lastIndexOf('#')+1)){
 						case 'title':
-							k=$a.parent().parent(); 
-							mailid=k.parent().get(0).id.substr(4);
+							k=$a.parents('.mail-container'); 
+							mailid=k.parent().css('background-color','').attr('id').substr(4);
 							content=k.children('.mail-content');
 							if(content.is(":hidden")){
 								$.get('ajax_mailfunc.php?op=show&mail_id='+mailid,function(data){
@@ -174,7 +173,6 @@ $Title="Mail List";
 									content.children('pre').html(data);
 								});
 								content.show();
-								$a.prev('span').remove();
 							}else{
 								content.hide();
 							}
@@ -185,11 +183,10 @@ $Title="Mail List";
 							k.remove();
 							break;
 						case 'rep':
-							k=$a.parent().parent().prev().prev();
-							content=k.html();
+							k=$a.parents('.mail-container');
+							content=k.children('.mail-info').html();
 							$('#to_input').val(content.substr(0,content.indexOf(' ')));
-							k=k.prev().children('a[href="#title"]');
-							$('#title_input').val('Re:'+k.html());
+							$('#title_input').val('Re:'+k.find('a[href="#title"]').html());
 							$('#send_result').hide();
 							$('#MailModal').modal('show');
 							break;
