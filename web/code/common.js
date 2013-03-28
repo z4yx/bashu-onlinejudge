@@ -115,7 +115,7 @@ $(document).ready(function(){
 			if(isNaN(data)||data=='0')
 				return;
 			$notifier.html('&nbsp;('+data+')');
-			var $alert=$('<div class="alert alert-success center nocontent">You have unread mails.</div>').appendTo('body');
+			var $alert=$('<div class="alert alert-success center alert-popup">You have unread mails.</div>').appendTo('body');
 			setTimeout(function(){$alert.fadeOut(400);},1000);
 		});
 	}
