@@ -42,7 +42,7 @@ $Title="Mail List";
 								<div class="mail-container">
 									<div class="mail-title">
 										<?php 
-										if($row[3])echo '<span class="label label-warning" style="padding:1px"><i class="icon-chevron-right icon-white"></i></span>';
+										if($row[3])echo '<span><i class="icon-chevron-right text-error"></i> </span>';
 										echo '<a href="#title">',htmlspecialchars($row[1]),'</a>';
 										?>
 									</div>
