@@ -153,8 +153,8 @@ $Title="Record";
               <option value="time">Time</option>
               <option value="memory">Memory</option>
             </select>
-            <label>
-              <input <?php if($public_code)echo 'checked'?> style="margin:0 3px" id="chk_public" type="checkbox" name="public">Open Source
+            <label class="checkbox">
+              <input <?php if($public_code)echo 'checked'?> id="chk_public" type="checkbox" name="public">Open Source
             </label>
             <span style="margin-left:5px" class="btn" id="btn_reset">Reset</span>
           </form>

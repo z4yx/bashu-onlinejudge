@@ -36,7 +36,7 @@ $Title="Mail List";
 			<div class="row-fluid">
 				<div class="span2 offset2 form-inline">
 					<span id="sendnew" style="margin:5px" class="btn btn-small"><i class="icon-inbox"></i> COMPOSE </span>
-		            <label class="checkbox"><input <?php if(isset($_GET['starred']))echo 'checked'?> class="checkbox" id="chk_starred" type="checkbox" name="star">Starred</label>
+		            <label class="checkbox"><input <?php if(isset($_GET['starred']))echo 'checked'?>  id="chk_starred" type="checkbox" name="star">Starred</label>
 				</div>
 			</div>
 			<div class="row-fluid">

@@ -189,20 +189,20 @@ $Title="Problem $prob_id";
         <a class="close" data-dismiss="modal">&times;</a>
         <h4>Submit solution</h4>
       </div>
-      <form style="margin: 0" action="submit.php" method="post" id="form_submit">
+      <form class="margin-0" action="submit.php" method="post" id="form_submit">
         <div class="modal-body" style="padding-top:5px">
-          <div style="clear:both">
-            <h5 class="center">Paste your code here.</h5>
-            <textarea style="width: 750px;" id="detail_input" rows="17" name="source"></textarea>
-          </div>
-          <div class="alert alert-error hide" id="submit_result"></div>
+          <h5 class="center">Paste your code here.</h5>
+          <textarea style="width: 750px;" id="detail_input" rows="16" name="source"></textarea>
+          <div class="alert alert-error hide margin-0" id="submit_result"></div>
         </div>
-        <div class="modal-footer">
-          <div style="float:left">
-              <label class="control-label" style="display:inline-block;" for="prob_input">Problem</label>
+        <div class="modal-footer form-inline">
+          <div class="pull-left">
+              <label class="control-label" for="prob_input">Problem</label>
               <input type="text" class="input-mini" style="font-weight: bold;margin-bottom: 0;" id="prob_input" name="problem">
           </div>
-          <label style="display:inline-block;"><input style="margin:0 3px" type="checkbox" <?php if($pref->sharecode=='on')echo 'checked';?> name="public">Share this code</label>
+          <label class="checkbox">
+            <input type="checkbox" <?php if($pref->sharecode=='on')echo 'checked';?> name="public">Share this code
+          </label>
           <select name="language" id="slt_lang">
             <?php foreach ($LANG_NAME as $langid => $lang) {
               echo "<option value=\"$langid\" ";
