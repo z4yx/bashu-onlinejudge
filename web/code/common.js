@@ -156,12 +156,3 @@ $(document).ready(function(){
 		return false;
 	}
 });
-
-	
-$(function(){
-    $('.nav a').hover(function(){
-        $('i', this).addClass('icon-large');
-    }, function(){
-        $('i', this).removeClass('icon-large');
-    });
-});    
