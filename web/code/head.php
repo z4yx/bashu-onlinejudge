@@ -6,6 +6,9 @@
   <link href="../assets/css/cerulean.min.css" rel="stylesheet">
   <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
   <link href="../assets/css/font-awesome.min.css" rel="stylesheet">
+  <!--[if IE 7]>
+  <link rel="stylesheet" href="../assets/css/font-awesome-ie7.min.css">
+  <![endif]-->
   <link href="../assets/js/google-code-prettify/prettify.css" rel="stylesheet">
   <link href="../assets/css/docs.css?v=11" rel="stylesheet">
 
