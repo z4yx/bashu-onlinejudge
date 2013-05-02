@@ -298,8 +298,6 @@ $Title="Admin panel";
                   yAxis: 0
                 }]
               });
-              // console.log("cpuChart");
-              console.log(window.cpuChart);
             }
             cpuChart.series[0].points[0].update(data.cpu,true);
           }
@@ -319,8 +317,6 @@ $Title="Admin panel";
                   yAxis: 0
                 }]
               });
-              // console.log("memChart");
-              console.log(window.memChart);
 
               $('#meter_title').show();
             }
