@@ -182,15 +182,15 @@ $Title="Admin panel";
           E.preventDefault();
           var jq=$(E.target);
           if(jq.is('i')){
-            var jq_uid=jq.parent().parent().prev(),oper,str_id;
+            var oper;
+            var str_id=jq.parents('tr').first().children().first().contents()
+              .filter(function(){return this.nodeType == 3;})
+              .text();
             if(jq.hasClass('icon-remove')){
-              jq_uid=jq_uid.prev();
-              str_id=jq_uid.contents().filter(function(){return this.nodeType == 3;}).text();
               if(!window.confirm("Are you sure to delete "+str_id))
                 return false;
               oper='del_usr';
             }else{
-              str_id=jq_uid.contents().filter(function(){return this.nodeType == 3;}).text();
               oper='en_usr';
             }
             $.ajax({

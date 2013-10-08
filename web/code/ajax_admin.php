@@ -7,15 +7,18 @@ if(!isset($_POST['op']))
 $op=$_POST['op'];
 require('inc/database.php');
 if($op=="list_usr"){ 
-	$res=mysql_query("select user_id,accesstime from users where defunct='Y'");
+	$res=mysql_query("select user_id,accesstime,solved,submit from users where defunct='Y'");
 	if(mysql_num_rows($res)==0)
 		die ('<div class="row-fluid"><div class="alert alert-info span4">No disabled users</div></div>');
 ?>
-	<table class="table table-condensed table-striped" style="width:480px">
+	<table class="table table-condensed table-striped" style="width:550px">
 		<caption>Disabled users</caption>
 		<thead>
 			<tr>
 				<th>User</th>
+				<th>Last Login</th>
+				<th>Submit</th>
+				<th>AC</th>
 				<th>Enable</th>
 				<th>Delete</th>
 			</tr>
@@ -26,7 +29,11 @@ if($op=="list_usr"){
 					echo '<tr><td>',$row[0];
 					if(is_null($row[1]))
 						echo '<span style="color:red">(new)</span>';
-					echo '</td><td><a href="#"><i class="icon icon-ok"></i></a></td><td><a href="#"><i class="icon icon-remove"></i></a></td></tr>';
+					echo '</td>';
+					echo '<td>',$row[1],'</td>';
+					echo '<td>',$row[3],'</td>';
+					echo '<td>',$row[2],'</td>';
+					echo '<td><a href="#"><i class="icon icon-ok"></i></a></td><td><a href="#"><i class="icon icon-remove"></i></a></td></tr>';
 				}
 			?>
 		</tbody>
