@@ -297,6 +297,7 @@ $Title="Admin panel";
           });
           return false;
         });
+        $('#input_adminpass').focus();
       });
 
       function update_chart(){
