@@ -111,6 +111,14 @@ $Title="Admin panel";
                     <input type="submit" class="btn" value="Disable">
                     <input type="hidden" name="op" value="disable_usr">
                   </form>
+                  <hr>
+
+                  <form action="admin.php" method="post" class="form-inline" id="form_resetpwd">
+                    <label for="input_reset_usr" style="display:block">Reset Password</label>
+                    <input type="text" id="input_reset_usr" name="user_id" class="input-small" placeholder="User ID">
+                    <input type="submit" class="btn" value="Reset">
+                    <input type="hidden" name="op" value="reset_usr">
+                  </form>
                 </div>
               </div>
             </div>
@@ -223,6 +231,18 @@ $Title="Admin panel";
             url:"ajax_admin.php",
             data:$('#form_usr').serialize(),
             success:getusrlist
+          });
+          return false;
+        });
+        $('#form_resetpwd').submit(function(E){
+          E.preventDefault();
+          if(!window.confirm("Are you sure to reset password?"))
+            return false;
+          $.ajax({
+            type:"POST",
+            url:"ajax_admin.php",
+            data:$('#form_resetpwd').serialize(),
+            success:function(info){alert(info)}
           });
           return false;
         });

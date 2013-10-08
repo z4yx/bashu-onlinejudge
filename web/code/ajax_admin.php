@@ -116,5 +116,12 @@ if($op=="list_usr"){
 		echo "success";
 	else
 		echo "fail";
+}else if($op=="reset_usr"){
+	isset($_POST['user_id']) ? $uid=mysql_real_escape_string(trim($_POST['user_id'])) : die('');
+	mysql_query("update users set password=user_id where user_id='$uid'");
+	if(mysql_affected_rows()==1)
+		echo 'Password is the same as user name now!';
+	else
+		echo 'No such user!';
 }
 ?>
