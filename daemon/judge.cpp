@@ -108,7 +108,7 @@ bool solution::compile() throw (const char *)
 			puts("Compile Error");
 
 			std::unique_lock<std::mutex> Lock(* (std::mutex*)mutex_for_query);
-			detail_results.push_back({RES_CE, 0, 0, last_state, 0});
+			detail_results.push_back((case_info){RES_CE, 0, 0, last_state, 0});
 
 			return false;
 		}
@@ -142,7 +142,8 @@ void solution::judge() throw (const char *)
 	int total_score = 0, total_time = 0, max_memory = 0, dir_len = strlen(dir_name);
 	int status;
 	std::string tips;
-	for(std::string &d_name : in_files) {
+	for(auto it = in_files.begin(); it != in_files.end(); ++it) {
+		const std::string &d_name = *it;
 		sprintf(buffer, "%s/%s", dir_name, d_name.c_str());
 
 		puts(buffer);
@@ -253,7 +254,7 @@ void solution::judge() throw (const char *)
 		}
 
 		std::unique_lock<std::mutex> Lock(* (std::mutex*)mutex_for_query);
-		detail_results.push_back({status, result.time, result.memory, tips, get_score});
+		detail_results.push_back((case_info){status, result.time, result.memory, tips, get_score});
 	}
 
 	if(error_code == -1) //No error

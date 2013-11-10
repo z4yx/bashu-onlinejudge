@@ -151,13 +151,17 @@ void thread_remove()
 		delete cur;
 	}
 }
+static bool waiting_is_not_empty()
+{
+	return !waiting.empty();
+}
 void thread_judge()
 {
 	for(;;) {
 		solution *cur;
 		do {
 			std::unique_lock<std::mutex> Lock(waiting_mutex);
-			notifier.wait(Lock, []()->bool {return !waiting.empty();});
+			notifier.wait(Lock, waiting_is_not_empty);
 			cur = waiting.front();
 			waiting.pop();
 		}while(0);
@@ -180,7 +184,7 @@ void thread_judge()
 			try {
 				std::unique_lock<std::mutex> Lock_map(* (std::mutex*)(cur->mutex_for_query));
 				cur->detail_results.clear();
-				cur->detail_results.push_back({RES_SE, 0, 0, cur->last_state, 0});
+				cur->detail_results.push_back((case_info){RES_SE, 0, 0, cur->last_state, 0});
 				cur->timestamp = time(0);
 
 #ifdef DUMP_FOR_DEBUG
@@ -206,15 +210,20 @@ void thread_judge()
 		}
 	}
 }
+static bool filled_is_true()
+{
+	return filled;
+}
 void thread_rejudge()
 {
 	std::unique_lock<std::mutex> Lock(rejudge_mutex);
 	for(;;) {
-		rejudge_notifier.wait(Lock, []()->bool{return filled;});
+		rejudge_notifier.wait(Lock, filled_is_true);
 		filled = false;
 
 		puts("rejudge thread running");
-		for(int solution_id : rejudge_list) {
+		for(auto it = rejudge_list.begin(); it != rejudge_list.end(); ++it) {
+			int solution_id = *it;
 			printf("rejudging %d\n", solution_id);
 			solution *sol = new solution;
 			if(!sol) {
@@ -225,7 +234,7 @@ void thread_rejudge()
 				sol->copy_setting(rejudge_init); //Get problem settings, like compare_way
 				get_exist_solution_info(solution_id, sol);
 				sol->error_code = -1;
-				sol->key = std::to_string(solution_id);
+				sol->key = std::to_string((long long int)solution_id);
 
 				rejudging = true;
 				do { //insert to queue

@@ -14,7 +14,9 @@ public:
 			throw "encoder: Can't allocate memory";
 		char *p = buf;
 		*(p++) = '"';
-		for(char &c : in) {
+		int len = in.size();
+		for(int i=0; i<len; i++) {
+			char c = in[i];
 			switch (c) {
 				case '"':
 					*(p++) = '\\';
@@ -60,8 +62,9 @@ void json_builder(std::ostringstream &json, solution *target)
 		json<<RES_CE<<",0,0,"<<encoder(target->last_state)<<"]}";
 		return;
 	}*/
-	for(case_info &c : target->detail_results) 
+	for(auto it = target->detail_results.begin(); it != target->detail_results.end(); ++it) {
+		case_info &c = *it;
 		json<<"["<<c.error_code<<','<<c.time<<','<<c.memory<<','<<encoder(c.info)<<','<<c.score<<"],";
-
+	}
 	json<<"[]]}";
 }
