@@ -103,6 +103,8 @@ private:
    ///Output
    std::string makeSection(const section_t& section);
    std::string makeKeyValue(const key_t& key, const value_t& value);
+
+   std::string expandEnv(const char *s);
 };
 
 ///
@@ -261,7 +263,7 @@ template<class T, class U, class V>
                char *p = strchr(line, '=');
                if(p == NULL)
                   continue;
-               value_t value(p + 1);
+               value_t value(expandEnv(p + 1));
                *p = '\0';
                key_t key(line);
                // END //
@@ -324,4 +326,29 @@ template<class T, class U, class V>
    }
 
    file.close();
+}
+
+template<class T, class U, class V>
+   std::string INI<T, U, V>::expandEnv(const char *s)
+{
+   std::string result;
+   const char * start = NULL;
+   for(; *s; s++) {
+      if(start) {
+         if(*s == ')') {
+            int length = s-1-start;
+            if(length > 0) {
+               const char *env = getenv(std::string(start+1, length).c_str());
+               if(env)
+                  result += env;
+               start = NULL;
+            }
+         }
+      }else if(*s == '$' && *(s+1) == '('){
+         start = s+1;
+      }else {
+         result += *s;
+      }
+   }
+   return result;
 }
