@@ -1,0 +1,3 @@
+#!/bin/bash
+
+make -C $OPENSHIFT_REPO_DIR/daemon/
