@@ -1,5 +1,8 @@
 <?php
-if(!mysql_connect('localhost','root','')){
+if(!mysql_connect($_SERVER['OPENSHIFT_MYSQL_DB_SOCKET'],
+	$_SERVER['OPENSHIFT_MYSQL_DB_USERNAME'],
+	$_SERVER['OPENSHIFT_MYSQL_DB_PASSWORD'])
+	){
 	echo 'Can not connect to mysql!';
 	throw new Exception('Can not connect to mysql!');
 }

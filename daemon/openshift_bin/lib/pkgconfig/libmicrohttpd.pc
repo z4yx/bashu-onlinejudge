@@ -1,0 +1,13 @@
+prefix=/var/lib/openshift/511f532de0b8cd85e500005c/app-root/runtime/root
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libmicrohttpd
+Description: A library for creating an embedded HTTP server
+Version: 0.9.22
+Requires:
+Conflicts:
+Libs: -L${libdir} -lmicrohttpd
+Libs.private: 
+Cflags: -I${includedir}

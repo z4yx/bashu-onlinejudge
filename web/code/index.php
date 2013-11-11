@@ -4,7 +4,7 @@ function encode_user_id($user)
   if(!extension_loaded('openssl'))
     return false;
   $iv='7284565820000000';
-  $key=hash('sha256','my)(password_xx0',true);
+  $key=hash('sha256',$_SERVER['OPENSHIFT_SECRET_TOKEN'],true);
   return openssl_encrypt($user,'aes-256-cbc',$key,false,$iv);
 }
 require('inc/checklogin.php');
