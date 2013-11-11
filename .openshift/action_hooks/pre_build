@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Killing judge daemon"
+killall daemon
