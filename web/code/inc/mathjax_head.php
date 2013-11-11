@@ -9,5 +9,4 @@ MathJax.Hub.Config({
 	"HTML-CSS": { availableFonts: ["TeX"], webFont: "TeX", imageFont: null }
 });
 </script>
-<!--<script type="text/javascript"  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script async type="text/javascript" src="../assets/Mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
