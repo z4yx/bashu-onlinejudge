@@ -51,7 +51,7 @@ if($op=="list_usr"){
 		</thead>
 		<tbody>
 			<?php 
-				$res=mysql_query("select user_id,rightstr from privilege");
+				$res=mysql_query("select user_id,rightstr from privilege order by user_id");
 				while($row=mysql_fetch_row($res)){
 					echo '<tr><td>',$row[0],'</td><td>',$row[1],'</td><td><a href="#"><i class="icon icon-remove"></i></a></td></tr>';
 				}
