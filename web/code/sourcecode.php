@@ -7,12 +7,26 @@ $sol_id=intval($_GET['solution_id']);
 
 require('inc/checklogin.php');
 require('inc/database.php');
+require 'inc/problem_flags.php';
 $result=mysql_query("select user_id,time,memory,result,language,code_length,problem_id,public_code from solution where solution_id=$sol_id");
 $row=mysql_fetch_row($result);
 if(!$row)
   die('No such solution.');
 
-if(!isset($_SESSION['user']) || !$row[7] && strcmp($row[0],$_SESSION['user'])!=0 && !isset($_SESSION['source_browser']))
+$allowed=FALSE;
+if(isset($_SESSION['user'])){
+  if(strcmp($row[0],$_SESSION['user'])==0)
+    $allowed=TRUE;
+  else if(isset($_SESSION['source_browser']))
+    $allowed=TRUE;
+  else if($row[7]){
+    $prob_id=$row[6];
+    $prob=mysql_query("select has_tex from problem where problem_id=$prob_id");
+    if( ($tmp=mysql_fetch_row($prob)) && !($tmp[0]&PROB_DISABLE_OPENSOURCE) )
+        $allowed=TRUE;
+  }
+}
+if(!$allowed)
   $info = 'You cannot view this code.';
 else{
   $result=mysql_query("select source from source_code where solution_id=$sol_id");

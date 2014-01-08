@@ -53,6 +53,17 @@ $Title="New problem";
           </div>
         </div>      
         <div class="row-fluid">
+          <div class="span5">
+            <p><span>Options: </span>
+            <div style="margin-left:20px">
+              <label class="checkbox">
+                <input type="checkbox" name="disable_open_source">Disable Open Source
+              </label>
+            </div>
+            </p>
+          </div>
+        </div>
+        <div class="row-fluid">
           <div class="span9">
             <p>
               Description:<br>

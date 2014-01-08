@@ -9,7 +9,7 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
 }else {
   require('inc/database.php');
 
-  $query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,compare_way from problem where problem_id=$prob_id";
+  $query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,compare_way,has_tex from problem where problem_id=$prob_id";
   $result=mysql_query($query);
   $row=mysql_fetch_row($result);
   if(!$row)
@@ -34,6 +34,7 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
     }
   }
 }
+require 'inc/problem_flags.php';
 $Title="Edit problem $prob_id";
 ?>
 <!DOCTYPE html>
@@ -93,6 +94,17 @@ $Title="Edit problem $prob_id";
             <p><span>Case score: </span><input id="input_score" name="score" class="input-mini" type="text" value="<?php echo $row[10]?>"></p>
           </div>
         </div>      
+        <div class="row-fluid">
+          <div class="span5">
+            <p><span>Options: </span>
+            <div style="margin-left:20px">
+              <label class="checkbox">
+                <input type="checkbox" <?php if($row[12]&PROB_DISABLE_OPENSOURCE)echo 'checked=""'?> name="disable_open_source">Disable Open Source
+              </label>
+            </div>
+            </p>
+          </div>
+        </div>
         <div class="row-fluid">
           <div class="span9">
             <p>
