@@ -140,6 +140,8 @@ void solution::judge() throw (const char *)
 	std::sort(in_files.begin(), in_files.end());
 
 	int total_score = 0, total_time = 0, max_memory = 0, dir_len = strlen(dir_name);
+	const int full_score = 100;
+	int case_score = full_score/in_files.size();
 	int status;
 	std::string tips;
 	for(std::string &d_name : in_files) {
@@ -148,7 +150,7 @@ void solution::judge() throw (const char *)
 		puts(buffer);
 
 		execute_info result;
-		int get_score = score;
+		int get_score = case_score;
 
 		if(run_judge(target_path, buffer, "user.out", time_limit, (lang_extra_mem[lang] + mem_limit) << 10 /*to byte*/, &result)) {
 			error_code = RES_SE;
@@ -259,7 +261,8 @@ void solution::judge() throw (const char *)
 	if(error_code == -1) //No error
 		error_code = RES_AC;
 
-	score = total_score;//use score,mem_limit,time_limit to store result
+	//use score,mem_limit,time_limit to store result
+	score = total_score/double(case_score * in_files.size())*full_score + 0.500001;
 	mem_limit = max_memory;
 	time_limit = total_time;
 	printf("error_code %d, time %dms, memory %dkB, score %d\n", error_code, time_limit, mem_limit, score);

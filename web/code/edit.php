@@ -89,7 +89,7 @@ $Title="Edit problem $prob_id";
             </p>
           </div>
         </div>
-        <div class="row-fluid">
+        <div class="row-fluid hide">
           <div class="span5">
             <p><span>Case score: </span><input id="input_score" name="score" class="input-mini" type="text" value="<?php echo $row[10]?>"></p>
           </div>
