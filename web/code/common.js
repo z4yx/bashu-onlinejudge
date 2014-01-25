@@ -102,14 +102,25 @@ $(document).ready(function(){
 	$('#logoff_btn').click(function(){$.ajax({url:"logoff.php",dataType:"html",success:function(){location.reload();}});});
 	var $search_input=$('#search_input');
 	if($search_input.length)
+	{
 		$search_input.typeahead({
 			source:function(query, update){
+				var typeahead = this;
 				$.getJSON("ajax_search.php?q="+encodeURIComponent(query),function (r){
 					  update(r.arr);
+					  typeahead.$menu.find('.active').removeClass('active');
 					}
 				);
 			}
 		});
+		$search_input.keydown(function(E){
+			if(E.keyCode == 13){
+				var selected = $search_input.parent().find('.typeahead:visible>.active');
+				if(!selected.length)
+					$('#search_form').submit();
+			}
+		})
+	}
 	$('#form_login').submit(function(E){
 		var b=false;
 		if($('#uid').attr('value')==''){
