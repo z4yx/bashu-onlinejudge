@@ -28,7 +28,7 @@ if($pref->hidelogo=='off'){ ?>
 <?php }?>
   <div class="navbar-inner" style="padding:0">
     <div class="container-fluid navbar-padding-fix">
-      <a class="brand" href="index.php"><i class="icon-home"></i> Bashu OnlineJudge</a>
+      <a class="brand" href="index.php"><i class="icon-home"></i><span class="navbar-hide-text"> Bashu OnlineJudge</span></a>
       <div class="btn-group pull-right">
 
 <?php if(isset($_SESSION['user'])){?>
@@ -55,12 +55,12 @@ if($pref->hidelogo=='off'){ ?>
 <?php }?>
       </div>
         <ul class="nav">
-          <li><a id="nav_bbs" title="Alt+B" href="board.php"><i class="icon-bullhorn"></i> Board</a></li>
-          <li><a id="nav_set" href="problemset.php"><i class="icon-th-list"></i> Problemset</a></li>
-          <li><a id="nav_prob" title="Alt+P" href="problempage.php"><i class="icon-play-circle"></i> Problem</a></li>
-          <li><a id="nav_record" title="Alt+R" href="record.php"><i class="icon-camera"></i> Record</a></li>
-          <li><a id="nav_rank" href="ranklist.php"><i class="icon-thumbs-up"></i> Ranklist</a></li>
-          <li><a id="nav_about" href="about.php"><i class="icon-phone"></i> About</a></li>
+          <li><a id="nav_bbs" title="Alt+B" href="board.php"><i class="icon-bullhorn"></i><span class="navbar-hide-text"> Board</a></span></li>
+          <li><a id="nav_set" href="problemset.php"><i class="icon-th-list"></i><span class="navbar-hide-text"> Problemset</a></span></li>
+          <li><a id="nav_prob" title="Alt+P" href="problempage.php"><i class="icon-play-circle"></i><span class="navbar-hide-text"> Problem</a></span></li>
+          <li><a id="nav_record" title="Alt+R" href="record.php"><i class="icon-camera"></i><span class="navbar-hide-text"> Record</a></span></li>
+          <li><a id="nav_rank" href="ranklist.php"><i class="icon-thumbs-up"></i><span class="navbar-hide-text"> Ranklist</a></span></li>
+          <li><a id="nav_about" href="about.php"><i class="icon-phone"></i><span class="navbar-hide-text"> About</a></span></li>
         </ul>
         <form class="navbar-search pull-left" id="search_form" action="search.php" method="get">
           <input type="text" name="q" title="Alt+I" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" autocomplete="off" placeholder="Problem ID,Title,Source">
