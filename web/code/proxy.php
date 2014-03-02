@@ -1,5 +1,5 @@
 <?php
-if(!isset($_GET['url'])){
+if(!isset($_GET['url']) || 0!==preg_match('/\W/',$_GET['url'])){
 	die('Invalid URL');
 }
 $url = rawurlencode($_GET['url']);
