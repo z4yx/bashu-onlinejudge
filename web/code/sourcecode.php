@@ -1,4 +1,31 @@
 <?php 
+function check_permission($prob_id,$opened,$user)
+{
+  if(!isset($_SESSION['user']))
+    return "Not logged in";
+  if(strcmp($user,$_SESSION['user'])==0 || isset($_SESSION['source_browser']))
+    return TRUE;
+
+  require 'inc/problem_flags.php';
+  if($opened){
+    $row = mysql_fetch_row(mysql_query("select has_tex from problem where problem_id=$prob_id"));
+    if(!$row)
+      return "No such problem";
+    $prob_flag = $row[0];
+    if($prob_flag & PROB_DISABLE_OPENSOURCE)
+      return "Operation denied";
+    else if($prob_flag & PROB_SOLVED_OPENSOURCE){
+      $query='select min(result) from solution where user_id=\''.$_SESSION['user']."' and problem_id=$prob_id group by problem_id";
+      $user_status=mysql_query($query);
+      $row=mysql_fetch_row($user_status);
+      if($row && $row[0]==0)
+        return TRUE;
+      return "Source code not available until you solve the problem";
+    }
+    return TRUE;
+  }
+  return 'You cannot view this code.';
+}
 require('inc/result_type.php');
 require('inc/lang_conf.php');
 if(!isset($_GET['solution_id']))
@@ -7,28 +34,21 @@ $sol_id=intval($_GET['solution_id']);
 
 require('inc/checklogin.php');
 require('inc/database.php');
-require 'inc/problem_flags.php';
 $result=mysql_query("select user_id,time,memory,result,language,code_length,problem_id,public_code from solution where solution_id=$sol_id");
 $row=mysql_fetch_row($result);
 if(!$row)
   die('No such solution.');
 
-$allowed=FALSE;
-if(isset($_SESSION['user'])){
-  if(strcmp($row[0],$_SESSION['user'])==0)
-    $allowed=TRUE;
-  else if(isset($_SESSION['source_browser']))
-    $allowed=TRUE;
-  else if($row[7]){
-    $prob_id=$row[6];
-    $prob=mysql_query("select has_tex from problem where problem_id=$prob_id");
-    if( ($tmp=mysql_fetch_row($prob)) && !($tmp[0]&PROB_DISABLE_OPENSOURCE) )
-        $allowed=TRUE;
-  }
-}
-if(!$allowed)
-  $info = 'You cannot view this code.';
+$ret = check_permission($row[6], $row[7], $row[0]);
+if($ret === TRUE)
+  $allowed = TRUE;
 else{
+  $allowed = FALSE;
+  $info=$ret;
+}
+
+
+if($allowed){
   $result=mysql_query("select source from source_code where solution_id=$sol_id");
   if($tmp=mysql_fetch_row($result))
     $source=$tmp[0];

@@ -33,8 +33,14 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
         break;
     }
   }
+
+  require 'inc/problem_flags.php';
+  $option_opensource=0;
+  if($row[12]&PROB_DISABLE_OPENSOURCE)
+    $option_opensource=2;
+  else if($row[12]&PROB_SOLVED_OPENSOURCE)
+    $option_opensource=1;
 }
-require 'inc/problem_flags.php';
 $Title="Edit problem $prob_id";
 ?>
 <!DOCTYPE html>
@@ -97,11 +103,19 @@ $Title="Edit problem $prob_id";
         <div class="row-fluid">
           <div class="span5">
             <p><span>Options: </span>
-            <div style="margin-left:20px">
-              <label class="checkbox">
-                <input type="checkbox" <?php if($row[12]&PROB_DISABLE_OPENSOURCE)echo 'checked=""'?> name="disable_open_source">Disable Open Source
-              </label>
-            </div>
+            <ul>
+              <li>
+                <span>Opened source can be viewed by </span>
+                <select name="option_open_source" id="option_open_source" style="width:auto">
+                  <option value="0">anyone</option>
+                  <option value="1">solved user</option>
+                  <option value="2">nobody</option>
+                </select>
+                <script>
+                document.getElementById('option_open_source').selectedIndex="<?php echo $option_opensource; ?>"
+                </script>
+              </li>
+            </ul>
             </p>
           </div>
         </div>
