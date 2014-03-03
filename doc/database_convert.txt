@@ -1,6 +1,7 @@
 数据库先对blob解码(password,source),再将编码转为utf-8
 清空loginlog
 清除solution中的waiting(10000)
+更新users中的solved和submit
 PE,OE全部转为WA; 1,6 -> 4
 SE转为RE; 98 -> 5
 一些表的列功能发生变化

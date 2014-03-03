@@ -132,7 +132,9 @@ $Title="Record";
             <label>Problem:</label>
             <input type="text" class="input-mini" name="problem_id" id="ipt_problem_id" value="<?php echo $problem_id?>">
             <label>User:</label>
+            <?php if(isset($_SESSION['user'])) echo'<div class="input-append">' ?>
             <input type="text" class="input-small" name="user_id" id="ipt_user_id" value="<?php echo $user_id?>">
+            <?php if(isset($_SESSION['user'])) echo'<button class="btn" id="filter_me" data-myuid="',$_SESSION['user'],'" type="button">Me</button></div>' ?>
             <label>Result:</label>
             <select class="input-small" name="result" id="slt_result">
               <option value="-1">All</option>
@@ -297,6 +299,10 @@ $Title="Record";
         $('#ipt_user_id').keydown(function(E){
           if(E.keyCode==13)fun_submit();
         });
+        $('#filter_me').click(function(E){
+          $('#ipt_user_id').val($(this).data('myuid'));
+          fun_submit();
+        })
         $('#btn_reset').click(function(){window.location="record.php?problem_id="+$("#ipt_problem_id").val()+"&user_id="+$("#ipt_user_id").val();});
       }); 
     </script>

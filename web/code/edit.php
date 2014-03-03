@@ -9,7 +9,7 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
 }else {
   require('inc/database.php');
 
-  $query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,compare_way from problem where problem_id=$prob_id";
+  $query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,compare_way,has_tex from problem where problem_id=$prob_id";
   $result=mysql_query($query);
   $row=mysql_fetch_row($result);
   if(!$row)
@@ -33,6 +33,13 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
         break;
     }
   }
+
+  require 'inc/problem_flags.php';
+  $option_opensource=0;
+  if($row[12]&PROB_DISABLE_OPENSOURCE)
+    $option_opensource=2;
+  else if($row[12]&PROB_SOLVED_OPENSOURCE)
+    $option_opensource=1;
 }
 $Title="Edit problem $prob_id";
 ?>
@@ -88,11 +95,30 @@ $Title="Edit problem $prob_id";
             </p>
           </div>
         </div>
-        <div class="row-fluid">
+        <div class="row-fluid hide">
           <div class="span5">
             <p><span>Case score: </span><input id="input_score" name="score" class="input-mini" type="text" value="<?php echo $row[10]?>"></p>
           </div>
         </div>      
+        <div class="row-fluid">
+          <div class="span5">
+            <p><span>Options: </span>
+            <ul>
+              <li>
+                <span>Opened source can be viewed by </span>
+                <select name="option_open_source" id="option_open_source" style="width:auto">
+                  <option value="0">anyone</option>
+                  <option value="1">solved user</option>
+                  <option value="2">nobody</option>
+                </select>
+                <script>
+                document.getElementById('option_open_source').selectedIndex="<?php echo $option_opensource; ?>"
+                </script>
+              </li>
+            </ul>
+            </p>
+          </div>
+        </div>
         <div class="row-fluid">
           <div class="span9">
             <p>

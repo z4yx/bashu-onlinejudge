@@ -31,10 +31,23 @@ $samp_out=isset($_POST['sample_output']) ? mysql_real_escape_string($_POST['samp
 $hint=isset($_POST['hint']) ? mysql_real_escape_string($_POST['hint']) : '';
 $source=isset($_POST['source']) ? mysql_real_escape_string($_POST['source']) : '';
 
+require 'inc/problem_flags.php';
 $has_tex=0;
+if(isset($_POST['option_open_source'])){
+	switch(intval($_POST['option_open_source'])){
+		case 0:
+			break;
+		case 1:
+			$has_tex|=PROB_SOLVED_OPENSOURCE;
+			break;
+		case 2:
+			$has_tex|=PROB_DISABLE_OPENSOURCE;
+			break;
+	}
+}
 foreach ($_POST as $value) {
 	if(strstr($value,'[tex]') || strstr($value,'[inline]')) {
-		$has_tex=1;
+		$has_tex|=PROB_HAS_TEX;
 		//echo $value;
 		break;
 	}

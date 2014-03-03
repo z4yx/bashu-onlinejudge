@@ -394,3 +394,26 @@ input.error{
   top: 60px; 
   left: -475px; 
 }
+@media (max-width: 1149px) {
+  .navbar .brand .navbar-hide-text{
+    display: none;
+  }
+}
+@media (max-width: 979px) {
+  .navbar .nav .navbar-hide-text{
+    display: none;
+  }
+  .navbar .nav .active .navbar-hide-text{
+    display: inline;
+  }
+}
+body{
+  padding-right: 0;
+  padding-left: 0;
+}
+@media (max-width: 767px){
+.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+  margin-right: 0;
+  margin-left: 0;
+}
+}

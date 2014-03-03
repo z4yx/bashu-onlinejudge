@@ -100,6 +100,9 @@ alter table attend CONVERT TO CHARACTER SET utf8;
 update solution set valid=0;
 update solution,(select solution_id from(select solution_id,problem_id,user_id,result FROM solution order by solution_id) as t where result=0 group by problem_id,user_id)as s SET valid=1 where solution.solution_id=s.solution_id;
 
+update users,(select user_id as uid,count(1) as s from solution group by user_id) as cnt set users.submit=cnt.s where cnt.uid=users.user_id;
+update users,(select user_id as uid,count(distinct problem_id) as s from solution where result=0 group by user_id) as cnt set users.solved=cnt.s where cnt.uid=users.user_id;
+
 CREATE TABLE `preferences` (
   `id` int AUTO_INCREMENT,
   `user_id` varchar(20) NOT NULL DEFAULT '',

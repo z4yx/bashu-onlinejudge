@@ -51,6 +51,7 @@ else{
     $arr[$statis[0]]=$statis[1];
   ksort($arr);
 }
+require 'inc/problem_flags.php';
 $Title="Problem $prob_id";
 ?>
 <!DOCTYPE html>
@@ -59,7 +60,7 @@ $Title="Problem $prob_id";
 
   <body>
     <?php
-    if($row[12])
+    if($row[12]&PROB_HAS_TEX)
       require('inc/mathjax_head.php');
     require('page_header.php');
     ?>

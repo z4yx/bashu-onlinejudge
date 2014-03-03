@@ -1,4 +1,31 @@
 <?php 
+function check_permission($prob_id,$opened,$user)
+{
+  if(!isset($_SESSION['user']))
+    return "Not logged in";
+  if(strcmp($user,$_SESSION['user'])==0 || isset($_SESSION['source_browser']))
+    return TRUE;
+
+  require 'inc/problem_flags.php';
+  if($opened){
+    $row = mysql_fetch_row(mysql_query("select has_tex from problem where problem_id=$prob_id"));
+    if(!$row)
+      return "No such problem";
+    $prob_flag = $row[0];
+    if($prob_flag & PROB_DISABLE_OPENSOURCE)
+      return "Operation denied";
+    else if($prob_flag & PROB_SOLVED_OPENSOURCE){
+      $query='select min(result) from solution where user_id=\''.$_SESSION['user']."' and problem_id=$prob_id group by problem_id";
+      $user_status=mysql_query($query);
+      $row=mysql_fetch_row($user_status);
+      if($row && $row[0]==0)
+        return TRUE;
+      return "Source code not available until you solve the problem";
+    }
+    return TRUE;
+  }
+  return 'You cannot view this code.';
+}
 require('inc/result_type.php');
 require('inc/lang_conf.php');
 if(!isset($_GET['solution_id']))
@@ -12,9 +39,16 @@ $row=mysql_fetch_row($result);
 if(!$row)
   die('No such solution.');
 
-if(!isset($_SESSION['user']) || !$row[7] && strcmp($row[0],$_SESSION['user'])!=0 && !isset($_SESSION['source_browser']))
-  $info = 'You cannot view this code.';
+$ret = check_permission($row[6], $row[7], $row[0]);
+if($ret === TRUE)
+  $allowed = TRUE;
 else{
+  $allowed = FALSE;
+  $info=$ret;
+}
+
+
+if($allowed){
   $result=mysql_query("select source from source_code where solution_id=$sol_id");
   if($tmp=mysql_fetch_row($result))
     $source=$tmp[0];

@@ -47,11 +47,27 @@ $Title="New problem";
             </p>
           </div>
         </div>
-        <div class="row-fluid">
+        <div class="row-fluid hide">
           <div class="span5">
             <p><span>Case score: </span><input id="input_score" name="score" class="input-mini" type="text" value="10"></p>
           </div>
         </div>      
+        <div class="row-fluid">
+          <div class="span5">
+            <p><span>Options: </span>
+            <ul>
+              <li>
+                <span>Opened source can be viewed by </span>
+                <select name="option_open_source" id="option_open_source" style="width:auto">
+                  <option value="0">anyone</option>
+                  <option value="1">solved user</option>
+                  <option value="2">nobody</option>
+                </select>
+              </li>
+            </ul>
+            </p>
+          </div>
+        </div>
         <div class="row-fluid">
           <div class="span9">
             <p>
