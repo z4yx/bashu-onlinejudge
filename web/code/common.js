@@ -17,6 +17,15 @@ function encode_space(str) {
 	s=s.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 	return s;
 }
+function LoadCSS(url) {
+   var head = document.getElementsByTagName('head')[0];
+   var link = document.createElement('link');
+   link.type = 'text/css';
+   link.rel = 'stylesheet';
+   link.href = url;
+   head.appendChild(link);
+   return link;
+ }
 function GetUrlParms()    
 {
     var args=new Object();
