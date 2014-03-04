@@ -3,6 +3,7 @@
 # script. The application will work only if it binds to
 
 export LD_LIBRARY_PATH=$OPENSHIFT_REPO_DIR/daemon/openshift_bin/lib
+mkdir $HOME/app-root/runtime/testcase
 nohup $OPENSHIFT_REPO_DIR/daemon/daemon > $OPENSHIFT_PHP_LOG_DIR/daemon.log 2>&1 &
 
 echo "Judge daemon started!"

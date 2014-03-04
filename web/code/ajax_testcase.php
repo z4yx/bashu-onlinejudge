@@ -5,7 +5,9 @@ if(!isset($_SESSION['administrator']))
 
 function get_testcase_dir()
 {
-	$content = file_get_contents("http://127.0.0.1:8881/get_datapath");
+	$daemon_ip=$_SERVER["OPENSHIFT_INTERNAL_IP"];
+	$daemon_port=31415;
+	$content = file_get_contents("http://$daemon_ip:$daemon_port/get_datapath");
 	if(FALSE === $content)
 		return FALSE;
 	return $content.DIRECTORY_SEPARATOR;
