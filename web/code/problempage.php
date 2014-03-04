@@ -170,6 +170,7 @@ $Title="Problem $prob_id";
             <div class="span12" style="text-align:center">
               <div class="well well-small problem-operation" style="margin-top:10px">
                 <a href="edit.php?problem_id=<?php echo $prob_id?>" class="btn btn-success">Edit</a>
+                <a href="testcase.php?problem_id=<?php echo $prob_id?>" class="btn btn-warning">Test Case</a>
                 <span id="action_delete" class="btn btn-danger"><?php echo $row[11]=='N' ? 'Delete' : 'Resume';?></span>
               </div>
             </div>

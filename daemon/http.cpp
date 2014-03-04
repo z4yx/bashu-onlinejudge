@@ -22,6 +22,7 @@ char robots_txt[] = "User-agent: *\nDisallow: /\n";
 char HTTP_BIND_IP[32];
 uint16_t HTTP_BIND_PORT;
 static struct sockaddr_in sock_addr;
+extern char DataDir[];
 
 typedef std::pair<MHD_PostProcessor*, solution*> pair;
 int ignore_requst(struct MHD_Connection *connection)
@@ -104,6 +105,13 @@ static int server_handler(
 					MHD_destroy_response(response);
 					return ret;
 				}
+			}else if(strcmp(url, "/get_datapath") == 0){
+				struct MHD_Response *response = 
+					MHD_create_response_from_buffer(strlen(DataDir), DataDir, MHD_RESPMEM_PERSISTENT);
+				// MHD_add_response_header(response, "Connection", "close");
+				int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+				MHD_destroy_response(response);
+				return ret;
 			}else if(strcmp(url, "/robots.txt") == 0) {
 				struct MHD_Response *response = 
 					MHD_create_response_from_buffer(sizeof(robots_txt)-1, robots_txt, MHD_RESPMEM_PERSISTENT);
