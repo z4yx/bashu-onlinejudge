@@ -109,7 +109,7 @@ $Title="Source $sol_id";
       <?php } ?>
       <hr>
       <footer>
-        <p>&copy; 2012 Bashu Middle School</p>
+        <p>&copy; 2012-2014 Bashu Middle School</p>
       </footer>
 
     </div>
