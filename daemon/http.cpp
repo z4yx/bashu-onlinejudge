@@ -35,52 +35,53 @@ int ignore_requst(struct MHD_Connection *connection)
 	return ret;
 }
 template<class T>
-void numcat(T &left, const char *right)
+void numcat(T &left, const char *right, size_t sz)
 {
-	int len = strlen(right);
+	int len = sz;
 	while(len--)
-		left *= 10;
-	left += atol(right);
+		left = left * 10 + *(right++) - '0';
 }
 static int iterate_post(void *arg, enum MHD_ValueKind, const char *name,
 	const char*, const char*, const char*, const char *data, uint64_t offset, size_t size)
 {
 	solution *p = ((pair*)arg) -> second;
+	if(!size)
+		return MHD_YES;
 	//printf("[%s]->[%s] %lld %d\n", name, data, offset, size);
 	switch(*name - 'a') {
 		//A number may be separated into two parts
 		case MSG_problem:
-			numcat(p->problem, data);
+			numcat(p->problem, data, size);
 			break;
 		case MSG_lang:
-			numcat(p->lang, data);
+			numcat(p->lang, data, size);
 			break;
 		case MSG_time:
-			numcat(p->time_limit, data);
+			numcat(p->time_limit, data, size);
 			break;
 		case MSG_mem:
-			numcat(p->mem_limit, data);
+			numcat(p->mem_limit, data, size);
 			break;
 		case MSG_score:
-			numcat(p->score, data);
+			numcat(p->score, data, size);
 			break;
 		case MSG_code:
-			p->code += data;
+			p->code.append(data, size);
 			break;
 		case MSG_user:
-			p->user += data;
+			p->user.append(data, size);
 			break;
 		case MSG_key:
-			p->key += data;
+			p->key.append(data, size);
 			break;
 		case MSG_share:
-			p->public_code = atol(data);
+			p->public_code = *data-'0';
 			break;
 		case MSG_compare:
-			numcat(p->compare_way, data);
+			numcat(p->compare_way, data, size);
 			break;
 		case MSG_rejudge:
-			p->type = atol(data);
+			p->type = *data-'0';
 			break;
 	}
 	return MHD_YES;
