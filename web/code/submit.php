@@ -79,6 +79,7 @@ $data=array(
 	'i'=>$share_code,
 	'j'=>$row[3]
 );
+ignore_user_abort(TRUE);
 $result = posttodaemon($data);
 //echo $result;
 if(strstr($result,"OK"))
