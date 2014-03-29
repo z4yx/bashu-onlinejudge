@@ -202,7 +202,7 @@ void solution::judge() throw (const char *)
 						tips = "Please contact administrator.";
 						get_score = 0;
 					}else if(s == 4) { // for spj
-						status = (get_score == score) ? RES_AC : RES_WA;
+						status = (get_score == case_score) ? RES_AC : RES_WA;
 						total_score += get_score;
 						tips = info.user_mismatch;
 						free(info.user_mismatch);
