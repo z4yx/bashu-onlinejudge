@@ -4,15 +4,21 @@ if(!isset($_GET['problem_id']))
 $prob_id=intval($_GET['problem_id']);
 
 require('inc/checklogin.php');
+
+if(!isset($_SESSION['user'],$_SESSION['administrator']))
+  die("Permission denied");
+if(!isset($_SESSION['admin_tfa']) || !$_SESSION['admin_tfa']){
+  $_SESSION['admin_retpage'] = "testcase.php?problem_id=$prob_id";
+  header("Location: admin_auth.php");
+  exit;
+}
+
 require('inc/database.php');
 
 $result=mysql_query("select title from problem where problem_id=$prob_id");
 $row=mysql_fetch_row($result);
 if(!$row)
   die('No such problem.');
-
-if(!isset($_SESSION['user'],$_SESSION['administrator']))
-  $info="Permission denied";
 
 
 $Title="Test Cases of $prob_id";
@@ -25,11 +31,6 @@ $Title="Test Cases of $prob_id";
     <?php require('page_header.php'); ?>  
           
     <div class="container-fluid">
-      <?php
-      if(isset($info))
-        echo '<div class="row-fluid center">',$info,'</div>';
-      else{
-      ?>
         <div class="row-fluid center">
           <h3>Test cases of <?php echo $prob_id,' ',$row[0]; ?></h3>
         </div>
@@ -53,7 +54,6 @@ $Title="Test Cases of $prob_id";
             </table>
           </div>
         </div>
-      <?php } ?>
       <hr>
       <footer>
         <p>&copy; 2012-2014 Bashu Middle School</p>

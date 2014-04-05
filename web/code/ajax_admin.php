@@ -2,6 +2,8 @@
 session_start();
 if(!isset($_SESSION['administrator']))
 	die('Not administrator');
+if(!isset($_SESSION['admin_tfa']) || !$_SESSION['admin_tfa'])
+	die('No TFA');
 if(!isset($_POST['op']))
 	die('error');
 $op=$_POST['op'];

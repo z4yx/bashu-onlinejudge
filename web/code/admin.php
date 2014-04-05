@@ -2,21 +2,16 @@
 require('inc/checklogin.php');
 
 if(!isset($_SESSION['user'],$_SESSION['administrator'])){
-  $info='<div class="center">You are not administrator.</div>';
+  die('You are not administrator.');
+}else if(!isset($_SESSION['admin_tfa']) || !$_SESSION['admin_tfa']){
+  $_SESSION['admin_retpage'] = 'admin.php';
+  header("Location: admin_auth.php");
+  exit;
 }else{
   require('inc/database.php');
-  if(isset($_POST['paswd'])){
 
-    require_once('inc/checkpwd.php');
-    if(password_right($_SESSION['user'], $_POST['paswd']))
-      $_SESSION['admin_panel']=1;
-  }
-  $need_password=true;
-  if(isset($_SESSION['admin_panel'])){
-    $need_password=false;
-    $res=mysql_query('select content from news where news_id=0');
-    $index_text=($res && ($row=mysql_fetch_row($res))) ? str_replace('<br>', "\n", $row[0]) : '';
-  }
+  $res=mysql_query('select content from news where news_id=0');
+  $index_text=($res && ($row=mysql_fetch_row($res))) ? str_replace('<br>', "\n", $row[0]) : '';
 }
 $Title="Admin panel";
 ?>
@@ -28,11 +23,7 @@ $Title="Admin panel";
           
     <div class="container-fluid admin-page">
       <div class="row-fluid">
-      <?php
-      if(isset($info)) {
-        echo $info;
-      }else if(!$need_password) {
-      ?>
+
         <div class="span12">
           <div class="tabbable tabs-left">
             <ul class="nav nav-tabs" id="nav_tab">
@@ -124,15 +115,6 @@ $Title="Admin panel";
             </div>
           </div>
         </div>
-      <?php }else { ?>
-        <div class="span5 offset5">
-          <form action="admin.php" class="form-inline" method="post">
-            <div><label for="input_adminpass">Please enter your password</label></div>
-            <input type="password" autofoucs id="input_adminpass" name="paswd" class="input-small">
-            <input type="submit" class="btn" value="Go">
-          </form>
-        </div>
-      <?php } ?>
       </div>
       <hr>
       <footer>

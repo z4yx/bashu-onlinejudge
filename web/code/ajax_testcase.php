@@ -2,6 +2,8 @@
 session_start();
 if(!isset($_SESSION['administrator']))
 	die('Not administrator');
+if(!isset($_SESSION['admin_tfa']) || !$_SESSION['admin_tfa'])
+	die('No TFA');
 
 function get_testcase_dir()
 {
