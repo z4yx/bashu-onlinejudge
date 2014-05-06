@@ -2,6 +2,8 @@
 require('inc/checklogin.php');
 if(!isset($_SESSION['user'],$_SESSION['administrator']))
   $info = 'You are not administrator';
+require 'inc/problem_flags.php';
+$level_max=(PROB_LEVEL_MASK>>PROB_LEVEL_SHIFT);
 $Title="New problem";
 ?>
 <!DOCTYPE html>
@@ -54,7 +56,7 @@ $Title="New problem";
         </div>      
         <div class="row-fluid">
           <div class="span5">
-            <p><span>Options: </span>
+            <span>Options: </span>
             <ul>
               <li>
                 <span>Opened source can be viewed by </span>
@@ -64,8 +66,18 @@ $Title="New problem";
                   <option value="2">nobody</option>
                 </select>
               </li>
+              <li>
+                <span>Level </span>
+                <select name="option_level" id="option_level" style="width:auto">
+                  <option value="0">Default</option>
+                  <script>
+                  for (var i = 1; i <= <?php echo $level_max?>; i++) {
+                    document.write('<option value="'+i+'">'+i+'</option>')
+                  };
+                  </script>
+                </select>
+              </li>
             </ul>
-            </p>
           </div>
         </div>
         <div class="row-fluid">

@@ -45,6 +45,13 @@ if(isset($_POST['option_open_source'])){
 			break;
 	}
 }
+if(isset($_POST['option_level'])){
+	$l=intval($_POST['option_level']);
+	$level_max=(PROB_LEVEL_MASK>>PROB_LEVEL_SHIFT);
+	if($l>=0 && $l<=$level_max){
+		$has_tex|=($l<<PROB_LEVEL_SHIFT);
+	}
+}
 foreach ($_POST as $value) {
 	if(strstr($value,'[tex]') || strstr($value,'[inline]')) {
 		$has_tex|=PROB_HAS_TEX;
