@@ -4,6 +4,9 @@ if(!isset($_GET['problem_id']))
 $prob_id=intval($_GET['problem_id']);
 
 require('inc/checklogin.php');
+require 'inc/problem_flags.php';
+$way='tra';
+$prec=-1;
 if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
   $info = 'You are not administrator';
 }else {
@@ -15,8 +18,6 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
   if(!$row)
     $info = 'Wrong Problem ID';
   else { 
-    $way='tra';
-    $prec=-1;
     switch ($row[11] >> 16) {
       case 0:
         $way='tra';
@@ -34,13 +35,15 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
     }
   }
 
-  require 'inc/problem_flags.php';
   $option_opensource=0;
   if($row[12]&PROB_DISABLE_OPENSOURCE)
     $option_opensource=2;
   else if($row[12]&PROB_SOLVED_OPENSOURCE)
     $option_opensource=1;
+  $option_level=($row[12]&PROB_LEVEL_MASK)>>PROB_LEVEL_SHIFT;
 }
+$level_max=(PROB_LEVEL_MASK>>PROB_LEVEL_SHIFT);
+
 $Title="Edit problem $prob_id";
 ?>
 <!DOCTYPE html>
@@ -102,7 +105,7 @@ $Title="Edit problem $prob_id";
         </div>      
         <div class="row-fluid">
           <div class="span5">
-            <p><span>Options: </span>
+            <span>Options: </span>
             <ul>
               <li>
                 <span>Opened source can be viewed by </span>
@@ -115,8 +118,21 @@ $Title="Edit problem $prob_id";
                 document.getElementById('option_open_source').selectedIndex="<?php echo $option_opensource; ?>"
                 </script>
               </li>
+              <li>
+                <span>Level </span>
+                <select name="option_level" id="option_level" style="width:auto">
+                  <option value="0">Default</option>
+                  <script>
+                  for (var i = 1; i <= <?php echo $level_max?>; i++) {
+                    if(i==<?php echo $option_level?>)
+                      document.write('<option selected value="'+i+'">'+i+'</option>')
+                    else
+                      document.write('<option value="'+i+'">'+i+'</option>')
+                  };
+                  </script>
+                </select>
+              </li>
             </ul>
-            </p>
           </div>
         </div>
         <div class="row-fluid">
@@ -184,7 +200,7 @@ $Title="Edit problem $prob_id";
       <?php } ?>
       <hr>
       <footer>
-        <p>&copy; 2012 Bashu Middle School</p>
+        <p>&copy; 2012-2014 Bashu Middle School</p>
       </footer>
     </div>
     <div class="html-tools">

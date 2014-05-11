@@ -2,6 +2,8 @@
 session_start();
 if(!isset($_SESSION['administrator']))
 	die('Not administrator');
+if(!isset($_SESSION['admin_tfa']) || !$_SESSION['admin_tfa'])
+	die('No TFA');
 
 function get_testcase_dir()
 {
@@ -30,6 +32,12 @@ function upload_file_handler($targetDir)
 		$fileName = $_FILES["file"]["name"];
 	} else {
 		$fileName = uniqid("file_");
+	}
+	
+	$fileName = basename($fileName);
+	if($fileName=='' || $fileName=='.' || $fileName=='..' ){
+		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+		die('{"jsonrpc" : "2.0", "error" : {"code": 104, "message": "Illegal file name."}, "id" : "id"}');
 	}
 	$filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
 

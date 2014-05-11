@@ -43,6 +43,8 @@ require('inc/checklogin.php');
 
 if(!isset($_SESSION['user']))
 	die('Not Logged in.');
+if(!isset($_POST['language'],$_POST['problem']))
+	die('Wrong argument');
 
 $lang=intval($_POST['language']);
 if(!array_key_exists($lang,$LANG_NAME))
@@ -81,6 +83,7 @@ $data=array(
 	'i'=>$share_code,
 	'j'=>$row[3]
 );
+ignore_user_abort(TRUE);
 $result = posttodaemon($data);
 //echo $result;
 if(strstr($result,"OK"))

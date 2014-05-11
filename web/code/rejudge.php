@@ -63,6 +63,7 @@ $data=array(
 	'j'=>$row[3],
 	'k'=>1 //TYPE_rejudge
 );
+ignore_user_abort(TRUE);
 $result = posttodaemon($data);
 
 if(strstr($result,"OK"))
