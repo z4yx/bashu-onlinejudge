@@ -4,6 +4,9 @@ if(!isset($_GET['problem_id']))
 $prob_id=intval($_GET['problem_id']);
 
 require('inc/checklogin.php');
+require 'inc/problem_flags.php';
+$way='tra';
+$prec=-1;
 if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
   $info = 'You are not administrator';
 }else {
@@ -15,8 +18,6 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
   if(!$row)
     $info = 'Wrong Problem ID';
   else { 
-    $way='tra';
-    $prec=-1;
     switch ($row[11] >> 16) {
       case 0:
         $way='tra';
@@ -34,7 +35,6 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
     }
   }
 
-  require 'inc/problem_flags.php';
   $option_opensource=0;
   if($row[12]&PROB_DISABLE_OPENSOURCE)
     $option_opensource=2;

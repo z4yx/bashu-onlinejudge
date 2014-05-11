@@ -41,6 +41,8 @@ require('inc/checklogin.php');
 
 if(!isset($_SESSION['user']))
 	die('Not Logged in.');
+if(!isset($_POST['language'],$_POST['problem']))
+	die('Wrong argument');
 
 $lang=intval($_POST['language']);
 if(!array_key_exists($lang,$LANG_NAME))
