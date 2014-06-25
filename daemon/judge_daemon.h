@@ -21,6 +21,8 @@ struct solution
 #ifdef DUMP_FOR_DEBUG
 	std::string raw_post_data;
 #endif
+	char buffer[65536];
+	const char *target_path;
 
 	solution();
 	~solution();
@@ -49,6 +51,7 @@ enum {RES_AC=0, RES_CE=7, RES_TLE=2, RES_MLE=3, RES_WA=4, RES_RE=5, RES_VE=99, R
 typedef int (*run_compiler_def)(const char *, char *, int);
 typedef int (*run_judge_def)(const char *, const char *, const char *, int, int, execute_info*);
 
+const char* getTargetPath();
 void applog(const char *str, const char *info = "") throw ();
 bool read_config();
 bool start_http_interface();

@@ -14,12 +14,11 @@ namespace std {
 #endif
 #include <mysql.h>
 #include "judge_daemon.h"
+#include "conf_items.h"
 
-std::mutex database_mutex;
+static std::mutex database_mutex;
 static MYSQL *hMySQL;
-char statements[65536*2]; //escaped compile info becomes longer
-
-char DATABASE_HOST[64], DATABASE_USER[128], DATABASE_PASS[128];
+static char statements[65536*2]; //escaped compile info becomes longer
 
 bool init_mysql_con() throw ()
 {

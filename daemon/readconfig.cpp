@@ -1,5 +1,6 @@
 #include "INI1.26.h" // "feather-ini-parser" on googlecode
 #include "judge_daemon.h"
+#include "conf_items.h"
 #include <sys/param.h> //for MAXPATHLEN
 
 using std::string;
@@ -10,12 +11,14 @@ int lang_extra_mem[MAXLANG];
 bool lang_exist[MAXLANG];
 string lang_ext[MAXLANG];
 string lang_compiler[MAXLANG];  
-typedef INI <string, string, string> ini_t;
 
-extern char DATABASE_HOST[], DATABASE_USER[], DATABASE_PASS[];
-extern char DataDir[];
-extern char HTTP_BIND_IP[];
-extern uint16_t HTTP_BIND_PORT;
+char DATABASE_HOST[64], DATABASE_USER[128], DATABASE_PASS[128];
+char HTTP_BIND_IP[32];
+uint16_t HTTP_BIND_PORT;
+
+char DataDir[MAXPATHLEN+16];
+
+typedef INI <string, string, string> ini_t;
 
 bool read_config()
 {

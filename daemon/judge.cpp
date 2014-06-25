@@ -1,4 +1,5 @@
 #include "judge_daemon.h"
+#include "conf_items.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,15 +27,6 @@ namespace std {
 
 enum{CMP_tra, CMP_float, CMP_int, CMP_spj};
 
-char DataDir[MAXPATHLEN+4], dir_name[MAXPATHLEN+16], input_filename[MAXPATHLEN+16];
-
-extern bool lang_exist[];
-extern int lang_extra_mem[];
-extern std::string lang_ext[], lang_compiler[];
-
-char target_path[MAXPATHLEN+16];
-char buffer[65536];
-
 bool clean_files() throw ()
 {
 	int ret;
@@ -45,6 +37,19 @@ bool clean_files() throw ()
 #endif
 	return ret == 0;
 }
+solution::solution()
+{
+	target_path=getTargetPath();
+	mutex_for_query = new std::mutex;
+	problem = compare_way = lang = time_limit = mem_limit = score = error_code = 0;
+	public_code = 0;
+	timestamp = 0;
+	type = TYPE_normal;
+}
+solution::~solution()
+{
+	delete (std::mutex*)mutex_for_query;
+}
 void solution::copy_setting(const solution &from) throw ()
 {
 	problem=from.problem;
@@ -54,6 +59,7 @@ void solution::copy_setting(const solution &from) throw ()
 	mem_limit=from.mem_limit;
 	score=from.score;
 	type=from.type;
+	target_path=from.target_path;
 }
 bool solution::compile() throw (const char *)
 {
@@ -117,6 +123,7 @@ bool solution::compile() throw (const char *)
 }
 void solution::judge() throw (const char *)
 {
+	char dir_name[MAXPATHLEN+16], input_filename[MAXPATHLEN+16];
 	puts("judge");
 
 	sprintf(dir_name, "%s/%d", DataDir, problem);

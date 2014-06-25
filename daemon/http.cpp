@@ -16,13 +16,9 @@ extern int inet_aton(const char *cp_arg, struct in_addr *addr);
 #endif
 #include <microhttpd.h>
 #include "judge_daemon.h"
+#include "conf_items.h"
 
-char robots_txt[] = "User-agent: *\nDisallow: /\n";
-
-char HTTP_BIND_IP[32];
-uint16_t HTTP_BIND_PORT;
-static struct sockaddr_in sock_addr;
-extern char DataDir[];
+static char robots_txt[] = "User-agent: *\nDisallow: /\n";
 
 typedef std::pair<MHD_PostProcessor*, solution*> pair;
 int ignore_requst(struct MHD_Connection *connection)
@@ -198,6 +194,7 @@ static int on_client_connect(void *cls, const struct sockaddr * addr, socklen_t 
 bool start_http_interface()
 {
 	struct MHD_Daemon *handle;
+	struct sockaddr_in sock_addr;
 
 	sock_addr.sin_family = AF_INET;
 	sock_addr.sin_port = htons(HTTP_BIND_PORT);
