@@ -383,6 +383,11 @@ input.error{
   color: #B94A48;
   border-color: #B94A48;
 }
+input.input-in-table{
+  padding: 2px 4px;
+  height: 16px;
+  margin: 0;
+}
 #PreviewPopover .popover-content{
   max-height: 200px;
   width: 450px;
