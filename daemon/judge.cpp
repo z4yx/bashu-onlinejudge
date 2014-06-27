@@ -95,6 +95,10 @@ bool solution::compile() throw (const char *)
 	if(!output) {
 		throw "Can't open compiler output";
 	}
+	char *buffer = new char[65536];
+	if(!buffer){
+		throw "Failed to allocate buffer.";
+	}
 	int read_size = fread(buffer, 1, 65400, output);
 	buffer[read_size] = '\0';
 	fclose(output);	
@@ -104,14 +108,17 @@ bool solution::compile() throw (const char *)
 		if(strstr(buffer, "@~good~@") == NULL) {
 			applog("Info: Execute file exists, but compiler doesn't return 0.");
 		}
+		delete[] buffer;
 	}else{
 		if(strstr(buffer, "@~good~@") != NULL) {
+			delete[] buffer;
 			throw "Compiler returned 0, but execute file doesn't exist.";
 		}else {
 			last_state = buffer;
 			score = time_limit = mem_limit = 0;
 			error_code = RES_CE;
 			puts("Compile Error");
+			delete[] buffer;
 
 			std::unique_lock<std::mutex> Lock(* (std::mutex*)mutex_for_query);
 			detail_results.push_back({RES_CE, 0, 0, last_state, 0});
@@ -124,6 +131,7 @@ bool solution::compile() throw (const char *)
 void solution::judge() throw (const char *)
 {
 	char dir_name[MAXPATHLEN+16], input_filename[MAXPATHLEN+16];
+	char buffer[MAXPATHLEN*2+16];
 	puts("judge");
 
 	sprintf(dir_name, "%s/%d", DataDir, problem);

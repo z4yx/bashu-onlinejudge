@@ -21,7 +21,6 @@ struct solution
 #ifdef DUMP_FOR_DEBUG
 	std::string raw_post_data;
 #endif
-	char buffer[65536];
 	const char *target_path;
 
 	solution();
