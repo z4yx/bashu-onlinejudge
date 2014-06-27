@@ -460,11 +460,13 @@ delimiter //
 CREATE FUNCTION get_problem_level (pid int)
 RETURNS int
 NOT DETERMINISTIC
+READS SQL DATA
 BEGIN
 RETURN IFNULL((SELECT (has_tex>>3)&7 FROM problem WHERE problem_id = pid),0);
 END//
 CREATE FUNCTION problem_flag_to_level (flag int)
 RETURNS int
+NO SQL
 BEGIN
 RETURN (flag>>3)&7;
 END//
