@@ -14,12 +14,11 @@ namespace std {
 #endif
 #include <mysql.h>
 #include "judge_daemon.h"
+#include "conf_items.h"
 
-std::mutex database_mutex;
+static std::mutex database_mutex;
 static MYSQL *hMySQL;
-char statements[65536*2]; //escaped compile info becomes longer
-
-char DATABASE_HOST[64], DATABASE_USER[128], DATABASE_PASS[128];
+static char statements[65536*2]; //escaped compile info becomes longer
 
 bool init_mysql_con() throw ()
 {
@@ -161,7 +160,7 @@ void write_result_to_database(int solution_id, solution *data) throw (const char
 
 	puts("update user info");
 	int is_first_solved = (int)(valid && data->error_code == RES_AC);
-	sprintf(statements, "update users set submit=submit+1,solved=solved+%d,score=score+%d,language=%d where user_id='%s'", is_first_solved, delta, data->lang, data->user.c_str());
+	sprintf(statements, "update users,(SELECT experience from level_experience where level=get_problem_level(%d))as t set submit=submit+1,solved=solved+%d,score=score+%d,users.experience=users.experience+IFNULL(t.experience,0)*%d,language=%d where user_id='%s'", data->problem, is_first_solved, delta, is_first_solved, data->lang, data->user.c_str());
 	if(mysql_query(hMySQL, statements))
 		throw "update user info";
 	// if(1 != mysql_affected_rows(hMySQL))
@@ -231,6 +230,10 @@ void refresh_users_problem(int problem_id) throw (const char *)
 	//sprintf(statements,"update users,(select count(*) as solved,uid from (select user_id as uid,count(*) as s from solution where result=0 group by problem_id,user_id) as tmp group by uid) as cnt set users.solved=cnt.solved where cnt.uid=users.user_id");
 	if(mysql_query(hMySQL, statements))
 		throw "update users solved";
+	//update users experience
+	sprintf(statements,"update users,(select user_id,sum(IFNULL(experience,0))as s from (select user_id,problem_id from solution where result=0 group by user_id,problem_id)u_p,problem left join level_experience on level=problem_flag_to_level(has_tex) where u_p.problem_id=problem.problem_id group by user_id)as cnt set users.experience=cnt.s where cnt.user_id=users.user_id");
+	if(mysql_query(hMySQL, statements))
+		throw "update users experience";
 	//update users score
 	sprintf(statements,"update users,(select sum(tmp.s) as newsum,uid from (select user_id as uid,problem_id,max(score) as s from solution group by problem_id,user_id) as tmp group by uid) as cnt set users.score=cnt.newsum where cnt.uid=users.user_id");
 	if(mysql_query(hMySQL, statements))

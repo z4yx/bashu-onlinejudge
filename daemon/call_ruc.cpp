@@ -16,10 +16,10 @@
 #define MAX_REPORT_LENGTH 64
 
 
-char info_str[128];
 int run_judge(const char *target, const char *input, const char *output, int time, int mem, execute_info* info)
 {
 	std::ostringstream command;
+	static char info_str[128];
 	command << RUC_NAME << target << ' ' << time 
 		<< ' ' << mem << " \"" << input << "\" \"" << output << "\"";
 	const std::string &str = command.str();
