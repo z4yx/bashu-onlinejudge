@@ -24,7 +24,15 @@ require('inc/checklogin.php');
 require('inc/database.php');
 check_problemid($req);
 $keyword=mysql_real_escape_string(trim($req));
-$result=mysql_query("select problem_id,title,source from problem where title like '%$keyword%' or source like '%$keyword%' order by problem_id limit $page_id,100");
+if(isset($_SESSION['user'])){
+  $user_id=$_SESSION['user'];
+  $col=',res';
+  $join="LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id group by problem_id) as temp on(pid=problem_id)";
+}else{
+  $col='';
+  $join='';
+}
+$result=mysql_query("select problem_id,title,source $col from problem $join where title like '%$keyword%' or source like '%$keyword%' order by problem_id limit $page_id,100");
 if(mysql_num_rows($result)==1){
   $row=mysql_fetch_row($result);
   header('location: problempage.php?problem_id='.$row[0]);
@@ -50,7 +58,12 @@ $Title="Search result $page_id";
             <table class="table table-hover table-bordered table-left-aligned table-first-center-aligned" style="margin-bottom:0">
               <thead><tr>
                 <th style="width:7%">ID</th>
-                <th style="width:63%">Title</th>
+                <?php 
+                  if(isset($_SESSION['user']))
+                    echo '<th colspan="2">Title</th>';
+                  else
+                    echo '<th>Title</th>';
+                ?>
                 <th style="width:30%">Source</th>
               </tr></thead>
               <tbody>
@@ -58,7 +71,13 @@ $Title="Search result $page_id";
                   while($row=mysql_fetch_row($result)){
                 echo '<tr>';
                 echo '<td>',$row[0],'</td>';
-                echo '<td><a href="problempage.php?problem_id=',$row[0],'">',$row[1],'</a></td>';
+                if(isset($_SESSION['user'])){
+                  echo '<td style="width:36px;text-align:center;"><i class=', is_null($row[3]) ? '"icon-remove icon-2x" style="visibility:hidden"' : ($row[3]? '"icon-remove icon-2x" style="color:red"' : '"icon-2x icon-ok" style="color:green"'), '></i>', '</td>';
+                  echo '<td style="border-left:0;">';
+                }else{
+                  echo '<td>';
+                }
+                echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1],'</a></td>';
                 echo '<td>',$row[2],'</td>';
                 echo "</tr>\n";
                   }
