@@ -1,6 +1,7 @@
 <?php 
 require('inc/result_type.php');
 require('inc/lang_conf.php');
+require('inc/problem_flags.php');
 require('inc/checklogin.php');
 
 if(isset($_GET['problem_id']))
@@ -44,7 +45,6 @@ else{
   $submit_user=$statis[0];
   $solved_user=$statis[1];
   $total_submit=$statis[2];
-  require 'inc/problem_flags.php';
   $prob_level=($row[12]&PROB_LEVEL_MASK)>>PROB_LEVEL_SHIFT;
 
   $result=mysql_query("select result,count(*) as sum from solution where problem_id=$prob_id group by result");
