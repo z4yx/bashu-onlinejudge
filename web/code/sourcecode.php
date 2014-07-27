@@ -117,7 +117,7 @@ $Title="Source $sol_id";
     <script src="../assets/js/google-code-prettify/prettify.js"></script>
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
     <script type="text/javascript"> 
       var solution_id=<?php echo $sol_id?>;
       $(document).ready(function(){

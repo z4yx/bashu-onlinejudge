@@ -13,7 +13,7 @@
   <link href="../assets/css/docs.css?v=11" rel="stylesheet">
 
   <!--[if IE 6]>
-  <link href="ie6.min.css" rel="stylesheet">
+  <link href="../assets/css/ie6.min.css" rel="stylesheet">
   <![endif]-->
   <!--[if lt IE 9]>
     <script src="../assets/js/html5.js"></script>

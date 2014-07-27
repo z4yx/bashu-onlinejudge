@@ -67,7 +67,7 @@ $Title="Test Cases of $prob_id";
     <script src="../assets/js/plupload.full.min.js"></script>
     <script src="../assets/js/jquery.ui.plupload.min.js"></script>
 
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
     <script type="text/javascript"> 
       var problem_id = <?php echo $prob_id?>;
       var uploader;

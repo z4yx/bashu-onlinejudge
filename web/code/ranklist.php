@@ -109,7 +109,7 @@ $Title="Ranklist";
     </div><!--/.container-->
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
 
     <script type="text/javascript">
       function intersection(obj1,obj2,arr1,arr2,ist){
