@@ -166,13 +166,13 @@ $(document).ready(function(){
 	}
 	$('#form_login').submit(function(E){
 		var b=false;
-		if($('#uid').attr('value')==''){
+		if($('#uid').val()==''){
 			$('#uid_ctl').addClass('error');
 			b=true;
 		}else{
 			$('#uid_ctl').removeClass('error');
 		}
-		if($('#pwd').attr('value')==''){
+		if($('#pwd').val()==''){
 			b=true;
 			$('#pwd_ctl').addClass('error');
 		}else
