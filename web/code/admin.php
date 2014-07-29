@@ -340,7 +340,7 @@ $Title="Admin panel";
             if(!window.cpuChart){
               window.cpuChart = new Highcharts.Chart({
                 chart: {
-                  renderTo: 'cpumeter',
+                  renderTo: 'cpumeter'
                 },        
                 yAxis: [{
                   title: {
@@ -359,7 +359,7 @@ $Title="Admin panel";
             if(!window.memChart){
               window.memChart = new Highcharts.Chart({
                 chart: {
-                  renderTo: 'memmeter',
+                  renderTo: 'memmeter'
                 },        
                 yAxis: [{
                   title: {

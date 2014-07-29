@@ -103,7 +103,7 @@ shortcuts={
 			var obj=$('#nav_mail');
 			if(obj.length) //if logged in
 				location.href=obj.attr('href');
-		} , //Alt+M
+		}   //Alt+M
 
 };
 shortcuts[49]=shortcuts[66]; //Alt+1
