@@ -30,15 +30,15 @@ if($pref->hidelogo=='off'){ ?>
     <div class="container-fluid navbar-padding-fix">
       <a class="brand" href="index.php"><i class="icon-home"></i><span class="navbar-hide-text"> Bashu OnlineJudge</span></a>
         <ul class="nav">
-          <li><a id="nav_bbs" title="Alt+B" href="board.php"><i class="icon-bullhorn"></i><span class="navbar-hide-text"> Board</span></a></li>
+          <li><a id="nav_bbs" class="shortcut-hint" title="Alt+B" href="board.php"><i class="icon-bullhorn"></i><span class="navbar-hide-text"> Board</span></a></li>
           <li><a id="nav_set" href="problemset.php"><i class="icon-th-list"></i><span class="navbar-hide-text"> Problemset</span></a></li>
-          <li><a id="nav_prob" title="Alt+P" href="problempage.php"><i class="icon-play-circle"></i><span class="navbar-hide-text"> Problem</span></a></li>
-          <li><a id="nav_record" title="Alt+R" href="record.php"><i class="icon-camera"></i><span class="navbar-hide-text"> Record</span></a></li>
+          <li><a id="nav_prob" class="shortcut-hint" title="Alt+P" href="problempage.php"><i class="icon-play-circle"></i><span class="navbar-hide-text"> Problem</span></a></li>
+          <li><a id="nav_record" class="shortcut-hint" title="Alt+R" href="record.php"><i class="icon-camera"></i><span class="navbar-hide-text"> Record</span></a></li>
           <li><a id="nav_rank" href="ranklist.php"><i class="icon-thumbs-up"></i><span class="navbar-hide-text"> Ranklist</span></a></li>
           <li><a id="nav_about" href="about.php"><i class="icon-phone"></i><span class="navbar-hide-text"> About</span></a></li>
         </ul>
-        <form class="navbar-search pull-left" id="search_form" action="search.php" method="get">
-          <input type="text" name="q" title="Alt+I" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" autocomplete="off" placeholder="Problem ID,Title,Source">
+        <form class="navbar-search pull-left shortcut-hint" id="search_form" title="Alt+I" action="search.php" method="get">
+          <input type="text" name="q" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" autocomplete="off" placeholder="Problem ID,Title,Source">
         </form>
       <div class="btn-group pull-right">
 
@@ -61,7 +61,7 @@ if($pref->hidelogo=='off'){ ?>
           <li><a id='logoff_btn' href="#"><i class="icon-signout"></i> sign out</a></li>
         </ul>
 <?php }else{?>
-        <a id="login_btn" title="Alt+L" data-toggle="modal" href="#LoginModal" class="btn">Login</a>
+        <a id="login_btn" title="Alt+L" data-toggle="modal" href="#LoginModal" class="btn shortcut-hint">Login</a>
         <a href="reg.php" class="btn">Sign Up</a>
 <?php }?>
       </div>

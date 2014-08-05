@@ -114,6 +114,14 @@ shortcuts[53]=function(){location.href=$('#nav_rank').attr('href');} //Alt+5
 shortcuts[54]=function(){location.href=$('#nav_about').attr('href');} //Alt+6
 shortcuts[55]=shortcuts[73]; //Alt+7
 
+function hotkey_hint_show () {
+	$('.shortcut-hint').addClass('shortcut-hint-active');
+}
+function hotkey_hint_dismiss (E) {
+	if(E.keyCode==18){ //alt key
+		$('.shortcut-hint').removeClass('shortcut-hint-active');
+	}
+}
 function reg_hotkey (key, fun) {
 	shortcuts[key] = fun; }
 $(document).ready(function(){
@@ -200,13 +208,17 @@ $(document).ready(function(){
 		setTimeout(checkMail,3000);
 	}
 }).keydown(function(E){
-	// console.log(E);
 	if(E.altKey && !E.metaKey){
 		var key=E.keyCode;
 		if(key>=97 && key<=122)
 			key-=32;
+		else if(key==18){ //alt key
+			hotkey_hint_show(E);
+			return;
+		}
 		if(shortcuts.hasOwnProperty(key))
 			(shortcuts[key])(E);
 		return false;
 	}
-});
+}).keyup(hotkey_hint_dismiss);
+$('#search_input').keyup(hotkey_hint_dismiss);

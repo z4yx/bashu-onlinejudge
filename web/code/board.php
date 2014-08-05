@@ -76,7 +76,7 @@ $Title="Web Board";
               <span  style="margin-left: 60px;" id="post_preview" class="btn btn-info">Preview</span>
             </div>
             <div style="float:right">
-              <input id="post_input" type="submit" class="btn btn-primary" value="Post">
+              <button type="submit" class="btn btn-primary shortcut-hint" title="Alt+S">Post</button>
               <button id="cancel_input" class="btn">Cancel</button>
             </div>
             <div class="center text-error"><strong id="post_status"></strong></div>
@@ -93,7 +93,7 @@ $Title="Web Board";
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span12" id="board">
-          <a href="#" title="Alt+N" class="btn btn-primary btn-small" id="new_msg"><i class="icon-file"></i> Post New Message</a>
+          <a href="#" title="Alt+N" class="btn btn-primary btn-small shortcut-hint" id="new_msg"><i class="icon-file"></i> Post New Message</a>
           <?php
             $top=$query_id;
             if($range){
@@ -152,10 +152,10 @@ $Title="Web Board";
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a class="pager-pre-link" title="Alt+A" href="board.php?<?php echo $query_prob,'&amp;start_id=',get_pre_link($top) ?>" id="btn-pre"> <i class="icon-angle-left"></i> Newer</a>
+            <a class="pager-pre-link shortcut-hint" title="Alt+A" href="board.php?<?php echo $query_prob,'&amp;start_id=',get_pre_link($top) ?>" id="btn-pre"> <i class="icon-angle-left"></i> Newer</a>
           </li>
           <li>
-            <a class="pager-next-link" title="Alt+D" href="<?php if($range) echo 'board.php?',$query_prob,'&amp;start_id=',$range; ?>#" id="btn-next">Older <i class="icon-angle-right"></i></a>
+            <a class="pager-next-link shortcut-hint" title="Alt+D" href="<?php if($range) echo 'board.php?',$query_prob,'&amp;start_id=',$range; ?>#" id="btn-next">Older <i class="icon-angle-right"></i></a>
           </li>
         </ul>
       </div> 

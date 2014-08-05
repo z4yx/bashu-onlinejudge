@@ -81,10 +81,10 @@ $Title="Ranklist";
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a class="pager-pre-link" title="Alt+A" href="ranklist.php?start_id=<?php echo $page_id-50 ?>" id="btn-pre">&larr; Previous</a>
+            <a class="pager-pre-link shortcut-hint" title="Alt+A" href="ranklist.php?start_id=<?php echo $page_id-50 ?>" id="btn-pre">&larr; Previous</a>
           </li>
           <li>
-            <a class="pager-next-link" title="Alt+D" href="ranklist.php?start_id=<?php echo $page_id+50 ?>" id="btn-next">Next &rarr;</a>
+            <a class="pager-next-link shortcut-hint" title="Alt+D" href="ranklist.php?start_id=<?php echo $page_id+50 ?>" id="btn-next">Next &rarr;</a>
           </li>
         </ul>
       </div>  
