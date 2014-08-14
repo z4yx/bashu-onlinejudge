@@ -250,6 +250,7 @@ $Title="Web Board";
         });
         $('#post_preview').click(function(){
           var data=$('#detail_input').val();
+          data=$('<div/>').text(data).html();
           dealwithlinks( $('#preview_content').html(parseBBCode(data)));
           $('#PreviewPopover').show();
           MathJax.Hub.Queue(["Typeset",MathJax.Hub,('preview_content')]);
