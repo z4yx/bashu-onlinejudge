@@ -33,6 +33,7 @@ struct profile
 	const char* info;		/*extra info when RE*/
 	long time;				/*total usage of time*/
 	long memory;			/*peak usage of memory*/
+	unsigned char exit_code;
 };
 /**********************************************************/
 

@@ -71,6 +71,10 @@ int main(int argc, char **argv)
 	switch(ret.status){
 		case PROF_SUCCESS:
 			state = 0;
+			if(ret.exit_code != 0) {
+				state = 5;
+				ret.info = "Exit code is not zero";
+			}
 			break;
 		case PROF_NOTSET:
 			sys_error = 1;
