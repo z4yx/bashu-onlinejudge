@@ -113,6 +113,7 @@ struct profile sable_run(struct sablebox* pbox)
 	ret.status = PROF_NOTSET;
 	ret.time = ret.memory = 0;
 	ret.info = NULL;
+	ret.exit_code = 0;
 
 	/* simple exception handler*/
 	if(setjmp(my_jmpbuf)){
@@ -354,6 +355,7 @@ static void profile_info(struct sablebox* pbox, struct __child_t* pson,
 		}
 	}else{
 		ret->status = PROF_SUCCESS;
+		ret->exit_code = WEXITSTATUS(exit_status);
 	}
 
 }
