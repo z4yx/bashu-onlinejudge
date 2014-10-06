@@ -39,7 +39,7 @@ function posttodaemon($data){
 }
 require('inc/checklogin.php');
 
-if(!isset($_SESSION['user']))
+if(!isset($_SESSION['user']) || strlen($_SESSION['user'])==0)
 	die('Not Logged in.');
 if(!isset($_POST['language'],$_POST['problem']))
 	die('Wrong argument');

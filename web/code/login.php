@@ -6,7 +6,7 @@ try{
 	require 'inc/userlogin.php';
 	require 'inc/cookie.php';
 	$user=trim($_POST['uid']);
-	if(preg_match('/\W/',$user))
+	if(preg_match('/\W/',$user) || strlen($user)==0)
 		throw new Exception('Invalid user ID');
 
 	session_start();
