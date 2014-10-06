@@ -13,7 +13,7 @@ Web
 Daemon
 ---
 
-**Windows用户:**
+**Windows用户:(Deprecated)**
 
 1. 修改`daemon/windows_binary/config.ini`中的数据目录,mysql密码等信息
 2. 运行`daemon/windows_binary/daemon.exe`
@@ -37,3 +37,43 @@ Daemon
 5. 如果提示"Started successfully.Waiting for submitting...",说明daemon启动成功,提交一个题目测试
 
   [sysvsem]: http://php.net/manual/en/book.sem.php
+
+配置文件
+===
+
+
+Daemon
+---
+
+####config.ini
+
+
+* DATABASE_USER/DATABASE_PASS 为mysql数据库的连接用户名密码,密码可以留空
+* datadir 为存放评测数据的目录,该目录存放以题号命名的目录,每个以题号命名的目录下存放该题的测试数据,测试数据输入输出文件名配对即可,例如:
+	- /home/judge/data/1000/a1.in
+	- /home/judge/data/1000/a1.out
+	- /home/judge/data/1000/hello.in
+	- /home/judge/data/1000/hello.out
+	- /home/judge/data/1001/abc.in
+	- /home/judge/data/1001/abc.out
+	- /home/judge/data/1001/c2.in
+	- /home/judge/data/1001/c2.out
+* [lang*] 允许的提交语言及相应的编译选项,与web端的配置lang_conf.php对应
+
+Web
+---
+
+####lang_conf.php
+
+
+* LANG_NAME 设置各种语言的显示名称
+* LANG_EXT 设置各种语言的源文件扩展名
+
+####cookie.php
+
+* <span style="color:red">cookie_key</span> 设置一个复杂的字符串用于对cookie加密,在生产环境中部署时务必修改,避免伪造cookie
+* cookie_expire cookie的过期时间(用于记住登录)
+
+####checklogin.php
+
+* REQUIRE_AUTH 是否要求全局认证,即登录后才能参看OJ的题目等
