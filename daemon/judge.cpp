@@ -152,11 +152,19 @@ void solution::judge() throw (const char *)
 		ep = readdir(dp);
 	}
 	closedir(dp);
+	if(in_files.empty()) {
+		error_code = RES_SE;
+		last_state = "No data files";
+		throw "Data folder is empty";
+	}
 	std::sort(in_files.begin(), in_files.end());
 
 	int total_score = 0, total_time = 0, max_memory = 0, dir_len = strlen(dir_name);
 	const int full_score = 100;
 	int case_score = full_score/in_files.size();
+	if(case_score <= 0)
+		case_score = 1;
+
 	int status;
 	std::string tips;
 	for(std::string &d_name : in_files) {
