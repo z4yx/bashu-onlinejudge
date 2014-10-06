@@ -379,6 +379,7 @@ CREATE TABLE `users` (
   `submit` int(11) DEFAULT '0',
   `solved` int(11) DEFAULT '0',
   `score` int(11) NOT NULL DEFAULT '0',
+  `experience` int(11) NOT NULL DEFAULT '0',
   `defunct` char(1) NOT NULL DEFAULT 'N',
   `ip` varchar(20) NOT NULL DEFAULT '',
   `accesstime` datetime DEFAULT NULL,
@@ -388,7 +389,8 @@ CREATE TABLE `users` (
   `reg_time` datetime DEFAULT NULL,
   `nick` varchar(100) DEFAULT NULL,
   `school` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`user_id`),
+  KEY `solve_submit` (`solved`,`submit`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -412,6 +414,65 @@ CREATE TABLE `preferences` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `u_p` (`user_id`,`property`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `experience_titles`
+--
+
+DROP TABLE IF EXISTS `experience_titles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `experience_titles` (
+  `experience` int(11) NOT NULL,
+  `title` varchar(20) NOT NULL,
+  PRIMARY KEY (`experience`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `experience_titles`
+--
+
+LOCK TABLES `experience_titles` WRITE;
+/*!40000 ALTER TABLE `experience_titles` DISABLE KEYS */;
+INSERT INTO `experience_titles` VALUES (0,'Default');
+/*!40000 ALTER TABLE `experience_titles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `level_experience`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `level_experience` (
+  `level` int(11) NOT NULL,
+  `experience` int(11) NOT NULL,
+  PRIMARY KEY (`level`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `level_experience` WRITE;
+/*!40000 ALTER TABLE `level_experience` DISABLE KEYS */;
+INSERT INTO `level_experience` VALUES (0,0),(1,1),(2,2),(3,4),(4,5),(5,10),(6,15),(7,20);
+/*!40000 ALTER TABLE `level_experience` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+delimiter //
+CREATE FUNCTION get_problem_level (pid int)
+RETURNS int
+NOT DETERMINISTIC
+READS SQL DATA
+BEGIN
+RETURN IFNULL((SELECT (has_tex>>3)&7 FROM problem WHERE problem_id = pid),0);
+END//
+CREATE FUNCTION problem_flag_to_level (flag int)
+RETURNS int
+NO SQL
+BEGIN
+RETURN (flag>>3)&7;
+END//
+ 
+delimiter ;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

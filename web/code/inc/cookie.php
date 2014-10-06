@@ -15,7 +15,7 @@ function check_cookie()
 	if(false===$arr || !isset($arr['magic']) || $arr['magic']!="bsoj")
 		return false;
 	$user = $arr['user'];
-	if(preg_match('/\W/',$user))
+	if(preg_match('/\W/',$user) || strlen($user)==0)
 		return false;
 
 	$_SESSION['user'] = $user;

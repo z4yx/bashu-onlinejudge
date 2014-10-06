@@ -383,6 +383,11 @@ input.error{
   color: #B94A48;
   border-color: #B94A48;
 }
+input.input-in-table{
+  padding: 2px 4px;
+  height: 16px;
+  margin: 0;
+}
 #PreviewPopover .popover-content{
   max-height: 200px;
   width: 450px;
@@ -393,6 +398,34 @@ input.error{
   max-width: none;
   top: 60px; 
   left: -475px; 
+}
+.shortcut-hint{
+  position: relative;
+}
+.shortcut-hint:after{
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  visibility: hidden;
+  content: attr(title);
+  padding: 2px;
+  line-height: 12px;
+  font-size: 12px;
+  background-color: #F5F5F5;
+  border: 1px solid #DDD;
+  color: #666;
+   -webkit-border-radius: 4px; 
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none; 
+}
+.shortcut-hint-active:after{
+  visibility: visible;
 }
 @media (max-width: 1149px) {
   .navbar .brand .navbar-hide-text{

@@ -35,7 +35,7 @@ $Title="Mail List";
 			?>
 			<div class="row-fluid">
 				<div class="span2 offset2 form-inline">
-					<span id="sendnew" style="margin:5px" class="btn btn-small"><i class="icon-inbox"></i> COMPOSE </span>
+					<span id="sendnew" style="margin:5px" class="btn btn-small shortcut-hint" title="Alt+N"><i class="icon-inbox"></i> COMPOSE </span>
 		            <label class="checkbox"><input <?php if(isset($_GET['starred']))echo 'checked'?>  id="chk_starred" type="checkbox" name="star">Starred</label>
 				</div>
 			</div>
@@ -80,10 +80,10 @@ $Title="Mail List";
 			<div class="row-fluid">
 				<ul class="pager">
 					<li>
-						<a class="pager-pre-link" title="Alt+A" href="#" id="btn-pre"><i class="icon-angle-left"></i> Previous</a>
+						<a class="pager-pre-link shortcut-hint" title="Alt+A" href="#" id="btn-pre"><i class="icon-angle-left"></i> Previous</a>
 					</li>
 					<li>
-						<a class="pager-next-link" title="Alt+D" href="#" id="btn-next">Next <i class="icon-angle-right"></i></a>
+						<a class="pager-next-link shortcut-hint" title="Alt+D" href="#" id="btn-next">Next <i class="icon-angle-right"></i></a>
 					</li>
 				</ul>
 			</div>  
@@ -119,7 +119,7 @@ $Title="Mail List";
 					<div class="alert alert-error hide margin-0" id="send_result"></div>
 				</div>
 				<div class="modal-footer">
-					<a href="#" class="btn btn-primary" id="send_btn">Send</a>
+					<a href="#" class="btn btn-primary shortcut-hint" title="Alt+S" id="send_btn">Send</a>
 					<a href="#" class="btn" data-dismiss="modal">Close</a>
 				</div>
 			</div>
@@ -132,7 +132,7 @@ $Title="Mail List";
 		</div><!--/.container-->
 		<script src="../assets/js/jquery.js"></script>
 	    <script src="../assets/js/bootstrap.min.js"></script>
-		<script src="common.js"></script>
+		<script src="../assets/js/common.js"></script>
 
 		<script type="text/javascript"> 
 			$(document).ready(function(){

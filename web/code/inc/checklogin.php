@@ -6,7 +6,7 @@ define('DISALLOW_GOOGLEBOT',0);
 
 session_start();
 
-if(!isset($_SESSION['user']) && (DISALLOW_GOOGLEBOT || FALSE===strstr($_SERVER['HTTP_USER_AGENT'],'Googlebot'))){
+if(!isset($_SESSION['user']) && (DISALLOW_GOOGLEBOT || !isset($_SERVER['HTTP_USER_AGENT']) || FALSE===strstr($_SERVER['HTTP_USER_AGENT'],'Googlebot'))){
 	require 'inc/cookie.php';
 	if(!check_cookie()) {
 		if(REQUIRE_AUTH) {
@@ -16,7 +16,8 @@ if(!isset($_SESSION['user']) && (DISALLOW_GOOGLEBOT || FALSE===strstr($_SERVER['
 	}else{
 		require_once 'inc/database.php';
 		require_once 'inc/userlogin.php';
-		login($_SESSION['user'], TRUE);
+		if(TRUE===login($_SESSION['user'], TRUE))
+			write_cookie();
 		mysql_close();
 	}
 }

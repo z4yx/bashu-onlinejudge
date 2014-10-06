@@ -201,7 +201,7 @@ $Title="New problem";
 
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
 
     <script type="text/javascript"> 
       $(document).ready(function(){

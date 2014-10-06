@@ -94,10 +94,10 @@ $Title="Problemset $page_id";
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a class="pager-pre-link" title="Alt+A" href="#" id="btn-pre">&larr; Previous</a>
+            <a class="pager-pre-link shortcut-hint" title="Alt+A" href="#" id="btn-pre">&larr; Previous</a>
           </li>
           <li>
-            <a class="pager-next-link" title="Alt+D" href="#" id="btn-next">Next &rarr;</a>
+            <a class="pager-next-link shortcut-hint" title="Alt+D" href="#" id="btn-next">Next &rarr;</a>
           </li>
         </ul>
       </div>
@@ -108,7 +108,7 @@ $Title="Problemset $page_id";
     </div>
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
 
     <script type="text/javascript"> 
       $(document).ready(function(){

@@ -8,6 +8,8 @@ if(!isset($_POST['op']))
 	die('error');
 $op=$_POST['op'];
 require('inc/database.php');
+require 'inc/problem_flags.php';
+$level_max=(PROB_LEVEL_MASK>>PROB_LEVEL_SHIFT);
 if($op=="list_usr"){ 
 	$res=mysql_query("select user_id,accesstime,solved,submit,(accesstime IS NULL) from users where defunct='Y'");
 	if(mysql_num_rows($res)==0)
@@ -86,6 +88,79 @@ if($op=="list_usr"){
 		</tbody>
 	</table>
 <?php
+}else if($op=='list_experience_title'){
+	$res=mysql_query("select title,experience from experience_titles order by experience");
+?>
+	<table class="table table-condensed table-striped" style="width:480px">
+      <caption>Titles</caption>
+      <thead>
+        <tr>
+          <th>Experience&nbsp;&ge;</th>
+          <th>Title</th>
+          <th>Operation</th>
+        </tr>
+      </thead>
+      <tbody>
+		<?php
+			while($row=mysql_fetch_row($res)){
+				$t=htmlspecialchars($row[0]);
+				echo <<<EOF
+        <tr>
+          <td>$row[1]</td>
+          <td>$t</td>
+          <td><a href="#"><i data-id="$row[1]" class="icon icon-remove"></i></a></td>
+        </tr>
+EOF;
+			}
+		?>
+      </tbody>
+    </table>
+<?php
+}else if($op=='list_level_experience'){
+	$res=mysql_query("select level,experience from level_experience order by level");
+	$le = array_fill(0, $level_max+1, 0);
+	while($row=mysql_fetch_row($res)){
+		$le[$row[0]]=$row[1];
+	}
+?>
+
+	<table class="table table-condensed table-striped" style="width:240px">
+	<caption>Experience of Problem</caption>
+	<thead>
+	  <th>Level</th>
+	  <th>Experience</th>
+	</thead>
+	<tbody>
+	<?php
+		foreach ($le as $key => $value) {
+			echo "<tr><td>$key</td><td><input type=\"text\" name=\"experience[]\" class=\"input-mini input-in-table center\" value=\"$value\"></td></tr>";
+		}
+	?>
+	</tbody>
+	</table>
+<?php
+}else if($op=='del_title'){
+	if(!isset($_POST['id']))
+		die('');
+	$experience=intval($_POST['id']);
+	mysql_query("DELETE FROM experience_titles where experience=$experience");
+}else if($op=='add_experience_title'){
+	if(!isset($_POST['experience'], $_POST['title']))
+		die('');
+	$e=intval($_POST['experience']);
+	$t=mysql_real_escape_string($_POST['title']);
+	mysql_query("INSERT INTO experience_titles VALUES ($e,'$t')");
+}else if($op=='update_level_experience'){
+	if(!isset($_POST['experience']))
+		die('');
+	$arr=$_POST['experience'];
+	if(count($arr)!=$level_max+1)
+		die('Wrong array length');
+	foreach ($arr as $key => $value) {
+		$key=intval($key);
+		$value=intval($value);
+		mysql_query("INSERT INTO level_experience VALUES ($key,$value) ON DUPLICATE KEY UPDATE experience=$value");
+	}
 }else if($op=="add_news"){
 	if(!isset($_POST['news']))
 		die('');

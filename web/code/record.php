@@ -210,10 +210,10 @@ $Title="Record";
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a class="pager-pre-link" title="Alt+A" href="record.php?<?php echo htmlspecialchars(get_pre_link())?>" id="btn-pre"><i class="icon-angle-left"></i> Previous</a>
+            <a class="pager-pre-link shortcut-hint" title="Alt+A" href="record.php?<?php echo htmlspecialchars(get_pre_link())?>" id="btn-pre"><i class="icon-angle-left"></i> Previous</a>
           </li>
           <li>
-            <a class="pager-next-link" title="Alt+D" href="record.php?<?php echo htmlspecialchars(get_next_link())?>" id="btn-next">Next <i class="icon-angle-right"></i></a>
+            <a class="pager-next-link shortcut-hint" title="Alt+D" href="record.php?<?php echo htmlspecialchars(get_next_link())?>" id="btn-next">Next <i class="icon-angle-right"></i></a>
           </li>
         </ul>
       </div>
@@ -238,7 +238,7 @@ $Title="Record";
     </div><!--/.container-->
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
 
     <script type="text/javascript"> 
       $(document).ready(function(){

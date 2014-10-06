@@ -93,20 +93,20 @@ $Title="Profile";
 
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
 
     <script type="text/javascript"> 
       $(document).ready(function(){
         $('#save_btn').click(function(){
           var b=false,pwd;
-          if($('#input_oldpwd').attr('value')==''){
+          if($('#input_oldpwd').val()==''){
             $('#oldpwd_ctl').addClass('error');
             b=true;
           }else{
             $('#oldpwd_ctl').removeClass('error');
           }
-          pwd=$('#input_newpwd').attr('value');
-          if(pwd!='' && $('#input_reppwd').attr('value')!=pwd){
+          pwd=$('#input_newpwd').val();
+          if(pwd!='' && $('#input_reppwd').val()!=pwd){
             b=true;
             $('#newpwd_ctl').addClass('error');
             $('#reppwd_ctl').addClass('error');

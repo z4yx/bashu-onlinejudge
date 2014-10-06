@@ -29,7 +29,7 @@ $Title="Admin panel";
             <ul class="nav nav-tabs" id="nav_tab">
               <li class="active"><a href="#tab_A" data-toggle="tab">Main Function</a></li>
               <li class=""><a href="#tab_B" data-toggle="tab">News</a></li>
-              <li class=""><a href="#tab_C" data-toggle="tab">Contest</a></li>
+              <li class=""><a href="#tab_C" data-toggle="tab">Experience</a></li>
               <li class=""><a href="#tab_D" data-toggle="tab">Privilege</a></li>
               <li class=""><a href="#tab_E" data-toggle="tab">Users</a></li>
             </ul>
@@ -76,7 +76,24 @@ $Title="Admin panel";
                 </div>
               </div>
               <div class="tab-pane" id="tab_C">
-                <p>Developing...</p>
+                <div style="margin-left:50px;margin-right:50px">
+                  <div id="table_experience_title"> 
+                    
+                  </div>
+                  <form action="admin.php" method="post" class="form-inline" id="form_experience_title">
+                    <input type="text" id="input_experience" name="experience" class="input-small" placeholder="Experience&nbsp;&ge;">
+                    <input type="text" id="input_experience_title" name="title" class="input-small" placeholder="Title">
+                    <input type="submit" class="btn" value="Add">
+                    <input type="hidden" name="op" value="add_experience_title">
+                  </form>
+                  <hr>
+                  <form action="admin.php" method="post" id="form_level_experience">
+                    <div id="table_level_experience"> 
+                    </div>
+                    <input type="submit" class="btn" value="Update">
+                    <input type="hidden" name="op" value="update_level_experience">
+                  </form>
+                </div>
               </div>
               <div class="tab-pane" id="tab_D">
                 <div style="margin-left:50px">
@@ -125,7 +142,7 @@ $Title="Admin panel";
 
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
     <script src="../assets/js/highcharts.js"></script>
     <script src="../assets/js/highcharts-more.js"></script>
 
@@ -146,6 +163,8 @@ $Title="Admin panel";
             }
           }
         });
+        var getlevellist=function(){$('#table_level_experience').load('ajax_admin.php',{op:'list_level_experience'});};
+        var gettitlelist=function(){$('#table_experience_title').load('ajax_admin.php',{op:'list_experience_title'});};
         var getprivlist=function(){$('#table_priv').load('ajax_admin.php',{op:'list_priv'});};
         var getnewslist=function(){$('#table_news').load('ajax_admin.php',{op:'list_news'});};
         var getusrlist=function(){$('#table_usr').load('ajax_admin.php',{op:'list_usr'});};
@@ -158,7 +177,39 @@ $Title="Admin panel";
               getnewslist();
             else if(E.target.innerHTML.search(/User/i)!=-1)
               getusrlist();
+            else if(E.target.innerHTML.search(/Experience/i)!=-1){
+              getlevellist();
+              gettitlelist();
+            }
           }
+        });
+        $('#table_experience_title').click(function(E){
+          E.preventDefault()
+          var $i=$(E.target);
+          if($i.is('i.icon-remove')){
+            var id=$i.data('id');
+            $.post('ajax_admin.php',{'op':'del_title','id':id},function(){
+              gettitlelist();
+            })
+          }
+        });
+        $('#form_experience_title').submit(function(E){
+          E.preventDefault();
+          $.ajax({
+            type:"POST",
+            url:"ajax_admin.php",
+            data:$(this).serialize(),
+            success:gettitlelist
+          });
+        });
+        $('#form_level_experience').submit(function(E){
+          E.preventDefault();
+          $.ajax({
+            type:"POST",
+            url:"ajax_admin.php",
+            data:$(this).serialize(),
+            success:getlevellist
+          });
         });
         $('#table_usr').click(function(E){
           E.preventDefault();
@@ -289,7 +340,7 @@ $Title="Admin panel";
             if(!window.cpuChart){
               window.cpuChart = new Highcharts.Chart({
                 chart: {
-                  renderTo: 'cpumeter',
+                  renderTo: 'cpumeter'
                 },        
                 yAxis: [{
                   title: {
@@ -308,7 +359,7 @@ $Title="Admin panel";
             if(!window.memChart){
               window.memChart = new Highcharts.Chart({
                 chart: {
-                  renderTo: 'memmeter',
+                  renderTo: 'memmeter'
                 },        
                 yAxis: [{
                   title: {

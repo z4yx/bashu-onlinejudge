@@ -1,6 +1,7 @@
 <?php 
 require('inc/result_type.php');
 require('inc/lang_conf.php');
+require('inc/problem_flags.php');
 require('inc/checklogin.php');
 
 if(isset($_GET['problem_id']))
@@ -44,7 +45,6 @@ else{
   $submit_user=$statis[0];
   $solved_user=$statis[1];
   $total_submit=$statis[2];
-  require 'inc/problem_flags.php';
   $prob_level=($row[12]&PROB_LEVEL_MASK)>>PROB_LEVEL_SHIFT;
 
   $result=mysql_query("select result,count(*) as sum from solution where problem_id=$prob_id group by result");
@@ -123,7 +123,7 @@ $Title="Problem $prob_id";
         </div>
         <div class="span3" id="rightside">
           <div class="row-fluid">
-            <h2 style="text-align:right"><span id="btn_hide" title="Alt+H" class="btn btn-small">Hide Information &raquo;</span></h2>
+            <h2 style="text-align:right"><span id="btn_hide" title="Alt+H" class="btn btn-small shortcut-hint">Hide Information &raquo;</span></h2>
           </div>
           <div class="row-fluid">
             <h3 class="problem-subtitle">&nbsp;</h3>
@@ -165,7 +165,7 @@ $Title="Problem $prob_id";
           </div></div>
           <div class="row-fluid"><div class="span12" style="text-align: center;">
             <div id="function" class="well well-small problem-operation" style="margin-top:10px">
-              <a href="#" title="Alt+S" class="btn btn-primary" id="action_submit">Submit</a>
+              <a href="#" title="Alt+S" class="btn btn-primary shortcut-hint" id="action_submit">Submit</a>
               <a href="record.php?way=time&amp;problem_id=<?php echo $prob_id?>" class="btn btn-info">Status</a>
               <a href="board.php?problem_id=<?php echo $prob_id;?>" class="btn btn-warning">Discuss</a>
             </div>
@@ -218,20 +218,20 @@ $Title="Problem $prob_id";
               echo ">$lang</option>";
             } ?>
           </select>
-          <input class="btn btn-primary" title="Alt+S" value="Submit" type="submit">
+          <button class="btn btn-primary shortcut-hint" title="Alt+S" type="submit">Submit</button>
           <a href="#" class="btn" data-dismiss="modal">Close</a>
         </div>
       </form>
     </div>
 
     <div id="show_tool" class="bottom-right hide">
-      <span id="btn_submit2" title="Alt+S" class="btn btn-mini btn-primary">Submit</span>
-      <span id="btn_show" title="Alt+H" class="btn btn-mini btn-primary">&laquo; Show Information</span>
+      <span id="btn_submit2" title="Alt+S" class="btn btn-mini btn-primary shortcut-hint">Submit</span>
+      <span id="btn_show" title="Alt+H" class="btn btn-mini btn-primary shortcut-hint">&laquo; Show Information</span>
     </div>
 
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
 
     <script type="text/javascript">
       var hide_info = 0;

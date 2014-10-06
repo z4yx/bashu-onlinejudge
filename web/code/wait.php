@@ -33,8 +33,8 @@ $Title="Waiting";
           </div>
           <div class="hide" id="ele_finish" style="margin-top: 15px;">
             <p>Finished! You can go back to the problem or go to the record page.</p>
-            <ul class="pager"><li class="previous"><a class="pager-pre-link" title="Alt+P" id="btn_back" href="#"><i class="icon-angle-left"></i> Problem Page</a></li>
-            <li class="next"><a class="pager-next-link" title="Alt+R" href="record.php">Record Page <i class="icon-angle-right"></i></a></li></ul>
+            <ul class="pager"><li class="previous"><a class="pager-pre-link shortcut-hint" title="Alt+P" id="btn_back" href="#"><i class="icon-angle-left"></i> Problem Page</a></li>
+            <li class="next"><a class="pager-next-link shortcut-hint" title="Alt+R" href="record.php">Record Page <i class="icon-angle-right"></i></a></li></ul>
           </div>
         </div>
     	</div>

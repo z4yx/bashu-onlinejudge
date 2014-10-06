@@ -35,32 +35,26 @@ namespace std {
 
 #include "judge_daemon.h"
 
-std::map<std::string, solution* > finder;
-std::queue<solution*> waiting, removing;
-std::mutex waiting_mutex, removing_mutex, finder_mutex, applog_mutex, rejudge_mutex;
-std::condition_variable notifier, rejudge_notifier;
-volatile bool rejudging, filled;
-std::vector<int> rejudge_list;
-solution rejudge_init;
+static std::map<std::string, solution* > finder;
+static std::queue<solution*> waiting, removing;
+static std::mutex waiting_mutex, removing_mutex, finder_mutex, applog_mutex, rejudge_mutex;
+static std::condition_variable notifier, rejudge_notifier;
+static volatile bool rejudging, filled;
+static std::vector<int> rejudge_list;
+static solution rejudge_init;
 
 #ifdef USE_DLL_ON_WINDOWS
 run_compiler_def run_compiler;
 run_judge_def run_judge;
 #endif
-extern char target_path[];
 
-solution::solution()
+static char target_path[MAXPATHLEN+16];
+
+const char* getTargetPath()
 {
-	mutex_for_query = new std::mutex;
-	problem = compare_way = lang = time_limit = mem_limit = score = error_code = 0;
-	public_code = 0;
-	timestamp = 0;
-	type = TYPE_normal;
+	return target_path;
 }
-solution::~solution()
-{
-	delete (std::mutex*)mutex_for_query;
-}
+
 void applog(const char *str, const char *info) throw ()
 {
 	time_t now_time = time(NULL);

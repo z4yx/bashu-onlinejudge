@@ -12,6 +12,7 @@ alter table users modify nick varchar(100) CHARACTER SET gbk;
 alter table users modify school BLOB;
 alter table users modify school varchar(100) CHARACTER SET gbk;
 alter table users ADD COLUMN score int NOT NULL DEFAULT 0 AFTER solved;
+alter table users ADD COLUMN experience int NOT NULL DEFAULT 0 AFTER score;
 alter table users CONVERT TO CHARACTER SET utf8;
 
 update source_code set source = uncompress(source);
@@ -102,6 +103,7 @@ update solution,(select solution_id from(select solution_id,problem_id,user_id,r
 
 update users,(select user_id as uid,count(1) as s from solution group by user_id) as cnt set users.submit=cnt.s where cnt.uid=users.user_id;
 update users,(select user_id as uid,count(distinct problem_id) as s from solution where result=0 group by user_id) as cnt set users.solved=cnt.s where cnt.uid=users.user_id;
+CREATE INDEX solve_submit ON users (solved,submit);
 
 CREATE TABLE `preferences` (
   `id` int AUTO_INCREMENT,
@@ -111,3 +113,35 @@ CREATE TABLE `preferences` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `u_p` (`user_id`,`property`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `experience_titles` (
+  `experience` int NOT NULL,
+  `title` varchar(20) NOT NULL,
+  PRIMARY KEY (`experience`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+INSERT INTO `experience_titles` VALUES (0,'Default');
+
+CREATE TABLE `level_experience` (
+  `level` int(11) NOT NULL,
+  `experience` int(11) NOT NULL,
+  PRIMARY KEY (`level`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+INSERT INTO `level_experience` VALUES (0,0),(1,1),(2,2),(3,4),(4,5),(5,10),(6,15),(7,20);
+
+delimiter //
+CREATE FUNCTION get_problem_level (pid int)
+RETURNS int
+NOT DETERMINISTIC
+READS SQL DATA
+BEGIN
+RETURN IFNULL((SELECT (has_tex>>3)&7 FROM problem WHERE problem_id = pid),0);
+END//
+
+CREATE FUNCTION problem_flag_to_level (flag int)
+RETURNS int
+NO SQL
+BEGIN
+RETURN (flag>>3)&7;
+END//
+ 
+delimiter ;

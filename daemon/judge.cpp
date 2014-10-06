@@ -1,4 +1,5 @@
 #include "judge_daemon.h"
+#include "conf_items.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,15 +27,6 @@ namespace std {
 
 enum{CMP_tra, CMP_float, CMP_int, CMP_spj};
 
-char DataDir[MAXPATHLEN+4], dir_name[MAXPATHLEN+16], input_filename[MAXPATHLEN+16];
-
-extern bool lang_exist[];
-extern int lang_extra_mem[];
-extern std::string lang_ext[], lang_compiler[];
-
-char target_path[MAXPATHLEN+16];
-char buffer[65536];
-
 bool clean_files() throw ()
 {
 	int ret;
@@ -45,6 +37,19 @@ bool clean_files() throw ()
 #endif
 	return ret == 0;
 }
+solution::solution()
+{
+	target_path=getTargetPath();
+	mutex_for_query = new std::mutex;
+	problem = compare_way = lang = time_limit = mem_limit = score = error_code = 0;
+	public_code = 0;
+	timestamp = 0;
+	type = TYPE_normal;
+}
+solution::~solution()
+{
+	delete (std::mutex*)mutex_for_query;
+}
 void solution::copy_setting(const solution &from) throw ()
 {
 	problem=from.problem;
@@ -54,6 +59,7 @@ void solution::copy_setting(const solution &from) throw ()
 	mem_limit=from.mem_limit;
 	score=from.score;
 	type=from.type;
+	target_path=from.target_path;
 }
 bool solution::compile() throw (const char *)
 {
@@ -89,6 +95,10 @@ bool solution::compile() throw (const char *)
 	if(!output) {
 		throw "Can't open compiler output";
 	}
+	char *buffer = new char[65536];
+	if(!buffer){
+		throw "Failed to allocate buffer.";
+	}
 	int read_size = fread(buffer, 1, 65400, output);
 	buffer[read_size] = '\0';
 	fclose(output);	
@@ -98,14 +108,17 @@ bool solution::compile() throw (const char *)
 		if(strstr(buffer, "@~good~@") == NULL) {
 			applog("Info: Execute file exists, but compiler doesn't return 0.");
 		}
+		delete[] buffer;
 	}else{
 		if(strstr(buffer, "@~good~@") != NULL) {
+			delete[] buffer;
 			throw "Compiler returned 0, but execute file doesn't exist.";
 		}else {
 			last_state = buffer;
 			score = time_limit = mem_limit = 0;
 			error_code = RES_CE;
 			puts("Compile Error");
+			delete[] buffer;
 
 			std::unique_lock<std::mutex> Lock(* (std::mutex*)mutex_for_query);
 			detail_results.push_back((case_info){RES_CE, 0, 0, last_state, 0});
@@ -117,6 +130,8 @@ bool solution::compile() throw (const char *)
 }
 void solution::judge() throw (const char *)
 {
+	char dir_name[MAXPATHLEN+16], input_filename[MAXPATHLEN+16];
+	char buffer[MAXPATHLEN*2+16];
 	puts("judge");
 
 	sprintf(dir_name, "%s/%d", DataDir, problem);
@@ -137,11 +152,19 @@ void solution::judge() throw (const char *)
 		ep = readdir(dp);
 	}
 	closedir(dp);
+	if(in_files.empty()) {
+		error_code = RES_SE;
+		last_state = "No data files";
+		throw "Data folder is empty";
+	}
 	std::sort(in_files.begin(), in_files.end());
 
 	int total_score = 0, total_time = 0, max_memory = 0, dir_len = strlen(dir_name);
 	const int full_score = 100;
 	int case_score = full_score/in_files.size();
+	if(case_score <= 0)
+		case_score = 1;
+
 	int status;
 	std::string tips;
 	for(auto it = in_files.begin(); it != in_files.end(); ++it) {

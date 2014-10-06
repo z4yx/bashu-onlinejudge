@@ -13,7 +13,7 @@ $total=($row[0]);
 if($page_id<0 || $page_id>=$total)
   die('Argument out of range.');
 $rank=$page_id;
-$result=mysql_query('select user_id,nick,solved,submit,score from users order by solved desc,submit desc limit '.$page_id.',50');
+$result=mysql_query("SELECT user_id,nick,solved,submit,score,experience_titles.title FROM (SELECT user_id,nick,solved,submit,score,MAX(experience_titles.experience) AS m FROM (SELECT user_id,nick,solved,submit,score,experience from users order by solved desc,submit desc limit $page_id,50)t,experience_titles where t.experience>=experience_titles.experience GROUP BY user_id)t1 LEFT JOIN experience_titles ON t1.m=experience_titles.experience order by solved desc,submit desc");
 $Title="Ranklist";
 ?>
 <!DOCTYPE html>
@@ -53,11 +53,12 @@ $Title="Ranklist";
               <thead><tr>
                 <th style="width:4%">No.</th>
                 <th style="width:15%">Name</th>
-                <th style="width:57%">Nick</th>
-                <th style="width:7%">Score</th>
-                <th style="width:6%">AC</th>
-                <th style="width:6%">Submit</th>
-                <th style="width:5%">Ratio</th>
+                <th style="width:56%">Nick</th>
+                <th style="width:5%">Title</th>
+                <th style="width:6%">Score</th>
+                <th style="width:5%">AC</th>
+                <th style="width:5%">Submit</th>
+                <th style="width:4%">Ratio</th>
               </tr></thead>
               <tbody id="userlist">
                 <?php 
@@ -65,6 +66,7 @@ $Title="Ranklist";
                 echo '<tr><td>',(++$rank),'</td>';
                 echo '<td><a href="#linkU">',$row[0],'</a></td>';
                 echo '<td>',htmlspecialchars($row[1]),'</td>';
+                echo '<td>',htmlspecialchars($row[5]),'</td>';
                 echo '<td>',$row[4],'</td>';
                 echo '<td><a href="record.php?user_id=',$row[0],'&amp;result=0">',$row[2],'</a></td>';
                 echo '<td><a href="record.php?user_id=',$row[0],'">',$row[3],'</a></td>';
@@ -79,10 +81,10 @@ $Title="Ranklist";
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a class="pager-pre-link" title="Alt+A" href="ranklist.php?start_id=<?php echo $page_id-50 ?>" id="btn-pre">&larr; Previous</a>
+            <a class="pager-pre-link shortcut-hint" title="Alt+A" href="ranklist.php?start_id=<?php echo $page_id-50 ?>" id="btn-pre">&larr; Previous</a>
           </li>
           <li>
-            <a class="pager-next-link" title="Alt+D" href="ranklist.php?start_id=<?php echo $page_id+50 ?>" id="btn-next">Next &rarr;</a>
+            <a class="pager-next-link shortcut-hint" title="Alt+D" href="ranklist.php?start_id=<?php echo $page_id+50 ?>" id="btn-next">Next &rarr;</a>
           </li>
         </ul>
       </div>  
@@ -107,7 +109,7 @@ $Title="Ranklist";
     </div><!--/.container-->
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="common.js"></script>
+    <script src="../assets/js/common.js"></script>
 
     <script type="text/javascript">
       function intersection(obj1,obj2,arr1,arr2,ist){

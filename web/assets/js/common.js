@@ -26,6 +26,40 @@ function LoadCSS(url) {
    head.appendChild(link);
    return link;
  }
+function InsertString(tb, str){
+    //var tb = document.getElementById(tbid);
+    tb.focus();
+    if (document.all){
+        var r = document.selection.createRange();
+        document.selection.empty();
+        r.text = str;
+        r.collapse();
+        r.select();
+    }
+    else{
+        var newstart = tb.selectionStart+str.length;
+        tb.value=tb.value.substr(0,tb.selectionStart)+str+tb.value.substring(tb.selectionEnd);
+        tb.selectionStart = newstart;
+        tb.selectionEnd = newstart;
+    }
+}
+function GetSelection(tb){
+
+    var sel = '';
+    if (document.all){
+        var r = document.selection.createRange();
+        document.selection.empty();
+        sel = r.text;
+    }
+    else{
+    	//var tb = document.getElementById(tbid);
+    	// tb.focus();
+        var start = tb.selectionStart;
+        var end = tb.selectionEnd;
+        sel = tb.value.substring(start, end);
+    }
+    return sel;
+}
 function GetUrlParms()    
 {
     var args=new Object();
@@ -69,7 +103,7 @@ shortcuts={
 			var obj=$('#nav_mail');
 			if(obj.length) //if logged in
 				location.href=obj.attr('href');
-		} , //Alt+M
+		}   //Alt+M
 
 };
 shortcuts[49]=shortcuts[66]; //Alt+1
@@ -80,6 +114,14 @@ shortcuts[53]=function(){location.href=$('#nav_rank').attr('href');} //Alt+5
 shortcuts[54]=function(){location.href=$('#nav_about').attr('href');} //Alt+6
 shortcuts[55]=shortcuts[73]; //Alt+7
 
+function hotkey_hint_show () {
+	$('.shortcut-hint').addClass('shortcut-hint-active');
+}
+function hotkey_hint_dismiss (E) {
+	if(E.keyCode==18){ //alt key
+		$('.shortcut-hint').removeClass('shortcut-hint-active');
+	}
+}
 function reg_hotkey (key, fun) {
 	shortcuts[key] = fun; }
 $(document).ready(function(){
@@ -132,13 +174,13 @@ $(document).ready(function(){
 	}
 	$('#form_login').submit(function(E){
 		var b=false;
-		if($('#uid').attr('value')==''){
+		if($('#uid').val()==''){
 			$('#uid_ctl').addClass('error');
 			b=true;
 		}else{
 			$('#uid_ctl').removeClass('error');
 		}
-		if($('#pwd').attr('value')==''){
+		if($('#pwd').val()==''){
 			b=true;
 			$('#pwd_ctl').addClass('error');
 		}else
@@ -166,13 +208,17 @@ $(document).ready(function(){
 		setTimeout(checkMail,3000);
 	}
 }).keydown(function(E){
-	// console.log(E);
 	if(E.altKey && !E.metaKey){
 		var key=E.keyCode;
 		if(key>=97 && key<=122)
 			key-=32;
+		else if(key==18){ //alt key
+			hotkey_hint_show(E);
+			return;
+		}
 		if(shortcuts.hasOwnProperty(key))
 			(shortcuts[key])(E);
 		return false;
 	}
-});
+}).keyup(hotkey_hint_dismiss);
+$('#search_input').keyup(hotkey_hint_dismiss);

@@ -17,9 +17,9 @@ function ws_connect(){
 	};
 	socket.onclose = function(){
 		$('#info_socket').html('Disconnected');
-		$('#chat_content').attr('disabled','disabled').css('background-color','#eee');
-		$('#ipt_message').attr('disabled','disabled');
-		$('#btn_send').attr('disabled','disabled');
+		$('#chat_content').prop('disabled','disabled').css('background-color','#eee');
+		$('#ipt_message').prop('disabled','disabled');
+		$('#btn_send').prop('disabled','disabled');
 		$('#btn_switch').removeAttr('disabled').html('Enter');
 	};
 }
@@ -35,7 +35,7 @@ $(document).ready(function(){
 			alert("You have to log in before you can enter chat room.");
 			return false;
 		}
-		var cmd = $(this).attr('disabled','disabled').html();
+		var cmd = $(this).prop('disabled','disabled').html();
 		if(cmd == 'Enter')
 			ws_connect();
 		else
