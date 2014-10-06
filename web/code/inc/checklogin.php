@@ -16,7 +16,8 @@ if(!isset($_SESSION['user']) && (DISALLOW_GOOGLEBOT || FALSE===strstr($_SERVER['
 	}else{
 		require_once 'inc/database.php';
 		require_once 'inc/userlogin.php';
-		login($_SESSION['user'], TRUE);
+		if(TRUE===login($_SESSION['user'], TRUE))
+			write_cookie();
 		mysql_close();
 	}
 }
