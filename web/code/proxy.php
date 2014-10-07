@@ -2,7 +2,7 @@
 if(!isset($_GET['url']) || 0!==preg_match('/\W/',$_GET['url'])){
 	die('Invalid URL');
 }
-$daemon_ip=$_SERVER["OPENSHIFT_INTERNAL_IP"];
+$daemon_ip=$_SERVER["OPENSHIFT_PHP_IP"];
 $daemon_port=31415;
 
 $url = rawurlencode($_GET['url']);

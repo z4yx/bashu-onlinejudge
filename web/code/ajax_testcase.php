@@ -7,7 +7,7 @@ if(!isset($_SESSION['admin_tfa']) || !$_SESSION['admin_tfa'])
 
 function get_testcase_dir()
 {
-	$daemon_ip=$_SERVER["OPENSHIFT_INTERNAL_IP"];
+	$daemon_ip=$_SERVER["OPENSHIFT_PHP_IP"];
 	$daemon_port=31415;
 	$content = file_get_contents("http://$daemon_ip:$daemon_port/get_datapath");
 	if(FALSE === $content)

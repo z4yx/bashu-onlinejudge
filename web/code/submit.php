@@ -7,7 +7,7 @@ function posttodaemon($data){
 		$encoded.=($encoded ? "&" : "");
 		$encoded.=rawurlencode($k)."=".rawurlencode($v);
 	}
-	$daemon_ip=$_SERVER["OPENSHIFT_INTERNAL_IP"];
+	$daemon_ip=$_SERVER["OPENSHIFT_PHP_IP"];
 	$daemon_port=31415;
 	if(!($fp=fsockopen($daemon_ip, $daemon_port)))
 		return ('Submit failed, can not connect to server.');
