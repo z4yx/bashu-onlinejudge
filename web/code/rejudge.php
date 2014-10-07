@@ -7,11 +7,13 @@ function posttodaemon($data){
 		$encoded.=($encoded ? "&" : "");
 		$encoded.=rawurlencode($k)."=".rawurlencode($v);
 	}
-	if(!($fp=fsockopen('127.0.0.1', 8881)))
+	$daemon_ip=$_SERVER["OPENSHIFT_PHP_IP"];
+	$daemon_port=31415;
+	if(!($fp=fsockopen($daemon_ip, $daemon_port)))
 		return ("Submit failed, can not connect to server.\n");
 
 	fputs($fp, "POST /submit_prob HTTP/1.0\r\n");
-	fputs($fp, "Host: 127.0.0.1\r\n");
+	fputs($fp, "Host: $daemon_ip\r\n");
 	fputs($fp, "Content-type: application/x-www-form-urlencoded\r\n");
 	fputs($fp, "Content-length: " . strlen($encoded) . "\r\n");
 	fputs($fp, "Connection: close\r\n\r\n");
