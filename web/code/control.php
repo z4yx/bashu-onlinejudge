@@ -29,6 +29,9 @@ $Title="Control panel";
               <input name="hidelogo" type="checkbox" <?php if($pref->hidelogo=='on')echo 'checked'; ?> > Hide logo
             </label>
             <label class="checkbox">
+              <input name="hidehotkey" type="checkbox" <?php if($pref->hidehotkey=='on')echo 'checked'; ?> > Hide hotkey hints
+            </label>
+            <label class="checkbox">
               <input name="sharecode" type="checkbox" <?php if($pref->sharecode=='on')echo 'checked'; ?> > Share my code by default
             </label>
             <input type="submit" class="btn" value="Save">

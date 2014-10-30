@@ -208,6 +208,8 @@ $(document).ready(function(){
 		setTimeout(checkMail,3000);
 	}
 }).keydown(function(E){
+	if(window.hidehotkey)
+		return;
 	if(E.altKey && !E.metaKey){
 		var key=E.keyCode;
 		if(key>=97 && key<=122)

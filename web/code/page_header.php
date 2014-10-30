@@ -12,6 +12,8 @@ if(isset($_SESSION['pref']))
 else
   $pref=new preferences();
 
+if($pref->hidehotkey=='on')
+  echo "<script>window.hidehotkey=true;</script>";
 if($pref->hidelogo=='off'){ ?>
 <header>
   <a href="index.php"><img src="../assets/img/logo.jpg" alt="Logo" class="img-rounded"></a>
