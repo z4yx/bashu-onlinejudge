@@ -400,7 +400,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('root','',0,0,0,'N','127.0.0.1','2005-04-06 15:04:00',1,0,'rootpass','2005-04-06 11:25:58','default administrator','');
+INSERT INTO `users` VALUES ('root','',0,0,0,0,'N','127.0.0.1','2005-04-06 15:04:00',1,0,'rootpass','2005-04-06 11:25:58','default administrator','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
