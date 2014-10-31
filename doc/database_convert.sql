@@ -114,6 +114,15 @@ CREATE TABLE `preferences` (
   UNIQUE INDEX `u_p` (`user_id`,`property`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `saved_problem` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `problem_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` varchar(20) NOT NULL DEFAULT '',
+  `savetime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_p` (`user_id`,`problem_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `experience_titles` (
   `experience` int NOT NULL,
   `title` varchar(20) NOT NULL,

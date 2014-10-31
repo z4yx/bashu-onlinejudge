@@ -416,6 +416,23 @@ CREATE TABLE `preferences` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `saved_problem`
+--
+
+DROP TABLE IF EXISTS `saved_problem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `saved_problem` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `problem_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` varchar(20) NOT NULL DEFAULT '',
+  `savetime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_p` (`user_id`,`problem_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `experience_titles`
 --
 

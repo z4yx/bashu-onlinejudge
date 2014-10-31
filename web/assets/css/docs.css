@@ -427,6 +427,9 @@ input.input-in-table{
 .shortcut-hint-active:after{
   visibility: visible;
 }
+.width-for-2x-icon{
+  width: 26px;
+}
 @media (max-width: 1149px) {
   .navbar .brand .navbar-hide-text{
     display: none;
