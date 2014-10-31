@@ -21,7 +21,7 @@ else
 $range="between $page_id"."00 and $page_id".'99';
 if(isset($_SESSION['user'])){
   $user_id=$_SESSION['user'];
-  $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct,res from problem LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id $range group by problem_id) as temp on(pid=problem_id) where $addt_cond problem_id $range order by problem_id");
+  $result=mysql_query("SELECT problem_id,title,accepted,submit,in_date,defunct,res,saved.pid from problem LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id $range group by problem_id) as solved on(solved.pid=problem_id) left join (select problem_id as pid from saved_problem where user_id='$user_id') as saved on(saved.pid=problem_id) where $addt_cond problem_id $range order by problem_id");
 }else{
   $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct from problem where $addt_cond problem_id $range  order by problem_id");
 }
@@ -53,42 +53,7 @@ $Title="Problemset $page_id";
       </div>
       <div class="row-fluid">
         <div class="span10 offset1">
-            <table class="table table-striped table-bordered">
-              <thead><tr>
-                <th style="width:6%">ID</th>
-                <?php 
-                  if(isset($_SESSION['user']))
-                    echo '<th colspan="2">Title</th>';
-                  else
-                    echo '<th>Title</th>';
-                ?>
-                <th style="width:10%">AC/Submit</th>
-                <th style="width:6%">Ratio</th>
-                <th style="width:25%">Last Submit</th>
-              </tr></thead>
-              <tbody>
-                <?php 
-                  while($row=mysql_fetch_row($result)){
-                    echo '<tr>';
-                    echo '<td>',$row[0],'</td>';
-                    if(isset($_SESSION['user'])){
-                      echo '<td><i class=', is_null($row[6]) ? '"icon-remove icon-2x" style="visibility:hidden"' : ($row[6]? '"icon-remove icon-2x" style="color:red"' : '"icon-2x icon-ok" style="color:green"'), '></i>', '</td>';
-                      echo '<td style="text-align:left;border-left:0;">';
-                    }else{
-                      echo '<td style="text-align:left">';
-                    }
-                    echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1];
-                    if($row[5]=='Y')echo '<span class="label label-important">Deleted</span>';
-                    echo '</a></td>';
-                    echo '<td><a href="record.php?result=0&amp;problem_id=',$row[0],'">',$row[2],'</a>/';
-                    echo '<a href="record.php?problem_id=',$row[0],'">',$row[3],'</a></td>';
-                    echo '<td>',$row[3] ? intval($row[2]/$row[3]*100) : 0,'%</td>';
-                    echo '<td>',$row[4],'</td>';
-                    echo "</tr>\n";
-                  }
-                ?>
-              </tbody>
-            </table>
+            <?php require 'problemset_table.php';?>
         </div>  
       </div>
       <div class="row-fluid">
@@ -116,6 +81,23 @@ $Title="Problemset $page_id";
         $('#nav_set').parent().addClass('active');
         $('#ret_url').val("problemset.php?page_id="+cur_page);
 
+        $('#problemset_table').click(function(E){
+          var $target = $(E.target);
+          if($target.is('i.save_problem')){
+            var pid = $target.attr('data-pid');
+            var op;
+            if($target.hasClass('icon-star'))
+              op='rm_saved';
+            else
+              op='add_saved';
+            $.get('ajax_saveproblem.php?prob='+pid+'&op='+op,function(result){
+              if(/__ok__/.test(result)){
+                $target.toggleClass('icon-star-empty')
+                $target.toggleClass('icon-star')
+              }
+            });
+          }
+        });
         $('#btn-next').click(function(){
           <?php
             if($page_id<$maxpage){

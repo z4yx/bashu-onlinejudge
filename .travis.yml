@@ -1,0 +1,7 @@
+language: cpp
+compiler:
+  - gcc
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y libmicrohttpd-dev libmysqlclient-dev
+script: cd daemon && make

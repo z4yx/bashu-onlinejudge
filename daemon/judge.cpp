@@ -295,5 +295,7 @@ void solution::write_database() throw (const char *)
 {
 	int id = get_next_solution_id();
 	printf("solution_id: %d\n", id);
+	if(this->user.size() == 0)
+		throw "User id is empty";
 	write_result_to_database(id, this);
 }

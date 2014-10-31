@@ -12,6 +12,8 @@ if(isset($_SESSION['pref']))
 else
   $pref=new preferences();
 
+if($pref->hidehotkey=='on')
+  echo "<script>window.hidehotkey=true;</script>";
 if($pref->hidelogo=='off'){ ?>
 <header>
   <a href="index.php"><img src="../assets/img/logo.jpg" alt="Logo" class="img-rounded"></a>
@@ -52,6 +54,7 @@ if($pref->hidelogo=='off'){ ?>
         </a>
         <ul class="dropdown-menu">
           <li><a href="mail.php" id="nav_mail"><i class="icon-envelope"></i> mailbox</a></li>
+          <li><a href="marked.php"><i class="icon-star"></i> marked</a></li>
           <li><a href="profile.php"><i class="icon-github"></i> profile</a></li>
           <li><a href="control.php"><i class="icon-cogs"></i> preference</a></li>
 <?php   if(isset($_SESSION['administrator']))

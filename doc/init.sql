@@ -400,7 +400,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('root','',0,0,0,'N','127.0.0.1','2005-04-06 15:04:00',1,0,'rootpass','2005-04-06 11:25:58','default administrator','');
+INSERT INTO `users` VALUES ('root','',0,0,0,0,'N','127.0.0.1','2005-04-06 15:04:00',1,0,'rootpass','2005-04-06 11:25:58','default administrator','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -414,6 +414,23 @@ CREATE TABLE `preferences` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `u_p` (`user_id`,`property`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `saved_problem`
+--
+
+DROP TABLE IF EXISTS `saved_problem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `saved_problem` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `problem_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` varchar(20) NOT NULL DEFAULT '',
+  `savetime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_p` (`user_id`,`problem_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `experience_titles`

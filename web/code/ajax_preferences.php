@@ -22,6 +22,7 @@ function processOption($name)
 
 processOption('hidelogo');
 processOption('sharecode');
+processOption('hidehotkey');
 
 $_SESSION['pref']=serialize($pref);
 
