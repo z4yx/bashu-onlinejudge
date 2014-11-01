@@ -270,7 +270,7 @@ $Title="Problem $prob_id";
             return true;
           }
         });
-		$("#action_mark").click(function(){
+	$("#action_mark").click(function(){
             var op;
             if($(this).html()=="Mark")
                 op="add_saved";
