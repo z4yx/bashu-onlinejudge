@@ -167,7 +167,7 @@ $Title="Problem $prob_id";
             <div id="function" class="well well-small problem-operation" style="margin-top:10px">
               <a href="#" title="Alt+S" class="btn btn-primary shortcut-hint" id="action_submit">Submit</a>
               <a href="record.php?way=time&amp;problem_id=<?php echo $prob_id?>" class="btn btn-info">Status</a>
-			  <?php
+	      <?php
                 $current_user=$_SESSION['user'];
                 $result=mysql_query("SELECT problem_id FROM saved_problem where user_id='$current_user' and problem_id=$prob_id");
                 $row=mysql_fetch_row($result);
