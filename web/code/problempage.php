@@ -37,6 +37,19 @@ else{
         $info = '<tr><td colspan="2" class="gradient-red center"><i class="icon-remove icon-white"></i> Try Again !</td></tr>';
       }
     }
+    $current_user=$_SESSION['user'];
+    $result=mysql_query("SELECT problem_id FROM saved_problem where user_id='$current_user' and problem_id=$prob_id");
+    $mark_flag=mysql_fetch_row($result);
+    if(!($mark_flag)){
+        $mark_icon_class='icon-star-empty';
+        $mark_btn_class='btn btn-default btn-block';
+        $mark_btn_html='Mark';
+    }else{
+        $mark_icon_class='icon-star';
+        $mark_btn_class='btn btn-danger btn-block';
+        $mark_btn_html='Unmark';
+    }
+
   }else{
     $info = '<tr><td colspan="2" class="center muted" >Not logged in.</td></tr>';
   } 
@@ -167,19 +180,6 @@ $Title="Problem $prob_id";
             <div id="function" class="well well-small problem-operation" style="margin-top:10px">
               <a href="#" title="Alt+S" class="btn btn-primary shortcut-hint" id="action_submit">Submit</a>
               <a href="record.php?way=time&amp;problem_id=<?php echo $prob_id?>" class="btn btn-info">Status</a>
-	      <?php
-                $current_user=$_SESSION['user'];
-                $result=mysql_query("SELECT problem_id FROM saved_problem where user_id='$current_user' and problem_id=$prob_id");
-                $row=mysql_fetch_row($result);
-                if(is_null($row[0])){
-                    $mark_btn_class='btn btn-default';
-                    $mark_btn_html='Mark';
-                }else{
-                    $mark_btn_class='btn btn-danger';
-                    $mark_btn_html='Unmark';
-                }
-              ?>
-              <a href="#" class="<?php echo $mark_btn_class; ?>" id="action_mark"><?php echo $mark_btn_html; ?></a>
               <a href="board.php?problem_id=<?php echo $prob_id;?>" class="btn btn-warning">Discuss</a>
             </div>
           </div></div>
@@ -194,6 +194,16 @@ $Title="Problem $prob_id";
             </div>
           </div>
           <?php }?>
+          <?php if(isset($mark_btn_class)){ ?>
+          <div class="row-fluid">
+            <div class="span12" style="margin-bottom: 20px;">
+              <a href="#" class="<?php echo $mark_btn_class; ?>" id="action_mark">
+              <i class="<?php echo $mark_icon_class;?>"></i>
+              <span id="action_mark_html"><?php echo $mark_btn_html; ?></span>
+              </a>
+            </div>
+          </div>
+          <?php } ?>
         </div>
         <?php }?>
       </div>
@@ -272,15 +282,17 @@ $Title="Problem $prob_id";
         });
 	$("#action_mark").click(function(){
             var op;
-            if($(this).html()=="Mark")
+            if($('#action_mark_html').html()=="Mark")
                 op="add_saved";
             else
                 op="rm_saved";	
-            $.get("/code/ajax_saveproblem.php?prob="+prob+"&op="+op,function(result){
+            $.get("ajax_saveproblem.php?prob="+prob+"&op="+op,function(result){
                 if(/__ok__/.test(result)){
                     var tg=$("#action_mark");
                     tg.toggleClass("btn-danger");
-                    tg.toggleClass("btn-default");		
+                    tg.toggleClass("btn-default");
+                    tg.find('i').toggleClass('icon-star-empty').toggleClass('icon-star');
+                    var tg=$("#action_mark_html");
                     if(tg.html()=="Mark")
                         tg.html("Unmark");
                     else
