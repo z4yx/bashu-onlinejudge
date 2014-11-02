@@ -167,6 +167,19 @@ $Title="Problem $prob_id";
             <div id="function" class="well well-small problem-operation" style="margin-top:10px">
               <a href="#" title="Alt+S" class="btn btn-primary shortcut-hint" id="action_submit">Submit</a>
               <a href="record.php?way=time&amp;problem_id=<?php echo $prob_id?>" class="btn btn-info">Status</a>
+	      <?php
+                $current_user=$_SESSION['user'];
+                $result=mysql_query("SELECT problem_id FROM saved_problem where user_id='$current_user' and problem_id=$prob_id");
+                $row=mysql_fetch_row($result);
+                if(is_null($row[0])){
+                    $mark_btn_class='btn btn-default';
+                    $mark_btn_html='Mark';
+                }else{
+                    $mark_btn_class='btn btn-danger';
+                    $mark_btn_html='Unmark';
+                }
+              ?>
+              <a href="#" class="<?php echo $mark_btn_class; ?>" id="action_mark"><?php echo $mark_btn_html; ?></a>
               <a href="board.php?problem_id=<?php echo $prob_id;?>" class="btn btn-warning">Discuss</a>
             </div>
           </div></div>
@@ -256,6 +269,25 @@ $Title="Problem $prob_id";
             //$('#SubmitModal').modal('hide');
             return true;
           }
+        });
+	$("#action_mark").click(function(){
+            var op;
+            if($(this).html()=="Mark")
+                op="add_saved";
+            else
+                op="rm_saved";	
+            $.get("/code/ajax_saveproblem.php?prob="+prob+"&op="+op,function(result){
+                if(/__ok__/.test(result)){
+                    var tg=$("#action_mark");
+                    tg.toggleClass("btn-danger");
+                    tg.toggleClass("btn-default");		
+                    if(tg.html()=="Mark")
+                        tg.html("Unmark");
+                    else
+                        tg.html("Mark");
+                }
+            });
+            return false;
         });
         function click_submit(){
           <?php if(!isset($_SESSION['user'])){?>
