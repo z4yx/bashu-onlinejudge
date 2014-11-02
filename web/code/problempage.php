@@ -12,11 +12,25 @@ else
   $prob_id=1000;
 require('inc/database.php');
 
-$query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,defunct,has_tex from problem where problem_id=$prob_id";
+$query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,defunct,has_tex,compare_way from problem where problem_id=$prob_id";
 $result=mysql_query($query);
 $row=mysql_fetch_row($result);
 if(!$row)
   die('Wrong Problem ID.');
+switch ($row[13] >> 16) {
+  case 0:
+    $comparison='Traditional';
+    break;
+  case 1:
+    $comparison='Real, precision: '.($row[13] & 65535);
+    break;
+  case 2:
+    $comparison='Integer';
+    break;
+  case 3:
+    $comparison='Special Judge';
+    break;
+}
 
 if($row[11]=='Y' && !isset($_SESSION['administrator']))
   $forbidden=true;
@@ -149,6 +163,7 @@ $Title="Problem $prob_id";
                     <tr><td style="text-align:left">Case Time Limit:</td><td><?php echo $row[8]?> ms</td></tr>
                     <tr><td style="text-align:left">Memory Limit:</td><td><?php echo $row[9]?> KB</td></tr>
                     <tr><td style="text-align:left">Case score:</td><td><?php echo $row[10]?></td></tr>
+                    <tr><td style="text-align:left">Comparison:</td><td><?php echo $comparison?></td></tr>
                     <?php
                     if($prob_level)
                       echo '<tr><td style="text-align:left">Level:</td><td>',$prob_level,'</td></tr>';
