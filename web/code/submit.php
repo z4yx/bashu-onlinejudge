@@ -58,9 +58,18 @@ if(strlen($code)>29990)
 
 require('inc/database.php');
 
-$res=mysql_query("select case_time_limit,memory_limit,case_score,compare_way from problem where problem_id=$prob");
+$res=mysql_query("select case_time_limit,memory_limit,case_score,compare_way,defunct,has_tex from problem where problem_id=$prob");
 if(!($row=mysql_fetch_row($res)))
 	die('No such problem');
+
+require('inc/problem_flags.php');
+$forbidden=false;
+if($row[4]=='Y' && !isset($_SESSION['administrator']))
+  $forbidden=true;
+else if($row[5]&PROB_IS_HIDE && !isset($_SESSION['insider']))
+  $forbidden=true;
+if($forbidden)
+	die('You don\'t have permissions to access this problem');
 
 $_SESSION['lang']=$lang;
 mysql_query("update users set language=$lang where user_id='".$_SESSION['user']."'");

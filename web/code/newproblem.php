@@ -77,6 +77,11 @@ $Title="New problem";
                   </script>
                 </select>
               </li>
+              <li>
+                <label class="checkbox" style="font-size: 16px;">
+                  <input type="checkbox" name="hide_prob">Hide Problem
+                </label>
+              </li>
             </ul>
           </div>
         </div>

@@ -6,3 +6,5 @@ define("PROB_SOLVED_OPENSOURCE",4);
 
 define("PROB_LEVEL_MASK", 56); //bit 4 to bit 6
 define("PROB_LEVEL_SHIFT", 3);
+
+define("PROB_IS_HIDE", 64);

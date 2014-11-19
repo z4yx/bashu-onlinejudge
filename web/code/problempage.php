@@ -34,6 +34,8 @@ switch ($row[13] >> 16) {
 
 if($row[11]=='Y' && !isset($_SESSION['administrator']))
   $forbidden=true;
+else if($row[12]&PROB_IS_HIDE && !isset($_SESSION['insider']))
+  $forbidden=true;
 else{
   $forbidden=false;
   $_SESSION['view']=$prob_id;

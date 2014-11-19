@@ -12,6 +12,8 @@ function check_permission($prob_id,$opened,$user)
     if(!$row)
       return "No such problem";
     $prob_flag = $row[0];
+    if(($prob_flag & PROB_IS_HIDE) && !isset($_SESSION['insider']))
+      return 'You don\'t have permissions to access this problem';
     if($prob_flag & PROB_DISABLE_OPENSOURCE)
       return "Operation denied";
     else if($prob_flag & PROB_SOLVED_OPENSOURCE){

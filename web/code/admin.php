@@ -104,6 +104,7 @@ $Title="Admin panel";
                     <select name="right" id="slt_right">
                       <option value="administrator">administrator</option>
                       <option value="source_browser">source_browser</option>
+                      <option value="insider">insider</option>
                     </select>
                     <input type="submit" class="btn" value="Add">
                     <input type="hidden" name="op" value="add_priv">

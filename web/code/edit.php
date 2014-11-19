@@ -41,6 +41,7 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
   else if($row[12]&PROB_SOLVED_OPENSOURCE)
     $option_opensource=1;
   $option_level=($row[12]&PROB_LEVEL_MASK)>>PROB_LEVEL_SHIFT;
+  $option_hide=(($row[12]&PROB_IS_HIDE)?'checked':'');
 }
 $level_max=(PROB_LEVEL_MASK>>PROB_LEVEL_SHIFT);
 
@@ -131,6 +132,11 @@ $Title="Edit problem $prob_id";
                   };
                   </script>
                 </select>
+              </li>
+              <li>
+                <label class="checkbox" style="font-size: 16px;">
+                  <input <?php echo $option_hide?> type="checkbox" name="hide_prob">Hide Problem
+                </label>
               </li>
             </ul>
           </div>
