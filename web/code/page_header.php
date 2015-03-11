@@ -40,7 +40,7 @@ if($pref->hidelogo=='off'){ ?>
           <li><a id="nav_about" href="about.php"><i class="icon-phone"></i><span class="navbar-hide-text"> About</span></a></li>
         </ul>
         <form class="navbar-search pull-left shortcut-hint" id="search_form" title="Alt+I" action="search.php" method="get">
-          <input type="text" name="q" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" autocomplete="off" placeholder="Problem ID,Title,Source">
+          <input type="text" name="q" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" autocomplete="off" placeholder="ID, Title, Source, Tag">
         </form>
       <div class="btn-group pull-right">
 

@@ -399,6 +399,17 @@ input.input-in-table{
   top: 60px; 
   left: -475px; 
 }
+.panel-heading {
+  color: #333;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+}
+.note-short {
+  overflow: hidden;
+  max-height: 151px;
+  /*text-overflow: ellipsis;
+  white-space: pre;*/
+}
 .shortcut-hint{
   position: relative;
 }

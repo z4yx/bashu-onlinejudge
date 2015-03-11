@@ -12,13 +12,29 @@ else
   $prob_id=1000;
 require('inc/database.php');
 
-$query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,defunct,has_tex from problem where problem_id=$prob_id";
+$query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,defunct,has_tex,compare_way from problem where problem_id=$prob_id";
 $result=mysql_query($query);
 $row=mysql_fetch_row($result);
 if(!$row)
   die('Wrong Problem ID.');
+switch ($row[13] >> 16) {
+  case 0:
+    $comparison='Traditional';
+    break;
+  case 1:
+    $comparison='Real, precision: '.($row[13] & 65535);
+    break;
+  case 2:
+    $comparison='Integer';
+    break;
+  case 3:
+    $comparison='Special Judge';
+    break;
+}
 
 if($row[11]=='Y' && !isset($_SESSION['administrator']))
+  $forbidden=true;
+else if($row[12]&PROB_IS_HIDE && !isset($_SESSION['insider']))
   $forbidden=true;
 else{
   $forbidden=false;
@@ -37,6 +53,30 @@ else{
         $info = '<tr><td colspan="2" class="gradient-red center"><i class="icon-remove icon-white"></i> Try Again !</td></tr>';
       }
     }
+    $current_user=$_SESSION['user'];
+    $result=mysql_query("SELECT problem_id FROM saved_problem where user_id='$current_user' and problem_id=$prob_id");
+    $mark_flag=mysql_fetch_row($result);
+    if(!($mark_flag)){
+        $mark_icon_class='icon-star-empty';
+        $mark_btn_class='btn btn-default btn-block';
+        $mark_btn_html='Mark';
+    }else{
+        $mark_icon_class='icon-star';
+        $mark_btn_class='btn btn-danger btn-block';
+        $mark_btn_html='Unmark';
+    }
+    $result=mysql_query("SELECT content,tags FROM user_notes where user_id='$current_user' and problem_id=$prob_id");
+    $note_row=mysql_fetch_row($result);
+    if(!$note_row){
+      $note_content = '';
+      $tags = '';
+      $note_exist=false;
+    }else{
+      $note_content = $note_row[0];
+      $tags = $note_row[1];
+      $note_exist=true;
+    }
+
   }else{
     $info = '<tr><td colspan="2" class="center muted" >Not logged in.</td></tr>';
   } 
@@ -136,6 +176,7 @@ $Title="Problem $prob_id";
                     <tr><td style="text-align:left">Case Time Limit:</td><td><?php echo $row[8]?> ms</td></tr>
                     <tr><td style="text-align:left">Memory Limit:</td><td><?php echo $row[9]?> KB</td></tr>
                     <tr><td style="text-align:left">Case score:</td><td><?php echo $row[10]?></td></tr>
+                    <tr><td style="text-align:left">Comparison:</td><td><?php echo $comparison?></td></tr>
                     <?php
                     if($prob_level)
                       echo '<tr><td style="text-align:left">Level:</td><td>',$prob_level,'</td></tr>';
@@ -181,6 +222,40 @@ $Title="Problem $prob_id";
             </div>
           </div>
           <?php }?>
+          <?php if(isset($note_content)){ ?>
+          <div class="row-fluid">
+            <div class="span12" style="margin-bottom: 20px;">
+              <div class="accordion-group <?php if(!$note_exist) echo 'hide'?>" id="note_panel" >
+                <div class="accordion-heading panel-heading">
+                  <div class="accordion-toggle" style="cursor: auto;">
+                    <b>Notes</b>
+                    <a data-toggle="modal" href="#NoteModal" class="btn btn-mini btn-primary pull-right" id="action_edit_note">Edit</a>
+                  </div>
+                </div>
+                <div class="accordion-body in collapse" style="height: auto;">
+                  <div class="accordion-inner note-short" id="note_content"><?php echo htmlspecialchars($note_content);?></div>
+                </div>
+                <div class="accordion-body in collapse" style="height: auto;">
+                  <div class="accordion-inner">
+                  <strong>Tags:</strong>
+                  <span id="user_tags"><?php echo htmlspecialchars($tags)?></span>
+                  </div>
+                </div>
+              </div>
+              <a id="note_new_btn" class="btn btn-success btn-block <?php if($note_exist) echo 'hide'?>" data-toggle="modal" href="#NoteModal">Add notes and tags...</a>
+            </div>
+          </div>
+          <?php }?>
+          <?php if(isset($mark_btn_class)){ ?>
+          <div class="row-fluid">
+            <div class="span12" style="margin-bottom: 20px;">
+              <a href="#" class="<?php echo $mark_btn_class; ?>" id="action_mark">
+              <i class="<?php echo $mark_icon_class;?>"></i>
+              <span id="action_mark_html"><?php echo $mark_btn_html; ?></span>
+              </a>
+            </div>
+          </div>
+          <?php } ?>
         </div>
         <?php }?>
       </div>
@@ -223,6 +298,29 @@ $Title="Problem $prob_id";
         </div>
       </form>
     </div>
+    <div class="modal hide" id="NoteModal">
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h4>Notes - <?php echo $prob_id?></h4>
+      </div>
+      <form class="margin-0" action="#" method="post" id="form_note">
+        <div class="modal-body">
+          <textarea style="box-sizing: border-box;width: 100%;" rows="14" placeholder="Write something here..." name="content"></textarea>
+          <span class="help-block">This note can only be viewed by you.</span>
+          <input type="hidden" name="problem_id" value="<?php echo $prob_id?>">
+        </div>
+        <div class="modal-footer form-inline">
+          <div class="pull-left">
+            <div class="input-prepend">
+              <span class="add-on"><b>Tags</b></span>
+              <input class="span2" id="tags_edit" name="tags" type="text">
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Save</button>
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+      </form>
+    </div>
 
     <div id="show_tool" class="bottom-right hide">
       <span id="btn_submit2" title="Alt+S" class="btn btn-mini btn-primary shortcut-hint">Submit</span>
@@ -256,6 +354,48 @@ $Title="Problem $prob_id";
             //$('#SubmitModal').modal('hide');
             return true;
           }
+        });
+        $('#form_note').submit(function(){
+          var data = $(this).serializeArray();
+          $.post('ajax_usernote.php', data, function(res){
+            if(/__ok__/.test(res)){
+              for (var i = data.length - 1; i >= 0; i--) {
+                if(data[i].name=='content')
+                  $('#note_content').text(data[i].value);
+                else if(data[i].name=='tags')
+                  $('#user_tags').text(data[i].value);
+              };
+              $('#note_new_btn').hide();
+              $('#note_panel').show();
+              $('#NoteModal').modal('hide');
+            }
+          });
+          return false;
+        });
+        $('#NoteModal').on('show', function () {
+          $('#form_note textarea').val($('#note_content').text());
+          $('#tags_edit').val($('#user_tags').text());
+        });
+        $("#action_mark").click(function(){
+            var op;
+            if($('#action_mark_html').html()=="Mark")
+                op="add_saved";
+            else
+                op="rm_saved";	
+            $.get("ajax_saveproblem.php?prob="+prob+"&op="+op,function(result){
+                if(/__ok__/.test(result)){
+                    var tg=$("#action_mark");
+                    tg.toggleClass("btn-danger");
+                    tg.toggleClass("btn-default");
+                    tg.find('i').toggleClass('icon-star-empty').toggleClass('icon-star');
+                    var tg=$("#action_mark_html");
+                    if(tg.html()=="Mark")
+                        tg.html("Unmark");
+                    else
+                        tg.html("Mark");
+                }
+            });
+            return false;
         });
         function click_submit(){
           <?php if(!isset($_SESSION['user'])){?>

@@ -176,7 +176,7 @@ EOF;
 	if($uid=='')
 		die('');
 	isset($_POST['right']) ? $right=$_POST['right'] : die('');
-	if($right!='administrator'&&$right!='source_browser')
+	if($right!='administrator'&&$right!='source_browser'&&$right!='insider')
 		die('Invalid privilege');
 	mysql_query("insert into privilege VALUES ('$uid','$right','N')");
 }else if($op=="del_usr"){

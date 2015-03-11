@@ -20,7 +20,7 @@ function login($user, $is_cookie, $pwd='')
 	
 	$res=mysql_query("select rightstr from privilege where user_id='$user'");
 	while($r=mysql_fetch_row($res)){
-		if($r[0]=='administrator' || $r[0]=='source_browser')
+		if($r[0]=='administrator' || $r[0]=='source_browser' || $r[0]=='insider')
 			$_SESSION[$r[0]]=true;
 	}
 	

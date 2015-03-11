@@ -433,6 +433,25 @@ CREATE TABLE `saved_problem` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `user_notes`
+--
+
+DROP TABLE IF EXISTS `user_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `problem_id` int(11) NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  `tags` varchar(32) NOT NULL,
+  `content` text NOT NULL,
+  `edit_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_p` (`user_id`,`problem_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `experience_titles`
 --
 
