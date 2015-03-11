@@ -65,6 +65,17 @@ else{
         $mark_btn_class='btn btn-danger btn-block';
         $mark_btn_html='Unmark';
     }
+    $result=mysql_query("SELECT content,tags FROM user_notes where user_id='$current_user' and problem_id=$prob_id");
+    $note_row=mysql_fetch_row($result);
+    if(!$note_row){
+      $note_content = '';
+      $tags = '';
+      $note_exist=false;
+    }else{
+      $note_content = $note_row[0];
+      $tags = $note_row[1];
+      $note_exist=true;
+    }
 
   }else{
     $info = '<tr><td colspan="2" class="center muted" >Not logged in.</td></tr>';
@@ -211,6 +222,30 @@ $Title="Problem $prob_id";
             </div>
           </div>
           <?php }?>
+          <?php if(isset($note_content)){ ?>
+          <div class="row-fluid">
+            <div class="span12" style="margin-bottom: 20px;">
+              <div class="accordion-group <?php if(!$note_exist) echo 'hide'?>" id="note_panel" >
+                <div class="accordion-heading panel-heading">
+                  <div class="accordion-toggle" style="cursor: auto;">
+                    <b>Notes</b>
+                    <a data-toggle="modal" href="#NoteModal" class="btn btn-mini btn-primary pull-right" id="action_edit_note">Edit</a>
+                  </div>
+                </div>
+                <div class="accordion-body in collapse" style="height: auto;">
+                  <div class="accordion-inner note-short" id="note_content"><?php echo htmlspecialchars($note_content);?></div>
+                </div>
+                <div class="accordion-body in collapse" style="height: auto;">
+                  <div class="accordion-inner">
+                  <strong>Tags:</strong>
+                  <span id="user_tags"><?php echo htmlspecialchars($tags)?></span>
+                  </div>
+                </div>
+              </div>
+              <a id="note_new_btn" class="btn btn-success btn-block <?php if($note_exist) echo 'hide'?>" data-toggle="modal" href="#NoteModal">Add notes and tags...</a>
+            </div>
+          </div>
+          <?php }?>
           <?php if(isset($mark_btn_class)){ ?>
           <div class="row-fluid">
             <div class="span12" style="margin-bottom: 20px;">
@@ -263,6 +298,29 @@ $Title="Problem $prob_id";
         </div>
       </form>
     </div>
+    <div class="modal hide" id="NoteModal">
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h4>Notes - <?php echo $prob_id?></h4>
+      </div>
+      <form class="margin-0" action="#" method="post" id="form_note">
+        <div class="modal-body">
+          <textarea style="box-sizing: border-box;width: 100%;" rows="14" placeholder="Write something here..." name="content"></textarea>
+          <span class="help-block">This note can only be viewed by yourself.</span>
+          <input type="hidden" name="problem_id" value="<?php echo $prob_id?>">
+        </div>
+        <div class="modal-footer form-inline">
+          <div class="pull-left">
+            <div class="input-prepend">
+              <span class="add-on"><b>Tags</b></span>
+              <input class="span2" id="tags_edit" name="tags" type="text">
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Save</button>
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+      </form>
+    </div>
 
     <div id="show_tool" class="bottom-right hide">
       <span id="btn_submit2" title="Alt+S" class="btn btn-mini btn-primary shortcut-hint">Submit</span>
@@ -297,7 +355,28 @@ $Title="Problem $prob_id";
             return true;
           }
         });
-	$("#action_mark").click(function(){
+        $('#form_note').submit(function(){
+          var data = $(this).serializeArray();
+          $.post('ajax_usernote.php', data, function(res){
+            if(/__ok__/.test(res)){
+              for (var i = data.length - 1; i >= 0; i--) {
+                if(data[i].name=='content')
+                  $('#note_content').text(data[i].value);
+                else if(data[i].name=='tags')
+                  $('#user_tags').text(data[i].value);
+              };
+              $('#note_new_btn').hide();
+              $('#note_panel').show();
+              $('#NoteModal').modal('hide');
+            }
+          });
+          return false;
+        });
+        $('#NoteModal').on('show', function () {
+          $('#form_note textarea').val($('#note_content').text());
+          $('#tags_edit').val($('#user_tags').text());
+        });
+        $("#action_mark").click(function(){
             var op;
             if($('#action_mark_html').html()=="Mark")
                 op="add_saved";

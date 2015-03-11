@@ -123,6 +123,17 @@ CREATE TABLE `saved_problem` (
   UNIQUE KEY `u_p` (`user_id`,`problem_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `user_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `problem_id` int(11) NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  `tags` varchar(32) NOT NULL,
+  `content` TEXT NOT NULL DEFAULT '',
+  `edit_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_p` (`user_id`,`problem_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `experience_titles` (
   `experience` int NOT NULL,
   `title` varchar(20) NOT NULL,
