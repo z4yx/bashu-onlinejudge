@@ -306,7 +306,7 @@ $Title="Problem $prob_id";
       <form class="margin-0" action="#" method="post" id="form_note">
         <div class="modal-body">
           <textarea style="box-sizing: border-box;width: 100%;" rows="14" placeholder="Write something here..." name="content"></textarea>
-          <span class="help-block">This note can only be viewed by yourself.</span>
+          <span class="help-block">This note can only be viewed by you.</span>
           <input type="hidden" name="problem_id" value="<?php echo $prob_id?>">
         </div>
         <div class="modal-footer form-inline">

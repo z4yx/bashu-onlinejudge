@@ -26,13 +26,17 @@ check_problemid($req);
 $keyword=mysql_real_escape_string(trim($req));
 if(isset($_SESSION['user'])){
   $user_id=$_SESSION['user'];
-  $col=',res';
-  $join="LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id group by problem_id) as temp on(pid=problem_id)";
+  $result=mysql_query("SELECT problem_id,title,source,res,tags from
+    (select problem.problem_id,title,source,tags from problem left join user_notes on (user_id='$user_id' and user_notes.problem_id=problem.problem_id)  )pt
+    LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id group by problem_id) as temp on(pid=problem_id)
+    where title like '%$keyword%' or source like '%$keyword%' or tags like '%$keyword%'
+    order by problem_id limit $page_id,100");
 }else{
-  $col='';
-  $join='';
+  $result=mysql_query("SELECT problem_id,title,source from
+    problem
+    where title like '%$keyword%' or source like '%$keyword%'
+    order by problem_id limit $page_id,100");
 }
-$result=mysql_query("select problem_id,title,source $col from problem $join where title like '%$keyword%' or source like '%$keyword%' order by problem_id limit $page_id,100");
 if(mysql_num_rows($result)==1){
   $row=mysql_fetch_row($result);
   header('location: problempage.php?problem_id='.$row[0]);
@@ -60,11 +64,12 @@ $Title="Search result $page_id";
                 <th style="width:7%">ID</th>
                 <?php 
                   if(isset($_SESSION['user']))
-                    echo '<th colspan="2">Title</th>';
+                    echo '<th colspan="2">Title</th>',
+                        '<th style="width:15%">Tags</th>';
                   else
                     echo '<th>Title</th>';
                 ?>
-                <th style="width:30%">Source</th>
+                <th style="width:25%">Source</th>
               </tr></thead>
               <tbody>
                 <?php 
@@ -78,6 +83,8 @@ $Title="Search result $page_id";
                   echo '<td>';
                 }
                 echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1],'</a></td>';
+                if(isset($_SESSION['user']))
+                  echo '<td>',htmlspecialchars($row[4]),'</td>';
                 echo '<td>',$row[2],'</td>';
                 echo "</tr>\n";
                   }
