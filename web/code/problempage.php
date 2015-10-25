@@ -137,13 +137,13 @@ $Title="Problem $prob_id";
           <div class="row-fluid">
             <div class="span12">
               <h3 class="problem-subtitle">Sample Input</h3>
-              <div class="well well-small" style="font-family: monospace;"><?php echo mb_ereg_replace('\r?\n','<br>',$row[4]);?></div>
+              <textarea class="well well-small" readonly="readonly" style="font-family: monospace;cursor: text;"><?php echo $row[4];?></textarea>
             </div>
           </div>
           <div class="row-fluid">
             <div class="span12">
               <h3 class="problem-subtitle">Sample Output</h3>
-              <div class="well well-small" style="font-family: monospace;"><?php echo mb_ereg_replace('\r?\n','<br>',$row[5]);?></div>
+              <textarea class="well well-small" readonly="readonly" style="font-family: monospace;cursor: text;"><?php echo $row[5];?></textarea>
             </div>
           </div>
           <?php if(strlen($row[6])){ ?>
@@ -435,3 +435,4 @@ $Title="Problem $prob_id";
     </script>
   </body>
 </html>
+
