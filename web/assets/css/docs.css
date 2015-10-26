@@ -112,6 +112,18 @@ samp.samp-sourcecode {
 .problem-title{
   color: #1D2A88;
 }
+.problem-sample{
+  font-family: monospace;
+  white-space: pre;
+}
+textarea.problem-sample{
+  width: 100%;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+  font-size: inherit;
+  line-height: inherit;
+}
 .mail-item:nth-child(odd){
   background-color: #F9F9F9;
 }

@@ -137,13 +137,13 @@ $Title="Problem $prob_id";
           <div class="row-fluid">
             <div class="span12">
               <h3 class="problem-subtitle">Sample Input</h3>
-              <div class="well well-small" style="font-family: monospace;"><?php echo mb_ereg_replace('\r?\n','<br>',$row[4]);?></div>
+              <div class="well well-small click-to-copy problem-sample"><?php echo htmlspecialchars($row[4]);?></div>
             </div>
           </div>
           <div class="row-fluid">
             <div class="span12">
               <h3 class="problem-subtitle">Sample Output</h3>
-              <div class="well well-small" style="font-family: monospace;"><?php echo mb_ereg_replace('\r?\n','<br>',$row[5]);?></div>
+              <div class="well well-small click-to-copy problem-sample"><?php echo htmlspecialchars($row[5]);?></div>
             </div>
           </div>
           <?php if(strlen($row[6])){ ?>
@@ -337,6 +337,21 @@ $Title="Problem $prob_id";
         var prob=<?php echo $prob_id?>;
         $('#nav_prob').parent().addClass('active');
         $('#ret_url').val("problempage.php?problem_id="+prob);
+        $('.click-to-copy').click(function(){
+          var $self = $(this);
+          var $parent = $self.parent();
+          if($self.is('div')){
+            $self.replaceWith(function(){
+                return $("<textarea />", {
+                  html: $self.html(),
+                  class: $self.prop('class'),
+                  readonly: "readonly"
+                });
+            });
+            var $new = $parent.find('textarea');
+            $new.height(1).height($new.prop('scrollHeight')).select();
+          }
+        });
         $('#action_delete').click(function(){
           $.ajax({
             url:"ajax_deleteprob.php?problem_id="+prob,
