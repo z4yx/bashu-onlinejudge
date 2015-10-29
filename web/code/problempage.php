@@ -137,13 +137,13 @@ $Title="Problem $prob_id";
           <div class="row-fluid">
             <div class="span12">
               <h3 class="problem-subtitle">Sample Input</h3>
-              <div class="well well-small click-to-copy problem-sample"><?php echo htmlspecialchars($row[4]);?></div>
+              <div class="well well-small click-to-copy problem-sample"><?php echo ($row[4]);?></div>
             </div>
           </div>
           <div class="row-fluid">
             <div class="span12">
               <h3 class="problem-subtitle">Sample Output</h3>
-              <div class="well well-small click-to-copy problem-sample"><?php echo htmlspecialchars($row[5]);?></div>
+              <div class="well well-small click-to-copy problem-sample"><?php echo ($row[5]);?></div>
             </div>
           </div>
           <?php if(strlen($row[6])){ ?>
@@ -340,7 +340,7 @@ $Title="Problem $prob_id";
         $('.click-to-copy').click(function(){
           var $self = $(this);
           var $parent = $self.parent();
-          if($self.is('div')){
+          if($self.is('div') && !$self.children().length){
             $self.replaceWith(function(){
                 return $("<textarea />", {
                   html: $self.html(),
