@@ -86,7 +86,7 @@ $(function () {
                 type: 'area'
             },
             title: {
-                text: 'Submit Statistics'
+                text: 'Submission Statistics'
             },
             credits: {
               enabled: false
@@ -130,7 +130,7 @@ $(function () {
                 }
             },
             series: [{
-                name: 'Submit',
+                name: 'Submission',
                 data: [<?php foreach($submit_cnt as $row) echo "[Date.UTC(",$row[0],",",$row[1]-1,",1),",$row[2],"],"; ?>]
             },{
                 name: 'Accepted',
