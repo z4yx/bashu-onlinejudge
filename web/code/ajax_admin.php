@@ -208,5 +208,15 @@ EOF;
 		echo 'Password is the same as user name now!';
 	else
 		echo 'No such user!';
+}else if($op=="rand_inactive"){
+	isset($_POST['days']) ? $days=intval(trim($_POST['days'])) : die('');
+	if($days <= 0)
+		die('Error: days <= 0');
+	mysql_query("update users set password=MD5(RAND()) where TIMESTAMPDIFF(DAY,accesstime,NOW())>$days");
+	$affected = mysql_affected_rows();
+	if($affected>0)
+		echo "$affected users have been affected";
+	else
+		echo 'No user is affected';
 }
 ?>
