@@ -25,7 +25,7 @@ bool init_mysql_con() throw ()
 	hMySQL = mysql_init(NULL);
 	if(!hMySQL)
 		return false;
-	hMySQL = mysql_real_connect(hMySQL, DATABASE_HOST, DATABASE_USER, DATABASE_PASS, "bsoj", 0, NULL, 0);
+	hMySQL = mysql_real_connect(hMySQL, DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME, 0, NULL, 0);
 	if(!hMySQL)
 		return false;
 	if(mysql_set_character_set(hMySQL, "utf8"))

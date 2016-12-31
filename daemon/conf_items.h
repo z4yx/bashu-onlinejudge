@@ -3,7 +3,7 @@
 
 //Configure variables defined in readconf.cpp
 
-extern char DATABASE_HOST[], DATABASE_USER[], DATABASE_PASS[];
+extern char DATABASE_HOST[], DATABASE_USER[], DATABASE_PASS[], DATABASE_NAME[];
 extern char HTTP_BIND_IP[];
 extern uint16_t HTTP_BIND_PORT;
 
