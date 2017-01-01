@@ -83,7 +83,7 @@ $Title="Web Board";
           </fieldset>
           <input type="hidden" name="message_id" id="msgid_input">
           <?php if(isset($_GET['problem_id'])){
-            echo '<input type="hidden" name="problem_id" value="',$_GET['problem_id'],'">';
+            echo '<input type="hidden" name="problem_id" value="',intval($_GET['problem_id']),'">';
           }?>
         </form>
         <div class="resize-ico" id="resize"></div>   

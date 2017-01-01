@@ -133,7 +133,7 @@ $Title="Record";
             <input type="text" class="input-mini" name="problem_id" id="ipt_problem_id" value="<?php echo $problem_id?>">
             <label>User:</label>
             <?php if(isset($_SESSION['user'])) echo'<div class="input-append">' ?>
-            <input type="text" class="input-small" name="user_id" id="ipt_user_id" value="<?php echo $user_id?>">
+            <input type="text" class="input-small" name="user_id" id="ipt_user_id">
             <?php if(isset($_SESSION['user'])) echo'<button class="btn" id="filter_me" data-myuid="',$_SESSION['user'],'" type="button">Me</button></div>' ?>
             <label>Result:</label>
             <select class="input-small" name="result" id="slt_result">
@@ -246,6 +246,7 @@ $Title="Record";
         $('#slt_result>option[value=<?php echo $result?>]').prop('selected',true);
         $('#slt_way>option[value="<?php echo $way?>"]').prop('selected',true);
         $('#nav_record').parent().addClass('active');
+        $('#ipt_user_id').val(decodeURIComponent('<?php echo urlencode($user_id)?>'));
         $('#ret_url').val("record.php"+window.location.search);
 
         function toggle_s(obj){
