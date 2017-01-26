@@ -128,6 +128,14 @@ $Title="Admin panel";
                     <input type="submit" class="btn" value="Reset">
                     <input type="hidden" name="op" value="reset_usr">
                   </form>
+
+                  <form action="admin.php" method="post" class="form-inline" id="form_rand_inactive">
+                    Randomize password of users who haven't logged in for
+                    <input type="text" name="days" id="input_days_inactive" class="input-small" value="365">
+                    days.
+                    <input type="submit" class="btn" value="Do It">
+                    <input type="hidden" name="op" value="rand_inactive">
+                  </form>
                 </div>
               </div>
             </div>
@@ -136,7 +144,7 @@ $Title="Admin panel";
       </div>
       <hr>
       <footer>
-        <p>&copy; 2012-2014 Bashu Middle School</p>
+        <p>&copy; 2012-2016 Bashu Middle School</p>
       </footer>
 
     </div>
@@ -276,6 +284,18 @@ $Title="Admin panel";
             type:"POST",
             url:"ajax_admin.php",
             data:$('#form_resetpwd').serialize(),
+            success:function(info){alert(info)}
+          });
+          return false;
+        });
+        $('#form_rand_inactive').submit(function(E){
+          E.preventDefault();
+          if(!window.confirm("Are you sure to randomize password of them?"))
+            return false;
+          $.ajax({
+            type:"POST",
+            url:"ajax_admin.php",
+            data:$('#form_rand_inactive').serialize(),
             success:function(info){alert(info)}
           });
           return false;

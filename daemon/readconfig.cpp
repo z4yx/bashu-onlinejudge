@@ -12,7 +12,7 @@ bool lang_exist[MAXLANG];
 string lang_ext[MAXLANG];
 string lang_compiler[MAXLANG];  
 
-char DATABASE_HOST[64], DATABASE_USER[128], DATABASE_PASS[128];
+char DATABASE_HOST[64], DATABASE_USER[128], DATABASE_PASS[128], DATABASE_NAME[128];
 char HTTP_BIND_IP[32];
 uint16_t HTTP_BIND_PORT;
 
@@ -44,6 +44,9 @@ bool read_config()
 
 	tmp = ini.Get(std::string("DATABASE_PASS"), std::string(""));
 	strncpy(DATABASE_PASS, tmp.c_str(), 120);
+
+	tmp = ini.Get(std::string("DATABASE_NAME"), std::string("bsoj"));
+	strncpy(DATABASE_NAME, tmp.c_str(), 120);
 
 	tmp = ini.Get(std::string("HTTP_BIND_IP"), std::string("0.0.0.0"));
 	strncpy(HTTP_BIND_IP, tmp.c_str(), 30);

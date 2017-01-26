@@ -49,7 +49,7 @@ if($op=='check'){
 	if($op=='show'){
 		$res=mysql_query("select content,new_mail,to_user from mail where UPPER(defunct)='N' and mail_id=$mail");
 		if($res && ($row=mysql_fetch_row($res))){
-			if(strcmp($_SESSION['user'], $row[2]))
+			if(strcasecmp($_SESSION['user'], $row[2]))
 				exit(0);
 			echo htmlspecialchars($row[0]);
 			if($row[1])
