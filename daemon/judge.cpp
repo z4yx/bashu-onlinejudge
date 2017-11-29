@@ -67,6 +67,10 @@ bool solution::compile() throw (const char *)
 	if(!lang_exist[lang]) {
 		throw "Language doesn't exist";
 	}
+    if(lang_compiler[lang]=="Submit Answer"){
+        puts("Submit Answer");
+        return true;
+    }
 	std::string filename("target.");
 	filename += lang_ext[lang];
 
@@ -132,6 +136,8 @@ void solution::judge() throw (const char *)
 {
 	char dir_name[MAXPATHLEN+16], input_filename[MAXPATHLEN+16];
 	char buffer[MAXPATHLEN*2+16];
+    bool Submit=lang_compiler[lang]=="Submit Answer";
+    std::istringstream Code(code);
 	puts("judge");
 
 	sprintf(dir_name, "%s/%d", DataDir, problem);
@@ -157,8 +163,9 @@ void solution::judge() throw (const char *)
 		last_state = "No data files";
 		throw "Data folder is empty";
 	}
-	std::sort(in_files.begin(), in_files.end());
-
+	std::sort(in_files.begin(), in_files.end(),[](std::string a,std::string b){
+        return a.length()==b.length()?a<b:a.length()<b.length();
+    });
 	int total_score = 0, total_time = 0, max_memory = 0, dir_len = strlen(dir_name);
 	const int full_score = 100;
 	int case_score = full_score/in_files.size();
@@ -174,25 +181,37 @@ void solution::judge() throw (const char *)
 
 		execute_info result;
 		int get_score = case_score;
-
-		if(run_judge(target_path, buffer, "user.out", time_limit, (lang_extra_mem[lang] + mem_limit) << 10 /*to byte*/, &result)) {
+        if(Submit){
+            result.time=0;result.memory=0;
+            std::string str;
+            getline(Code,str);
+            int Line=atoi(str.c_str());
+            FILE *output=fopen("user.out","wb");
+            for(int i=1;i<=Line;i++){
+                getline(Code,str);
+                fprintf(output,"%s",str.c_str());
+            }
+            fclose(output);
+            goto goto_JUDGE;
+        }
+		else if(run_judge(target_path, buffer, "user.out", time_limit, (lang_extra_mem[lang] + mem_limit) << 10 /*to byte*/, &result)) {
 			error_code = RES_SE;
 			last_state = "Cannot run target program";
 			throw "Cannot run target program";
 		}else if(result.state == 0) {
+        goto_JUDGE:
 			int len = d_name.size()+dir_len+1; //dir+'/'+file
 			buffer[len-2] = 'o';
 			buffer[len-1] = 'u';
 			buffer[len] = 't';
 			buffer[len+1] = '\0';
-
 			FILE *fanswer = fopen(buffer, "rb");
 			if(fanswer) {
 				FILE *foutput = fopen("user.out", "rb"), *finput;
 				if(foutput) {
 					validator_info info;
 
-					switch(compare_way >> 16) {
+					switch((compare_way >> 16)&7) {
 					case CMP_tra:
 #ifdef USE_CENA_VALIDATOR
 						info = validator_cena(fanswer, foutput);

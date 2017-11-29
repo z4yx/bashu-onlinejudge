@@ -40,7 +40,7 @@ $result=mysql_query("select user_id,time,memory,result,language,code_length,prob
 $row=mysql_fetch_row($result);
 if(!$row)
   die('No such solution.');
-
+$prob_id=$row[6];
 $ret = check_permission($row[6], $row[7], $row[0]);
 if($ret === TRUE)
   $allowed = TRUE;
@@ -56,6 +56,7 @@ if($allowed){
     $source=$tmp[0];
   else
     $info = 'Source code is not available!';
+  $submitans=intval(mysql_fetch_row(mysql_query("select compare_way from problem where problem_id=$row[6]"))[0])>>20;
 }
 if(isset($_GET['raw'])){
   if(isset($info)){
@@ -72,7 +73,6 @@ $Title="Source $sol_id";
 <!DOCTYPE html>
 <html>
   <?php require('head.php'); ?>
-
   <body onload="prettyPrint()">
     <?php require('page_header.php'); ?>  
           
@@ -105,7 +105,11 @@ $Title="Source $sol_id";
         </div>
         <div class="row-fluid">
           <div class="span10 offset1" id="div_code">
+          <?php if($submitans==0){?>
               <pre class="prettyprint linenums"><?php echo htmlspecialchars($source);?></pre>
+          <?php }else{?>
+              <p class="hide" id="Code"><?php echo htmlspecialchars($source);?></p>
+          <?php }?>
           </div>
         </div>
       <?php } ?>
@@ -144,6 +148,44 @@ $Title="Source $sol_id";
         });
         return false;
       }
+      function Decode(String){
+        var temp = document.createElement("div");
+        temp.innerHTML = String;
+        var output = temp.innerText || temp.textContent;
+        temp = null;
+        return output;
+      }
+      var Case=0;
+      function Change(){
+        $.ajaxSetup({  
+          async : false  
+        });
+        var plain=document.getElementById("Code");
+        var div=document.getElementById("div_code");
+        var code=plain.innerHTML;
+        var Strings=code.split('\n');
+        var tot=0;
+        $.get("download.php?problem_id=<?php echo $prob_id;?>&op=query",function(data){tot=data;});
+        for(var i=0;i<Strings.length;i++){
+          var Line=new Number(Strings[i]),String="";
+          if(Line<0||Strings[i]=='')continue;
+          var node=document.createElement("p");
+          if(Case+1>tot)break;
+          var Inner=document.createTextNode("Case "+(++Case));
+          node.style="font-size:20px;";
+          node.appendChild(Inner);
+          div.appendChild(node);
+          node=document.createElement("pre");
+          node.class="show";
+          for(var j=i+1;j<=i+Line;j++)
+            String+=Strings[j]+"\n";
+          Inner=document.createTextNode(Decode(String));
+          node.appendChild(Inner);
+          div.appendChild(node);
+          i+=Line;
+        };
+      };
+      <?php if($submitans!=0){?>Change();<?php }?>
     </script>
   </body>
 </html>

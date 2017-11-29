@@ -3,7 +3,28 @@ require('inc/result_type.php');
 require('inc/lang_conf.php');
 require('inc/problem_flags.php');
 require('inc/checklogin.php');
-
+function get_testcase_dir()
+{
+  if(!isset($_SESSION['testcase_dir'])||$_SESSION['testcase_dir']==''){
+    $content = file_get_contents("http://127.0.0.1:8881/get_datapath");
+    if(FALSE === $content)
+      die("failed to get dir");
+    $_SESSION['testcase_dir']=$content.DIRECTORY_SEPARATOR;
+  }
+  return $_SESSION['testcase_dir'];
+}
+function getcase($prob_id){
+  $datadir=get_testcase_dir();
+  $datadir=$datadir.'/'.$prob_id.'/';
+  $arr = scandir($datadir);
+  if(FALSE === $arr)
+    $arr = array();
+  $tot = 0;
+  foreach($arr as $file_name)
+    if(pathinfo($file_name,PATHINFO_EXTENSION)=='in')
+      $tot++;
+  return $tot;
+}
 if(isset($_GET['problem_id']))
   $prob_id=intval($_GET['problem_id']);
 else if(isset($_SESSION['view']))
@@ -17,7 +38,8 @@ $result=mysql_query($query);
 $row=mysql_fetch_row($result);
 if(!$row)
   die('Wrong Problem ID.');
-switch ($row[13] >> 16) {
+$judge=intval($row[13]>>20);
+switch (intval($row[13] >> 16)&7) {
   case 0:
     $comparison='Traditional';
     break;
@@ -67,7 +89,7 @@ else{
     }
     $result=mysql_query("SELECT content,tags FROM user_notes where user_id='$current_user' and problem_id=$prob_id");
     $note_row=mysql_fetch_row($result);
-    if(!$note_row){
+    if(!$note_row||($note_row[0]==''&&$note_row[1]=='')){
       $note_content = '';
       $tags = '';
       $note_exist=false;
@@ -80,6 +102,7 @@ else{
   }else{
     $info = '<tr><td colspan="2" class="center muted" >Not logged in.</td></tr>';
   } 
+  $case=getcase($prob_id);
   $result=mysql_query("select submit_user,solved,submit from problem where problem_id=$prob_id");
   $statis=mysql_fetch_row($result);
   $submit_user=$statis[0];
@@ -98,7 +121,28 @@ $Title="Problem $prob_id";
 <!DOCTYPE html>
 <html>
   <?php require('head.php'); ?>
-
+  <script>
+    var FAIL=1;
+    function Change(tmp){
+      var t=tmp.split('\n').length;
+      if(tmp!='')FAIL=0;
+      tmp=t+'\n'+tmp;
+      return tmp;
+    }
+    function SUBMIT(){
+      FAIL=1;
+      var form = document.getElementById('form_submit');
+      var Code = document.getElementById('submitcode');
+      var tagElements = form.getElementsByTagName('textarea');
+      Code.value="";
+      for (var j = 0; j < tagElements.length; j++){
+        if(tagElements[j].id=="submitcode")continue;
+        Code.value+=Change(tagElements[j].value);
+        Code.value+="\n";
+      }
+      return true;
+     }
+  </script>
   <body>
     <?php
     if($row[12]&PROB_HAS_TEX)
@@ -173,9 +217,11 @@ $Title="Problem $prob_id";
               <div class="well well-small">
                 <table class="table table-condensed table-striped" style="margin-bottom:0px;">
                   <tbody>
+                  <?php if($judge==0){?>
                     <tr><td style="text-align:left">Case Time Limit:</td><td><?php echo $row[8]?> ms</td></tr>
                     <tr><td style="text-align:left">Memory Limit:</td><td><?php echo $row[9]?> KB</td></tr>
-                    <tr><td style="text-align:left">Case score:</td><td><?php echo $row[10]?></td></tr>
+                  <?php }?>
+                    <tr><td style="text-align:left"><?php if($judge==0)echo"Case score:";else echo"Case num:";?></td><td><?php echo $row[10]?></td></tr>
                     <tr><td style="text-align:left">Comparison:</td><td><?php echo $comparison?></td></tr>
                     <?php
                     if($prob_level)
@@ -209,6 +255,7 @@ $Title="Problem $prob_id";
               <a href="#" title="Alt+S" class="btn btn-primary shortcut-hint" id="action_submit">Submit</a>
               <a href="record.php?way=time&amp;problem_id=<?php echo $prob_id?>" class="btn btn-info">Status</a>
               <a href="board.php?problem_id=<?php echo $prob_id;?>" class="btn btn-warning">Discuss</a>
+              <?php if($judge){?><a href="download.php?problem_id=<?php echo $prob_id?>&amp;op=download" class="btn btn-grey">Download</a><?php }?>
             </div>
           </div></div>
           <?php if(isset($_SESSION['administrator'])){?>
@@ -217,6 +264,7 @@ $Title="Problem $prob_id";
               <div class="well well-small problem-operation" style="margin-top:10px">
                 <a href="edit.php?problem_id=<?php echo $prob_id?>" class="btn btn-success">Edit</a>
                 <a href="testcase.php?problem_id=<?php echo $prob_id?>" class="btn btn-warning">Test Case</a>
+                <?php if($judge){?><a href="download.php?problem_id=<?php echo $prob_id?>&amp;op=update" class="btn btn-emmm">Update</a><?php }?>
                 <span id="action_delete" class="btn btn-danger"><?php echo $row[11]=='N' ? 'Delete' : 'Resume';?></span>
               </div>
             </div>
@@ -271,6 +319,7 @@ $Title="Problem $prob_id";
         <a class="close" data-dismiss="modal">&times;</a>
         <h4>Submit solution</h4>
       </div>
+      <?php if($judge==0){ ?>
       <form class="margin-0" action="submit.php" method="post" id="form_submit">
         <div class="modal-body" style="padding-top:5px">
           <h5 class="center">Paste your code here.</h5>
@@ -287,6 +336,7 @@ $Title="Problem $prob_id";
           </label>
           <select name="language" id="slt_lang">
             <?php foreach ($LANG_NAME as $langid => $lang) {
+              if($lang=='/')continue;
               echo "<option value=\"$langid\" ";
               if(isset($_SESSION['lang']) && $_SESSION['lang']==$langid)
                 echo 'selected="selected"';
@@ -297,6 +347,44 @@ $Title="Problem $prob_id";
           <a href="#" class="btn" data-dismiss="modal">Close</a>
         </div>
       </form>
+      <?php }else{?>
+      <form class="margin-0" action="submit.php" method="post" id="form_submit">
+        <div id="list" style="float:left;height:320px;overflow-y: auto; overflow-x: hidden;">
+        <?php for($i=1;$i<=$case;$i++){?>
+        <a class="btn btn-item<?php if($i==1)echo " active";?>" data_value="<?php echo $i;?>" style="margin-left: 20px;">Case <?php echo $i;?></a>
+        <?php }?>
+        </div>
+        <div id="Codingarea" style="float:right">
+          <textarea class="hidden" style="visibility:hidden" id="submitcode" name="source"></textarea>
+          <div class="alert alert-error hide margin-0" id="submit_result"></div>
+          <?php for($i=1;$i<=$case;$i++){?>
+            <?php if($i==1){?>
+          <textarea id="editor-<?php echo $i;?>" style="position:relative; margin-left: 0px; margin-top: 0px; width: 750px; height: 300px; visibility:visible"></textarea>
+            <?php }else{?>
+          <textarea id="editor-<?php echo $i;?>" style="position:absolute; margin-left: 0px; margin-top: -320px; width: 750px; height: 300px; visibility:hidden"></textarea>
+          <?php }}?>
+        </div>
+        <div class="modal-footer form-inline">
+          <div class="pull-left">
+              <label class="control-label" for="prob_input">Problem</label>
+              <input type="text" class="input-mini" style="font-weight: bold;margin-bottom: 0;" id="prob_input" name="problem">
+          </div>
+          <select class="hide" name="language" id="slt_lang" style="visibility:hidden">
+            <?php foreach ($LANG_NAME as $langid => $lang) {
+              echo "<option value=\"$langid\" ";
+              if($lang=='/')//_SESSION
+                echo 'selected="selected"';
+              echo ">$lang</option>";
+            } ?>
+          </select>
+          <label class="checkbox">
+            <input type="checkbox" <?php if($pref->sharecode=='on')echo 'checked';?> name="public">Share this code
+          </label>
+          <button class="btn btn-primary shortcut-hint" title="Alt+S" type="submit">Submit</button>
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+      </form>
+      <?php }?>
     </div>
     <div class="modal hide" id="NoteModal">
       <div class="modal-header">
@@ -360,8 +448,12 @@ $Title="Problem $prob_id";
           });
         });
         $('#form_submit').submit(function(){
+          <?php if($judge){?>SUBMIT();
+          var code = $('#submitcode').val();
+          <?php }else{?>
           var code = $('#detail_input').val();
-          if($.trim(code) == '' || code.length > 30000){
+          <?php }?>
+          if($.trim(code) == '' <?php if($judge){?> || FAIL <?php }?>|| code.length > 30000){
             $('#submit_result').html("Code is too short or too long.").show();
             return false;
           }else{
@@ -446,6 +538,24 @@ $Title="Problem $prob_id";
             click_submit();
         });
         reg_hotkey(72, toggle_info); //Alt+H
+      });
+      var currCase=1;
+      $(function(){
+        $('#list .btn-item').click(function() {
+          $(this)
+            .addClass('active')
+            .closest('#list')
+              .find('.btn-item')
+                .not($(this))
+                .removeClass('active')
+          ;
+          var x = $(this).attr('data_value');
+          if(currCase!=x){
+            $('#editor-' + currCase).css('visibility', 'hidden');
+            $('#editor-' + x).css('visibility', 'visible');
+            currCase = x;
+          }
+        });
       });
     </script>
   </body>

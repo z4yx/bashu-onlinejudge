@@ -6,6 +6,7 @@ $prob_id=intval($_GET['problem_id']);
 require('inc/checklogin.php');
 require 'inc/problem_flags.php';
 $way='tra';
+$judge_way='tra';
 $prec=-1;
 if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
   $info = 'You are not administrator';
@@ -18,7 +19,8 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
   if(!$row)
     $info = 'Wrong Problem ID';
   else { 
-    switch ($row[11] >> 16) {
+    $tmp=(intval($row[11])>>16)&7;
+    switch ($tmp) {
       case 0:
         $way='tra';
         break;
@@ -33,6 +35,7 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
         $way='spj';
         break;
     }
+    if($row[11]>>20==1)$judge_way='submit';
   }
 
   $option_opensource=0;
@@ -85,6 +88,10 @@ $Title="Edit problem $prob_id";
             <p><span>Memory: </span><input id="input_memory" name="memory" class="input-mini" type="text" value="<?php echo $row[9]?>"><span> KB</span></p>
           </div>
         </div>
+        <p><span>Judge: </span><select name="judge" id="input_judge" style="width:auto">
+              <option value="tra">Traditional</option>
+              <option value="submit">Submit</option>
+        </select></p>
         <div class="row-fluid">
           <div class="span12">
             <p><span>Validator: </span>
@@ -285,6 +292,7 @@ $Title="Edit problem $prob_id";
           }
         }
         $('#input_cmp>option[value="<?php echo $way?>"]').prop('selected',true);
+        $('#input_judge>option[value="<?php echo $judge_way?>"]').prop('selected',true);        
         (function(){
           var option='',k=<?php echo $prec?>;
           for(var i=0;i<10;i++){
