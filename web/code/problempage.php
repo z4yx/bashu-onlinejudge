@@ -264,13 +264,16 @@ $Title="Problem $prob_id";
               <div class="well well-small problem-operation" style="margin-top:10px">
                 <a href="edit.php?problem_id=<?php echo $prob_id?>" class="btn btn-success">Edit</a>
                 <a href="testcase.php?problem_id=<?php echo $prob_id?>" class="btn btn-warning">Test Case</a>
-                <?php if($judge){?><a href="download.php?problem_id=<?php echo $prob_id?>&amp;op=update" class="btn btn-emmm">Update</a><?php }?>
+                <?php if($judge){?><a onclick="Update()" class="btn btn-emmm">Update</a><?php }?>
+                
                 <span id="action_delete" class="btn btn-danger"><?php echo $row[11]=='N' ? 'Delete' : 'Resume';?></span>
               </div>
             </div>
           </div>
-          <?php }?>
+          <?php if($judge){?><div class="alert hide" id="update_res" style="margin-top:20px"></div>
+          <?php }}?>
           <?php if(isset($note_content)){ ?>
+          
           <div class="row-fluid">
             <div class="span12" style="margin-bottom: 20px;">
               <div class="accordion-group <?php if(!$note_exist) echo 'hide'?>" id="note_panel" >
@@ -420,6 +423,19 @@ $Title="Problem $prob_id";
     <script src="../assets/js/common.js"></script>
 
     <script type="text/javascript">
+      function Update(){
+        $.get("download.php?problem_id=<?php echo $prob_id;?>&op=update",function(data){
+          row=data.split('<br>');
+          if(row[row.length-1]=="admin_tfa")
+              window.location.href="admin_auth.php";
+          var obj=$('#update_res').hide();
+          obj.removeClass('alert-error');
+          obj.removeClass('alert-success');
+          if(row[row.length-1]=="Success")obj.addClass('alert-success');
+          else obj.addClass('alert-error');
+          obj.html("<button style=\"float: right;background: transparent;border: none;\" onclick=\"$('#update_res').slideUp();\"><font size=\"4\">×</font></button>"+data).slideDown();
+        });
+      }
       var hide_info = 0;
       $(document).ready(function(){
         var prob=<?php echo $prob_id?>;

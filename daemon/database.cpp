@@ -160,7 +160,7 @@ void write_result_to_database(int solution_id, solution *data) throw (const char
 
 	puts("update user info");
 	int is_first_solved = (int)(valid && data->error_code == RES_AC);
-	sprintf(statements, "update users,(SELECT experience from level_experience where level=get_problem_level(%d))as t set submit=submit+1,solved=solved+%d,score=score+%d,users.experience=users.experience+IFNULL(t.experience,0)*%d,language=%d where user_id='%s'", data->problem, is_first_solved, delta, is_first_solved, data->lang, data->user.c_str());
+	sprintf(statements, "update users,(SELECT experience from level_experience where level=get_problem_level(%d))as t set submit=submit+1,solved=solved+%d,score=score+%d,users.experience=users.experience+IFNULL(t.experience,0)*%d where user_id='%s'", data->problem, is_first_solved, delta, is_first_solved, data->user.c_str());
 	if(mysql_query(hMySQL, statements))
 		throw "update user info";
 	// if(1 != mysql_affected_rows(hMySQL))

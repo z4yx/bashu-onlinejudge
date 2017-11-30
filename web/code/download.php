@@ -26,6 +26,8 @@ function getcase($prob_id){
       $tot++;
   return $tot;
 }
+if(!isset($_SESSION['user']))
+    die("Not logged in");
 if(!isset($_GET['op']))exit;
 if(isset($_GET['problem_id']))
   $prob_id=intval($_GET['problem_id']);
@@ -58,17 +60,20 @@ if($op=='download'){
   if(!isset($_SESSION['administrator']))
     die('Permission Denied');
   if(!isset($_SESSION['admin_tfa']) || !$_SESSION['admin_tfa']){
-    $_SESSION['admin_retpage'] = "download.php?problem_id=$prob_id&op=$op";
-    header("Location: admin_auth.php");
+    $_SESSION['admin_retpage'] = "problempage.php?problem_id=$prob_id";
+    echo "admin_tfa";
     exit;
   }
   $datadir=$datadir.$prob_id.'/';
   if(!is_file($datadir."addition.zip"))$command="zip ".$datadir.$prob_id.".zip ".$datadir."*.in -j";
   else $command="zip ".$datadir.$prob_id.".zip ".$datadir."*.in ".$datadir."/addition.zip -j";
-  echo "system(".$command.")<br>";
-  system($command,$callback);
+  //echo "system(".$command.")<br>";
+  exec($command,$ret,$callback);
+  foreach($ret as $i){
+    echo mb_ereg_replace('\r?\n','<br>',$i)."<br>";
+  }
   if($callback!=0){
-    echo "<br>Something went wrong<br>Please Contact to Administrator<br>perhaps you haven't installed software \"zip\"";
+    echo "<br>Something went wrong<br>Please Contact to Administrator<br>perhaps you haven't installed software \"zip\"<br>fail";
   }else{
     echo "<br>Success";
   }
