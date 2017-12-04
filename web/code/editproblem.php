@@ -20,7 +20,9 @@ if(!isset($_POST['op']))
 require('inc/database.php');
 $time=intval($_POST['time']);
 $memory=intval($_POST['memory']);
+$judge_way=isset($_POST['judge']) ? $_POST['judge']=='tra' ? 0 : 1 : 0;
 $compare_way=isset($_POST['compare']) ? CMP_TYPE($_POST['compare'], intval($_POST['precision'])) : 0;
+$compare_way|=$judge_way<<20;
 $score=intval($_POST['score']);
 $title=isset($_POST['title']) ? mysql_real_escape_string($_POST['title']) : '';
 $des=isset($_POST['description']) ? mysql_real_escape_string($_POST['description']) : '';

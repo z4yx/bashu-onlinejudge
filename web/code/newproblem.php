@@ -35,6 +35,10 @@ $Title="New problem";
             <p><span>Memory: </span><input id="input_memory" name="memory" class="input-mini" type="text" value="65536"><span> KB</span></p>
           </div>
         </div>
+        <p><span>Judge: </span><select name="judge" id="input_judge" style="width:auto">
+              <option value="tra">Traditional</option>
+              <option value="submit">Submit</option>
+        </select></p>
         <div class="row-fluid">
           <div class="span12">
             <p><span>Validator: </span>

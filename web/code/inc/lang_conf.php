@@ -4,6 +4,7 @@ static $LANG_NAME=array(
     1 => 'GCC',
     2 => 'Pascal',
     3 => 'G++(0x)',
+    4 => '/',
   );
 
 static $LANG_EXT=array(
@@ -11,4 +12,5 @@ static $LANG_EXT=array(
     1 => 'c',
     2 => 'pas',
     3 => 'cpp',
+    4 => 'in',
   );

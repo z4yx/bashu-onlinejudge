@@ -70,9 +70,10 @@ else if($row[5]&PROB_IS_HIDE && !isset($_SESSION['insider']))
   $forbidden=true;
 if($forbidden)
 	die('You don\'t have permissions to access this problem');
-
-$_SESSION['lang']=$lang;
-mysql_query("update users set language=$lang where user_id='".$_SESSION['user']."'");
+if($LANG_NAME[$lang]!='/'){
+  $_SESSION['lang']=$lang;
+  mysql_query("update users set language=$lang where user_id='".$_SESSION['user']."'");
+}
 mysql_query("update problem set in_date=NOW() where problem_id=$prob");
 
 $key=md5('key'.time().rand());
