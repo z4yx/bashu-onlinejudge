@@ -453,6 +453,12 @@ input.input-in-table{
 .width-for-2x-icon{
   width: 26px;
 }
+table .online-users{
+  text-align: left;
+}
+.online-users .label{
+  margin-right: 4px;
+}
 @media (max-width: 1149px) {
   .navbar .brand .navbar-hide-text{
     display: none;

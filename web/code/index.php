@@ -9,6 +9,7 @@ function encode_user_id($user)
 }
 require('inc/checklogin.php');
 require('inc/database.php');
+$recently_access=mysql_query("select user_id from users where TIMESTAMPADD(DAY,-1,NOW())<accesstime order by user_id");
 $res=mysql_query("select content from news where news_id=0");
 $index_text=($row=mysql_fetch_row($res)) ? $row[0] : '';
 $res=mysql_query("select YEAR(in_date) as yr, MONTH(in_date) as mon,count(1),SUM(IF(result=0, 1, 0)) from solution GROUP BY YEAR(in_date) , MONTH(in_date) ORDER BY yr,mon");
@@ -36,6 +37,25 @@ $Title="Welcome to Bashu OnlineJudge";
                 <?php echo $index_text?>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="row-fluid">
+        <div class="span10 offset1">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>Active Users</td>
+              <td class="online-users">
+                <?php
+                  while($row=mysql_fetch_row($recently_access)){
+                    echo '<span class="label">',htmlspecialchars($row[0]),'</span>';
+                  }
+                ?>
+              </td>
+            </tr>
+            <tr><td></td><td></td></tr>
+          </tbody>
+        </table>
         </div>
       </div>
       <div class="row-fluid">

@@ -10,8 +10,7 @@
   <link rel="stylesheet" href="../assets/css/font-awesome-ie7.min.css">
   <![endif]-->
   <link href="../assets/js/google-code-prettify/prettify.css" rel="stylesheet">
-  <link href="../assets/css/docs.css?v=12" rel="stylesheet">
-
+  <link href="../assets/css/docs.css?v=13" rel="stylesheet">
   <!--[if IE 6]>
   <link href="../assets/css/ie6.min.css" rel="stylesheet">
   <![endif]-->
