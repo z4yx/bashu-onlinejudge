@@ -7,6 +7,10 @@ else if(isset($_SESSION['view']))
   $page_id=intval($_SESSION['view']/100);
 else
   $page_id=10;
+if(isset($_GET['category']))
+  $category=$_GET['category'];
+else
+  $category='';
 
 require('inc/database.php');
 $row=mysql_fetch_row(mysql_query('select max(problem_id) from problem'));
@@ -18,12 +22,21 @@ if(isset($_SESSION['administrator']))
   $addt_cond='';
 else
   $addt_cond=" defunct='N' and ";
-$range="between $page_id"."00 and $page_id".'99';
+if(strlen($category))
+  $range="in (select problem_id from problem_category where category='".mysql_real_escape_string($category)."' )";
+else
+  $range="between $page_id"."00 and $page_id".'99';
 if(isset($_SESSION['user'])){
   $user_id=$_SESSION['user'];
   $result=mysql_query("SELECT problem_id,title,accepted,submit,in_date,defunct,res,saved.pid from problem LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id $range group by problem_id) as solved on(solved.pid=problem_id) left join (select problem_id as pid from saved_problem where user_id='$user_id') as saved on(saved.pid=problem_id) where $addt_cond problem_id $range order by problem_id");
 }else{
   $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct from problem where $addt_cond problem_id $range  order by problem_id");
+}
+
+$cate_result=mysql_query('SELECT DISTINCT category from problem_category order by category');
+$categories = array();
+while($category_row=mysql_fetch_row($cate_result)){
+  array_push($categories, $category_row[0]);
 }
 $Title="Problemset $page_id";
 ?>
@@ -48,6 +61,23 @@ $Title="Problemset $page_id";
       }
       ?>
         <li><a href="level.php?level=1">Levels &raquo;</a></li>
+      </ul>
+      </div>
+      </div>
+      <div class="row-fluid">
+      <div class="pagination pagination-centered" style="margin-top: 0;">
+      <ul>
+      <?php
+      if(count($categories)>0){
+        echo '<li><a href="problemset.php"><i class="icon-remove-sign" aria-hidden="true"></i></a></li>';
+
+        foreach ($categories as $key => $i)
+          if($i!=$category)
+            echo '<li><a href="problemset.php?category=',htmlspecialchars($i),'">',htmlspecialchars($i),'</a></li>';
+          else
+            echo '<li class="active"><a href="problemset.php?category=',htmlspecialchars($i),'">',htmlspecialchars($i),'</a></li>';
+      }
+      ?>
       </ul>
       </div>
       </div>

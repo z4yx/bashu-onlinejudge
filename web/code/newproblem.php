@@ -146,6 +146,11 @@ $Title="New problem";
           </div>
         </div>
         <div class="row-fluid">
+          <div class="span9">
+            <p><span>Categories: </span><input id="input_category" name="category" type="text" class="input-xlarge""><span> (separated by space)</span></p>
+          </div>
+        </div>
+        <div class="row-fluid">
           <div class="span9" style="text-align:center">
             <input type="submit" class="btn btn-primary" value="Submit">
           </div>

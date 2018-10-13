@@ -45,6 +45,14 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])) {
     $option_opensource=1;
   $option_level=($row[12]&PROB_LEVEL_MASK)>>PROB_LEVEL_SHIFT;
   $option_hide=(($row[12]&PROB_IS_HIDE)?'checked':'');
+
+  $query="select category from problem_category where problem_id=$prob_id";
+  $result=mysql_query($query);
+  $categories = array();
+  while($category_row=mysql_fetch_row($result)){
+    array_push($categories, $category_row[0]);
+  }
+  $category=join(' ', $categories);
 }
 $level_max=(PROB_LEVEL_MASK>>PROB_LEVEL_SHIFT);
 
@@ -202,6 +210,11 @@ $Title="Edit problem $prob_id";
               Source:<br>
               <textarea class="span12" name="source" rows="1"><?php echo htmlspecialchars($row[7])?></textarea>
             </p>
+          </div>
+        </div>
+        <div class="row-fluid">
+          <div class="span9">
+            <p><span>Categories: </span><input id="input_category" name="category" type="text" class="input-xlarge" value="<?php echo htmlspecialchars($category)?>"><span> (separated by space)</span></p>
           </div>
         </div>
         <div class="row-fluid">
