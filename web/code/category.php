@@ -26,7 +26,7 @@ $Title="Problem Category";
           <div class="page-header">
             <h2><?php echo count($categories)?> Categories</h2>
           </div>
-          <p>
+          <p class="problem-category">
                 <?php
                 foreach ($categories as $key => $i)
                     echo '<a href="problemset.php?category=',htmlspecialchars($i),'"><span class="label label-success">',htmlspecialchars($i),'</span></a>';
