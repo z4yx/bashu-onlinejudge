@@ -32,12 +32,6 @@ if(isset($_SESSION['user'])){
 }else{
   $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct from problem where $addt_cond problem_id $range  order by problem_id");
 }
-
-$cate_result=mysql_query('SELECT DISTINCT category from problem_category order by category');
-$categories = array();
-while($category_row=mysql_fetch_row($cate_result)){
-  array_push($categories, $category_row[0]);
-}
 $Title="Problemset $page_id";
 ?>
 <!DOCTYPE html>
@@ -61,23 +55,6 @@ $Title="Problemset $page_id";
       }
       ?>
         <li><a href="level.php?level=1">Levels &raquo;</a></li>
-      </ul>
-      </div>
-      </div>
-      <div class="row-fluid">
-      <div class="pagination pagination-centered" style="margin-top: 0;">
-      <ul>
-      <?php
-      if(count($categories)>0){
-        echo '<li><a href="problemset.php"><i class="icon-remove-sign" aria-hidden="true"></i></a></li>';
-
-        foreach ($categories as $key => $i)
-          if($i!=$category)
-            echo '<li><a href="problemset.php?category=',htmlspecialchars($i),'">',htmlspecialchars($i),'</a></li>';
-          else
-            echo '<li class="active"><a href="problemset.php?category=',htmlspecialchars($i),'">',htmlspecialchars($i),'</a></li>';
-      }
-      ?>
       </ul>
       </div>
       </div>

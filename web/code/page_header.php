@@ -37,6 +37,7 @@ if($pref->hidelogo=='off'){ ?>
           <li><a id="nav_prob" class="shortcut-hint" title="Alt+P" href="problempage.php"><i class="icon-play-circle"></i><span class="navbar-hide-text"> Problem</span></a></li>
           <li><a id="nav_record" class="shortcut-hint" title="Alt+R" href="record.php"><i class="icon-camera"></i><span class="navbar-hide-text"> Record</span></a></li>
           <li><a id="nav_rank" href="ranklist.php"><i class="icon-thumbs-up"></i><span class="navbar-hide-text"> Ranklist</span></a></li>
+          <li><a id="nav_cate" href="category.php"><i class="icon-th"></i><span class="navbar-hide-text"> Category</span></a></li>
           <li><a id="nav_about" href="about.php"><i class="icon-phone"></i><span class="navbar-hide-text"> About</span></a></li>
         </ul>
         <form class="navbar-search pull-left shortcut-hint" id="search_form" title="Alt+I" action="search.php" method="get">
