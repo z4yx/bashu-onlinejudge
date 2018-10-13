@@ -11,6 +11,19 @@ function CMP_TYPE($way, $precision)
 		return 3 << 16;
 	return 0;
 }
+
+function update_categories($problem_id, $categories)
+{
+	mysql_query("delete from problem_category where problem_id=$problem_id");
+	if(count($categories)==0)
+		return;
+	$values=array();
+	foreach ($categories as $key => $value) {
+		array_push($values, "($problem_id,'$value')");
+	}
+	$values=join(',', $values);
+	mysql_query("insert into problem_category(`problem_id`,`category`) values $values");
+}
 session_start();
 if(!isset($_SESSION['user'])||!isset($_SESSION['administrator']))
 	die('You are not administrator');
@@ -30,6 +43,13 @@ $samp_in=isset($_POST['sample_input']) ? mysql_real_escape_string($_POST['sample
 $samp_out=isset($_POST['sample_output']) ? mysql_real_escape_string($_POST['sample_output']) : '';
 $hint=isset($_POST['hint']) ? mysql_real_escape_string($_POST['hint']) : '';
 $source=isset($_POST['source']) ? mysql_real_escape_string($_POST['source']) : '';
+$categories=isset($_POST['category']) ? explode(' ',$_POST['category']) : array();
+$filtered_categories=array();
+foreach ($categories as $key => $value) {
+	$s = trim($value);
+	if(strlen($s)>0)
+		array_push($filtered_categories, mysql_real_escape_string($s));
+}
 
 require 'inc/problem_flags.php';
 $has_tex=0;
@@ -72,8 +92,10 @@ if($_POST['op']=='edit'){
 	$result=mysql_query("update problem set title='$title',case_time_limit=$time,memory_limit=$memory,case_score=$score,description='$des',input='$input',output='$output',sample_input='$samp_in',sample_output='$samp_out',hint='$hint',source='$source',has_tex=$has_tex,compare_way=$compare_way where problem_id=$id");
 	if(!$result)
 		die('Operation failed');
-	else
+	else{
+		update_categories($id, $filtered_categories);
 		header("location: problempage.php?problem_id=$id");
+	}
 }else if($_POST['op']=='add'){
 	$id=1000;
 	$result=mysql_query('select max(problem_id) from problem');
@@ -82,7 +104,9 @@ if($_POST['op']=='edit'){
 	$result=mysql_query("insert into problem (problem_id,title,description,input,output,sample_input,sample_output,hint,source,in_date,memory_limit,case_time_limit,case_score,has_tex,compare_way) values ($id,'$title','$des','$input','$output','$samp_in','$samp_out','$hint','$source',NOW(),$memory,$time,$score,$has_tex,$compare_way)");
 	if(!$result)
 		die('Operation failed');
-	else
+	else{
+		update_categories($id, $filtered_categories);
 		header("location: problempage.php?problem_id=$id");
+	}
 }
 ?>

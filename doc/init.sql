@@ -491,6 +491,19 @@ INSERT INTO `level_experience` VALUES (0,0),(1,1),(2,2),(3,4),(4,5),(5,10),(6,15
 /*!40000 ALTER TABLE `level_experience` ENABLE KEYS */;
 UNLOCK TABLES;
 
+--
+-- Table structure for table `problem_category`
+--
+
+DROP TABLE IF EXISTS `problem_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `problem_category` (
+  `problem_id` int(11) NOT NULL,
+  `category` varchar(20) NOT NULL,
+  PRIMARY KEY (`category`,`problem_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 delimiter //
 CREATE FUNCTION get_problem_level (pid int)

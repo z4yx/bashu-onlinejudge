@@ -148,6 +148,12 @@ CREATE TABLE `level_experience` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 INSERT INTO `level_experience` VALUES (0,0),(1,1),(2,2),(3,4),(4,5),(5,10),(6,15),(7,20);
 
+CREATE TABLE `problem_category` (
+  `problem_id` int(11) NOT NULL,
+  `category` varchar(20) NOT NULL,
+  PRIMARY KEY (`category`,`problem_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 delimiter //
 CREATE FUNCTION get_problem_level (pid int)
 RETURNS int
