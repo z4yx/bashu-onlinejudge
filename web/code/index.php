@@ -40,6 +40,9 @@ $Title="Welcome to Bashu OnlineJudge";
         </div>
       </div>
       <div class="row-fluid">
+        <div id="chart" class="span12" style="height: 400px; margin: 0 auto"></div>
+      </div>
+      <div class="row-fluid">
         <div class="span10 offset1">
         <table class="table">
           <tbody>
@@ -57,9 +60,6 @@ $Title="Welcome to Bashu OnlineJudge";
           </tbody>
         </table>
         </div>
-      </div>
-      <div class="row-fluid">
-        <div id="chart" class="span12" style="height: 400px; margin: 0 auto"></div>
       </div>
       <hr>
       <footer>
