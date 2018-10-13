@@ -61,7 +61,7 @@ if(isset($_GET['type'])&&$_GET['type']=='json'){
 		$i=0;
 		$solved=mysql_query("select problem_id from solution where result=0 and user_id='$user' group by problem_id");
 		$number=mysql_num_rows($solved);
-		echo "<tr><td>Sloved:<br>($number)</td><td colspan=\"2\"><samp>";
+		echo "<tr><td>Solved:<br>($number)</td><td colspan=\"2\"><samp>";
 		while($row=mysql_fetch_row($solved)){
 			echo '<a target="_blank" href="problempage.php?problem_id=',$row[0],'">',$row[0],'</a>&nbsp;';
 			if((++$i)==11){

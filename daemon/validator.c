@@ -287,7 +287,7 @@ struct validator_info validator_float(FILE *fstd, FILE *fuser, int prec)
 		nusr = fscanf(fuser, "%lf", &vusr);
 
 		if(nstd == 1 && nusr == 1) {
-			if(fabs(vstd - vusr) >= error) {
+			if(fabs(vstd - vusr) >= error||isnan(vusr)) {
 				info.ret = VAL_MISMATCH;
 				info.user_mismatch = (char *)malloc(64);
 				info.std_mismatch = (char *)malloc(64);
