@@ -90,13 +90,6 @@ if($pref->hidelogo=='off'){ ?>
           <div class="controls">
             <input id="pwd" name="pwd" type="password" placeholder="Password">
           </div> </div>
-      <div class="control-group">
-        <div class="controls">
-          <label class="checkbox">
-            <input type="checkbox" name="remember">&nbsp;Remember me
-          </label>
-        </div>
-      </div>
       <input id="ret_url" name="url" type="hidden"><!--value=""-->
     </div>
     <div class="modal-footer">

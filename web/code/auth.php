@@ -29,9 +29,6 @@
             </div>
             <div class="control-group">
               <div class="controls">
-                <label class="checkbox">
-                  <input type="checkbox" name="remember">&nbsp;Remember me
-                </label>
                 <input id="signin" type="submit" value="Sign in" class="btn btn-primary">
                 <a href="#" onclick="return switch_page();" style="line-height:30px">Sign up</a>
               </div>
