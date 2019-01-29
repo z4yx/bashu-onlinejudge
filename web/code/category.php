@@ -22,10 +22,10 @@ $Title="Problem Category";
           
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="offset2 span8" style="font-size:16px">
-          <div class="page-header">
+        <div class="offset2 span8">
+          <!-- <div class="page-header">
             <h2><?php echo count($categories)?> Categories</h2>
-          </div>
+          </div> -->
           <p class="problem-category">
                 <?php
                 foreach ($categories as $key => $i)
