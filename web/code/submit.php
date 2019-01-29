@@ -1,5 +1,6 @@
 <?php
 require('inc/lang_conf.php');
+require('inc/judge_backend.php');
 
 function posttodaemon($data){
 	$encoded="";
@@ -7,7 +8,7 @@ function posttodaemon($data){
 		$encoded.=($encoded ? "&" : "");
 		$encoded.=rawurlencode($k)."=".rawurlencode($v);
 	}
-	if(!($fp=fsockopen('127.0.0.1', 8881)))
+	if(!($fp=fsockopen(JUDGE_DAEMON_IP, JUDGE_DAEMON_PORT)))
 		return ('Submit failed, can not connect to server.');
 
 	fputs($fp, "POST /submit_prob HTTP/1.0\r\n");

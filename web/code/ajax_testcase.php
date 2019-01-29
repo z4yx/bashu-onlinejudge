@@ -5,9 +5,10 @@ if(!isset($_SESSION['administrator']))
 if(!isset($_SESSION['admin_tfa']) || !$_SESSION['admin_tfa'])
 	die('No TFA');
 
+require('inc/judge_backend.php');
 function get_testcase_dir()
 {
-	$content = file_get_contents("http://127.0.0.1:8881/get_datapath");
+	$content = file_get_contents("http://".JUDGE_DAEMON_IP.":".JUDGE_DAEMON_PORT."/get_datapath");
 	if(FALSE === $content)
 		return FALSE;
 	return $content.DIRECTORY_SEPARATOR;
