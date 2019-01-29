@@ -7,7 +7,7 @@ class preferences{
 
 	function __construct()
 	{
-		$this->hidelogo='on';
+		$this->hidelogo='off';
 		$this->hidehotkey='off';
 		$this->sharecode='off';
 	}
