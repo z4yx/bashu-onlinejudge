@@ -39,7 +39,7 @@ static std::map<std::string, solution* > finder;
 static std::queue<solution*> waiting, removing;
 static std::mutex waiting_mutex, removing_mutex, finder_mutex, applog_mutex, rejudge_mutex;
 static std::condition_variable notifier, rejudge_notifier;
-static volatile bool rejudging, filled;
+static volatile bool filled;
 static std::vector<int> rejudge_list;
 static solution rejudge_init;
 
@@ -191,12 +191,12 @@ void thread_judge()
 				applog("Info: Can't create dump file.");
 			}
 		}
+		cur->judge_done = true;
 
 		if(cur->type == TYPE_normal) {
 			std::unique_lock<std::mutex> Lock(removing_mutex);
 			removing.push(cur);
 		}else if(cur->type == TYPE_rejudge){
-			rejudging = false;
 		}
 	}
 }
@@ -221,7 +221,6 @@ void thread_rejudge()
 				sol->error_code = -1;
 				sol->key = std::to_string(solution_id);
 
-				rejudging = true;
 				do { //insert to queue
 					std::unique_lock<std::mutex> Lock(waiting_mutex);
 					waiting.push(sol);
@@ -229,7 +228,8 @@ void thread_rejudge()
 				}while(0);
 
 				//wait until finished
-				while(rejudging);
+				while(!sol->judge_done)
+					std::this_thread::yield();
 
 				update_exist_solution_info(solution_id, sol);
 			}catch(const char *e) {
