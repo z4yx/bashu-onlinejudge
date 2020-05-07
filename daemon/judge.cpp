@@ -45,6 +45,7 @@ solution::solution()
 	public_code = 0;
 	timestamp = 0;
 	type = TYPE_normal;
+	judge_done = false;
 }
 solution::~solution()
 {

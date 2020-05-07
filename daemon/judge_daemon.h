@@ -14,6 +14,7 @@ struct solution
 	int problem, compare_way, lang, time_limit, mem_limit, score, error_code;
 	bool public_code;
 	unsigned char type;
+	volatile bool judge_done;
 	std::string code, user, key, last_state;
 	std::vector<case_info> detail_results;
 	void *mutex_for_query;//use void* to avoid including <mutex>
