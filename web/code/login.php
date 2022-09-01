@@ -15,7 +15,9 @@ try{
 
 	//echo("Login succeeded.");
 	header("location: ".$_POST['url']);
-}catch(Exception $E){?>
+}catch(Exception $E){
+	http_response_code(403);  // PHP 5.4+
+?>
 <html><head><script language="javascript">
 	alert('<?php echo $E->getMessage();?>');
 	history.go(-1);
