@@ -1,6 +1,7 @@
 <?php
 if(!isset($_GET['q']))
 	die('Wrong argument.');
+require('inc/checklogin.php');
 require('inc/database.php');
 $q=mysql_real_escape_string($_GET['q']);
 $result=mysql_query("select title from problem where title like '%$q%' limit 10");

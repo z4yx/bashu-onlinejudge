@@ -7,6 +7,7 @@ $msg=intval($_GET['message_id']);
 if(!$msg)
 	die('Wrong argument.');
 
+require('inc/checklogin.php');
 require('inc/database.php');
 
 $res=mysql_query('select content from message where message_id='.$msg);
