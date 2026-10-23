@@ -21,6 +21,8 @@
 #define INFO_SEGMENT_FAULT			"Segmentation fault"	
 #define INFO_MATH_FAULT				"Math error"
 #define INFO_SIGNAL					"Killed by a signal"
+#define INFO_32BIT_SYSCALL			"Forbidden 32-bit system call"
+#define INFO_UNKNOWN_SYSCALL		"Unknown system call"
 
 #define SCMASK_INFINITY				-1
 /**********************************************************/

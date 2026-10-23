@@ -224,6 +224,131 @@ static const char* scnames[] = {
 	#include "sable-syscallent.h"
 };
 
+/*number of names in the table above: it is shorter than MAX_SYSCALL_NUM, so
+  it must be bounds checked before being indexed*/
+#define SCNAMES_COUNT	(sizeof(scnames) / sizeof(scnames[0]))
+
+/*name of a syscall; a generic name is returned for the numbers the table does
+  not know (syscalls newer than the table, e.g. rseq, are most of them)*/
+static const char* scname(long scno)
+{
+	if(scno < 0 || (unsigned long)scno >= SCNAMES_COUNT || !scnames[scno])
+		return INFO_UNKNOWN_SYSCALL;
+	return scnames[scno];
+}
+
+/*********** helper functions for telling the syscall ABI *************/
+/*ptrace request number of PTRACE_GET_SYSCALL_INFO, available since Linux 5.3.
+  Request numbers belong to the kernel ABI, so it is defined here to keep the
+  code compilable with old system headers.*/
+#ifndef PTRACE_GET_SYSCALL_INFO
+#define PTRACE_GET_SYSCALL_INFO		0x420e
+#endif
+
+/*AUDIT_ARCH_X86_64, i.e. EM_X86_64 | __AUDIT_ARCH_64BIT | __AUDIT_ARCH_LE*/
+#define SABLE_AUDIT_ARCH_X86_64		0xc000003eU
+
+/*values of the op field of struct sable_syscall_info*/
+#define SABLE_SYSCALL_INFO_NONE		0
+
+/*__USER_CS, code segment selector of a 64-bit user process*/
+#define SABLE_USER_CS_64			0x33
+
+/*Minimal image of the kernel's struct ptrace_syscall_info.*/
+struct sable_syscall_info {
+	unsigned char op;
+	unsigned int arch __attribute__((aligned(4)));
+	unsigned long long instruction_pointer;
+	unsigned long long stack_pointer;
+	union {
+		struct {
+			unsigned long long nr;
+			unsigned long long args[6];
+		} entry;
+		struct {
+			long long rval;
+			unsigned char is_error;
+		} exit;
+		struct {
+			unsigned long long nr;
+			unsigned long long args[6];
+			unsigned int ret_data;
+		} seccomp;
+	} u;
+};
+
+/*Read the two bytes of the instruction a 64-bit process used to enter the
+  kernel and tell whether it is the 64-bit entry (0f 05, i.e. syscall) rather
+  than one of the 32-bit entries (cd 80, i.e. `int $0x80', or 0f 34, i.e.
+  sysenter).  Returns 1 for the 64-bit entry, 0 for the others and -1 when the
+  bytes cannot be read.  Called on kernels that cannot tell the ABI by
+  themselves (see below).*/
+static int sc_insn_is_64bit(pid_t pid)
+{
+	unsigned long rip, word, addr, offset;
+	unsigned char bytes[2];
+	int i;
+
+	errno = 0;
+	rip = ptrace(PTRACE_PEEKUSER, pid, RIP * 8, 0);
+	if(rip == (unsigned long)-1 && errno)
+		return -1;
+
+	/*every one of these instructions is 2 bytes long and may begin in the
+	  page before the one RIP points to, so the bytes are fetched one by one*/
+	for(i = 0; i < 2; i++){
+		addr = (rip - 2 + i) & ~(sizeof(long) - 1);
+		offset = (rip - 2 + i) & (sizeof(long) - 1);
+		errno = 0;
+		word = ptrace(PTRACE_PEEKTEXT, pid, (void*)addr, 0);
+		if(word == (unsigned long)-1 && errno)
+			return -1;
+		bytes[i] = (word >> (8 * offset)) & 0xff;
+	}
+	return bytes[0] == 0x0f && bytes[1] == 0x05;
+}
+
+/*Tell whether the syscall the child has just entered is issued through the
+  32-bit (i386) system call ABI.
+  Such a syscall is either made by a program running in 32-bit compatibility
+  mode, or by a 64-bit program using `int $0x80'.  Both of them must be
+  rejected: the syscall numbers stored in the mask are the 64-bit ones, and a
+  32-bit number means something completely different (i386's open() is 5,
+  which is x86_64's fstat()), so a black-listed 32-bit syscall would sneak
+  through the mask under the name of a harmless 64-bit one.*/
+static int is_32bit_syscall(pid_t pid)
+{
+	struct sable_syscall_info info;
+	long ret;
+
+	/*asking the kernel for the ABI of the current syscall; this is the only
+	  reliable way to catch `int $0x80' issued by a 64-bit process, because
+	  such a process still runs with the 64-bit code segment*/
+	memset(&info, 0, sizeof(info));
+	ret = ptrace(PTRACE_GET_SYSCALL_INFO, pid, (void*)sizeof(info), &info);
+	if(ret > 0 && info.op != SABLE_SYSCALL_INFO_NONE)
+		return info.arch != SABLE_AUDIT_ARCH_X86_64;
+
+	/*kernels older than 5.3 know nothing about PTRACE_GET_SYSCALL_INFO, so
+	  fall back to the code segment selector: it is 0x33 for 64-bit code and
+	  __USER32_CS (0x23) while the process runs in 32-bit compatibility mode*/
+	errno = 0;
+	ret = ptrace(PTRACE_PEEKUSER, pid, CS * 8, 0);
+	if(ret == -1 && errno)
+		return 0;	/*the child is gone, nothing to decide*/
+	if((unsigned long)ret != SABLE_USER_CS_64)
+		return 1;
+
+	/*the 64-bit code segment does not prove a 64-bit syscall: `int $0x80'
+	  and `sysenter' enter the 32-bit ABI without switching the segment, so
+	  on those kernels the instruction itself is the only clue left*/
+	ret = sc_insn_is_64bit(pid);
+	if(ret < 0)
+		return 1;	/*unreadable instruction, refuse it to be safe*/
+	return !ret;
+}
+/**********************************************************************/
+
 static int sc_handle(struct sablebox* pbox, struct __child_t* pson, struct profile* ret)
 {
 	static long scno = -1;
@@ -247,6 +372,15 @@ static int sc_handle(struct sablebox* pbox, struct __child_t* pson, struct profi
 		// }
 	}else{
 		pson->insyscall = 1;
+
+		/*a 32-bit mode syscall is refused whatever its number is, before
+		  looking at the syscall number at all*/
+		if(is_32bit_syscall(pson->pid)){
+			ret->status = PROF_RUNTIME_ERROR;
+			ret->info = INFO_32BIT_SYSCALL;
+			return 1;
+		}
+
 		scno = ptrace(PTRACE_PEEKUSER, pson->pid, ORIG_RAX * 8, 0);
 		if(scno == -1 || scno >= MAX_SYSCALL_NUM){
 			if(errno != ESRCH){
@@ -257,7 +391,7 @@ static int sc_handle(struct sablebox* pbox, struct __child_t* pson, struct profi
 		}
 
 #ifdef PRINT_FOR_DEBUG
-		printf("Call %d %s\n", scno, scnames[scno]);
+		printf("Call %ld %s\n", scno, scname(scno));
 #endif
 #ifndef ALLOW_FOR_DEBUG
 		if(!pbox->scp->set[scno]){
@@ -282,7 +416,7 @@ static int sc_handle(struct sablebox* pbox, struct __child_t* pson, struct profi
 				}
 			}else {
 				ret->status = PROF_RUNTIME_ERROR;
-				ret->info = scnames[scno];
+				ret->info = scname(scno);
 				return 1;
 			}
 		}
